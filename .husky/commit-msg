@@ -1,0 +1,12 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(awk '!/^\s*#/' "$COMMIT_MSG_FILE")
+
+IS_HEADER_FORMAT_VALID='^(:[a-zA-Z_]+: )?(feat|fix|docs|refactor|test|style|chore) #[0-9]+ : .+'
+
+# --- header ---
+if ! echo "$COMMIT_MSG" | grep -E "$IS_HEADER_FORMAT_VALID" > /dev/null; then
+    echo "🚨 커밋 메시지는 [commit type] #이슈번호 : [commit message] 형식이어야 합니다. (예시: chore #1 : 초기 설정)"
+    exit 1
+fi
