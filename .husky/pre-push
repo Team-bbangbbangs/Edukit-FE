@@ -1,0 +1,8 @@
+echo "🛠️ Running production build..."
+pnpm build
+if [ $? -ne 0 ]; then
+  echo "빌드 실패로 푸시 중단"
+  exit 1
+fi
+
+echo "푸시 전 검사 완료!"
