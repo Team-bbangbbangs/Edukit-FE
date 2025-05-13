@@ -1,0 +1,19 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA=$3
+
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+JIRA_KEY=$(echo "$BRANCH_NAME" | grep -oE '[A-Z]+-[0-9]+')
+
+if [ -z "$JIRA_KEY" ]; then
+  exit 0
+fi
+
+if grep -q "^$JIRA_KEY" "$COMMIT_MSG_FILE"; then
+  exit 0
+fi
+
+sed -i.bak -e "1s/^/$JIRA_KEY /" "$COMMIT_MSG_FILE"

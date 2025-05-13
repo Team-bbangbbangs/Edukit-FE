@@ -28,6 +28,9 @@ export default [
       react: {
         version: 'detect',
       },
+      'import/resolver': {
+        typescript: {}, // tsconfig.json 기준으로 모듈 해석
+      },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
