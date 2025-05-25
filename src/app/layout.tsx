@@ -1,4 +1,7 @@
+import Header from '@/components/header/header';
 import { MSWComponent } from '@/components/MSWComponent';
+
+import './globals.css';
 
 export const metadata = {
   title: 'Next.js',
@@ -10,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <MSWComponent>{children}</MSWComponent>
+        <Header />
       </body>
     </html>
   );
