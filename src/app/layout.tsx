@@ -1,5 +1,6 @@
 import Header from '@/components/header/header';
-import { MSWComponent } from '@/components/MSWComponent';
+import { MSWProvider } from '@/lib/msw-provider';
+import QueryProvider from '@/lib/tanstack-query-provider';
 
 import './globals.css';
 
@@ -12,8 +13,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <MSWComponent>{children}</MSWComponent>
-        <Header />
+        <MSWProvider>
+          <QueryProvider>
+            <Header />
+            {children}
+          </QueryProvider>
+        </MSWProvider>
       </body>
     </html>
   );

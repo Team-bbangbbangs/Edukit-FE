@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 
 import { Input } from '@/components/input/input';
+import { useLogin } from '@/hooks/api/useLogin';
 
 import {
   Modal,
@@ -28,11 +29,13 @@ export default function LoginModal({ open, onOpenChange }: LoginModalProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>();
 
-  const onSubmit = async (data: LoginFormData) => {
-    console.log('로그인 데이터:', data);
+  const { mutate: login, isPending } = useLogin();
+
+  const onSubmit = (data: LoginFormData) => {
+    login(data);
   };
 
   return (
@@ -66,7 +69,7 @@ export default function LoginModal({ open, onOpenChange }: LoginModalProps) {
             </div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isPending}
               className="mt-8 h-16 w-96 rounded-md bg-blue-900 px-4 py-2 text-2xl font-bold text-white"
             >
               로그인
