@@ -7,6 +7,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarTrigger,
+  SidebarHeader,
 } from '@/components/sidebar/base-sidebar';
 import { SIDEBAR_CONFIG } from '@/configs/sidebar-config';
 
@@ -15,6 +17,9 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsib
 export default function MainSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <SidebarTrigger />
+      </SidebarHeader>
       <SidebarContent>
         {SIDEBAR_CONFIG.map((item) => (
           <SidebarMenu key={item.title}>
@@ -23,8 +28,8 @@ export default function MainSidebar() {
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span>{item.title}</span>
+                      <item.icon />
+                      <span className="pt-1 text-[16px]">{item.title}</span>
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
@@ -33,7 +38,7 @@ export default function MainSidebar() {
                         <SidebarMenuSubItem key={child.title}>
                           <SidebarMenuSubButton asChild>
                             <a href={child.url}>
-                              <span>{child.title}</span>
+                              <span className="pt-[2px] text-[14px]">{child.title}</span>
                             </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -46,8 +51,8 @@ export default function MainSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <a href={item.url}>
-                    <item.icon className="mr-2 h-4 w-4" />
-                    <span>{item.title}</span>
+                    <item.icon />
+                    <span className="pt-1 text-[16px]">{item.title}</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
