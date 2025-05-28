@@ -1,4 +1,6 @@
 import Header from '@/components/header/header';
+import { SidebarProvider, SidebarTrigger } from '@/components/sidebar/base-sidebar';
+import MainSidebar from '@/components/sidebar/main-sidebar';
 import { MSWProvider } from '@/lib/msw-provider';
 import QueryProvider from '@/lib/tanstack-query-provider';
 
@@ -12,10 +14,14 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="h-screen">
         <MSWProvider>
           <QueryProvider>
             <Header />
+            <SidebarProvider className="fixed top-16 h-[calc(100vh-64px)]">
+              <MainSidebar />
+              <SidebarTrigger className="fixed left-2 top-[72px]" />
+            </SidebarProvider>
             {children}
           </QueryProvider>
         </MSWProvider>
