@@ -14,17 +14,15 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-hidden">
         <MSWProvider>
           <QueryProvider>
             <Header />
-            <SidebarProvider className="fixed top-16 h-[calc(100vh-64px)]">
+            <SidebarProvider>
               <MainSidebar />
               <SidebarTrigger className="fixed left-2 top-[72px]" />
+              <main className="h-[calc(100vh-64px)] w-full overflow-y-auto p-10">{children}</main>
             </SidebarProvider>
-            <main className="w-[calc(100vh - 16rem)] ml-64 mt-16 h-[calc(100vh-64px)] p-10">
-              {children}
-            </main>
           </QueryProvider>
         </MSWProvider>
       </body>
