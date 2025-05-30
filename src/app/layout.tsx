@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="h-screen">
+      <body>
         <MSWProvider>
           <QueryProvider>
             <Header />
@@ -22,7 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <MainSidebar />
               <SidebarTrigger className="fixed left-2 top-[72px]" />
             </SidebarProvider>
-            {children}
+            <main className="w-[calc(100vh - 16rem)] ml-64 mt-16 h-[calc(100vh-64px)] p-10">
+              {children}
+            </main>
           </QueryProvider>
         </MSWProvider>
       </body>
