@@ -16,22 +16,25 @@ export const getSubjectRecord = async () => {
     throw new Error(error.message || '데이터 fetch 실패');
   }
 
+  if (!json.data) {
+    throw new Error('서버에서 데이터를 받지 못했습니다.');
+  }
+
   return json.data;
 };
 
 export const getBehaviorRecord = async () => {
-  const res = await fetch('/api/getBehaviorRecord', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch('/api/getBehaviorRecord');
 
   const json: Response<StudentRecord[]> = await res.json();
 
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || '데이터 fetch 실패');
+  }
+
+  if (!json.data) {
+    throw new Error('서버에서 데이터를 받지 못했습니다.');
   }
 
   return json.data;
@@ -52,6 +55,10 @@ export const getCareerRecord = async () => {
     throw new Error(error.message || '데이터 fetch 실패');
   }
 
+  if (!json.data) {
+    throw new Error('서버에서 데이터를 받지 못했습니다.');
+  }
+
   return json.data;
 };
 
@@ -70,6 +77,10 @@ export const getClubRecord = async () => {
     throw new Error(error.message || '데이터 fetch 실패');
   }
 
+  if (!json.data) {
+    throw new Error('서버에서 데이터를 받지 못했습니다.');
+  }
+
   return json.data;
 };
 
@@ -86,6 +97,10 @@ export const getFreeRecord = async () => {
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || '데이터 fetch 실패');
+  }
+
+  if (!json.data) {
+    throw new Error('서버에서 데이터를 받지 못했습니다.');
   }
 
   return json.data;

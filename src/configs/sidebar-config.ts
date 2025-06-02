@@ -49,7 +49,7 @@ export const SIDEBAR_CONFIG: SidebarItem[] = [
   {
     type: 'link',
     title: '공지사항',
-    url: 'announcement',
+    url: 'notice',
     icon: Calendar,
   },
   {

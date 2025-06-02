@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import {
   Sidebar,
   SidebarContent,
@@ -37,9 +39,9 @@ export default function MainSidebar() {
                       {item.children.map((child) => (
                         <SidebarMenuSubItem key={child.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={child.url}>
+                            <Link href={child.url}>
                               <span className="pt-[2px] text-[14px]">{child.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -50,10 +52,10 @@ export default function MainSidebar() {
             ) : (
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href={item.url}>
+                  <Link href={item.url}>
                     <item.icon />
                     <span className="pt-1 text-[16px]">{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )}
