@@ -9,14 +9,14 @@ const notices: NoticeType[] = Array.from({ length: 80 }, (_, i) => ({
   id: `${i + 1}`,
   tag: tags[i % tags.length],
   title: `공지사항 제목 ${i + 1}`,
-  createdAt: new Date(Date.now() - i * 1000 * 60 * 60),
+  createdAt: new Date(Date.now() - i * 1000 * 60 * 60).toISOString(),
 }));
 
-export const noticeHandler = [
-  http.get('http://localhost:3000/api/notice', ({ request }) => {
+export const getNoticeList = [
+  http.get('/api/notice', ({ request }) => {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get('page') || '1', 10);
-    const tagParam = url.searchParams.get('tag');
+    const tagParam = url.searchParams.get('tagId');
 
     const tagByNumber: Record<string, string> = { '2': '공지', '3': '이벤트' };
     const tag = tagByNumber[tagParam || ''] || '';

@@ -41,15 +41,23 @@ export default function Pagination({ tagId, nowPage = '1', maxPage }: Pagination
       ) : (
         <span className={`${paginationStyle} text-slate-300`}>{'<'}</span>
       )}
-      {pageArr.map((page) => (
-        <Link
-          key={page}
-          href={makeQuery(page)}
-          className={`${paginationStyle} ${page === currentPage && 'bg-slate-300 font-bold'}`}
-        >
-          {page}
-        </Link>
-      ))}
+
+      {pageArr.map((page) =>
+        page !== currentPage ? (
+          <Link
+            key={page}
+            href={makeQuery(page)}
+            className={`${paginationStyle} hover:bg-slate-200`}
+          >
+            {page}
+          </Link>
+        ) : (
+          <span key={page} className={`${paginationStyle} bg-slate-300 font-bold`}>
+            {page}
+          </span>
+        ),
+      )}
+
       {endPageNumber !== maxPage ? (
         <Link
           href={makeQuery(endPageNumber + 1)}

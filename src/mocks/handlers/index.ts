@@ -3,6 +3,8 @@ import { getBehaviorRecord } from './get-behavior-record';
 import { getCareerRecord } from './get-career-record';
 import { getClubRecord } from './get-club-record';
 import { getFreeRecord } from './get-free-record';
+import { getNoticeDetail } from './get-notice-detail';
+import { getNoticeList } from './get-notice-list';
 import { getSubjectRecord } from './get-subject-record';
 
 export const handlers = [
@@ -12,4 +14,6 @@ export const handlers = [
   ...getCareerRecord,
   ...getFreeRecord,
   ...getClubRecord,
+  ...getNoticeList,
+  ...getNoticeDetail,
 ];
