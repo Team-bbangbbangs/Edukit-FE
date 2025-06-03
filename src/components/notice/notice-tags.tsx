@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const baseStyle = 'rounded-full px-5 py-1 pt-1.5 text-center font-bold ';
+const baseStyle = 'rounded-full px-5 py-1 pt-1.5 text-center font-bold text-[14px]';
 
 const activeStyle = 'bg-slate-800 text-white border border-white';
 
@@ -8,7 +8,7 @@ const nonActiveStyle = 'bg-white text-black border border-slate-400';
 
 export default function NoticeTags({ tagId }: { tagId?: string }) {
   return (
-    <div className="flex gap-4 py-6">
+    <div className="flex gap-2 py-4">
       <Link href="/notice" className={`${baseStyle} ${!tagId ? activeStyle : nonActiveStyle}`}>
         전체
       </Link>

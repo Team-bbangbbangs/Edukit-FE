@@ -5,19 +5,18 @@ import { formatDate } from '@/util/formatDate';
 
 export default function NoticeList({ notice }: { notice: NoticeType[] }) {
   return (
-    <ul className="w-full border-t border-t-slate-600">
+    <div className="mb-4 w-full border-b border-t border-b-slate-400 border-t-slate-400">
       {notice.map((item) => (
-        <li key={item.id} className="h-20 border-b border-b-slate-400">
-          <Link
-            href={`/notice/${item.id}`}
-            className="flex align-middle text-black hover:bg-slate-400"
-          >
-            <span className="w-24 px-4 font-bold">{item.tag}</span>
-            <span>{item.title}</span>
-            <time className="w-40 px-5">{formatDate(item.createdAt)}</time>
-          </Link>
-        </li>
+        <Link
+          key={item.id}
+          href={`/notice/${item.id}`}
+          className="flex h-14 items-center align-middle text-black hover:bg-slate-200"
+        >
+          <span className="w-40 px-10 font-bold">{item.tag}</span>
+          <span>{item.title}</span>
+          <time className="ml-auto w-60 px-5">{formatDate(item.createdAt)}</time>
+        </Link>
       ))}
-    </ul>
+    </div>
   );
 }
