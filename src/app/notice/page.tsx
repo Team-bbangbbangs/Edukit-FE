@@ -14,21 +14,22 @@ export default async function NoticePage({ searchParams }: PageProps) {
   const page = searchParams?.page;
   const tagId = searchParams?.tagId;
 
-  // const notices = await getNoticeList({
-  //   page,
-  //   tagId,
-  // });
+  const notices = await getNoticeList({
+    page,
+    tagId,
+  });
 
   return (
-    <div className="w-full p-10">
-      <h2 className="text-[30px] font-bold">공지사항</h2>
+    <div className="w-full px-10">
+      <h2 className="text-[26px] font-bold">공지사항</h2>
 
       <NoticeTags tagId={tagId} />
 
-      {/* {notices?.NoticeList ? <NoticeList notice={notices.NoticeList} /> : null} */}
+      {notices.data?.NoticeList ? <NoticeList notice={notices.data.NoticeList} /> : null}
 
-      {/* {notices ? <Pagination nowPage={page} maxPage={12} /> : null} */}
-      <Pagination tagId={tagId} nowPage={page} maxPage={12} />
+      {notices.data?.maxPage ? (
+        <Pagination tagId={tagId} nowPage={page} maxPage={notices.data.maxPage} />
+      ) : null}
     </div>
   );
 }
