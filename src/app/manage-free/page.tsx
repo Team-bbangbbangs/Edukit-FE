@@ -1,5 +1,5 @@
-import RecordTable from '@/components/record-table/record-table';
+import FreeRecordTable from '@/components/record/free-record-table';
 
 export default function Page() {
-  return <RecordTable recordType="free" />;
+  return <FreeRecordTable />;
 }

@@ -1,5 +1,5 @@
-import RecordTable from '@/components/record-table/record-table';
+import SubjectRecordTable from '@/components/record/subject-record-table';
 
 export default function Page() {
-  return <RecordTable recordType="subject" />;
+  return <SubjectRecordTable />;
 }

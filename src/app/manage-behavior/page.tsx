@@ -1,5 +1,5 @@
-import RecordTable from '@/components/record-table/record-table';
+import BehaviorRecordTable from '@/components/record/behavior-record-table';
 
 export default function Page() {
-  return <RecordTable recordType="behavior" />;
+  return <BehaviorRecordTable />;
 }
