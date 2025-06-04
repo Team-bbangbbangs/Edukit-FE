@@ -1,5 +1,5 @@
-import RecordTable from '@/components/record-table/record-table';
+import CareerRecordTable from '@/components/record/career-record-table';
 
 export default function Page() {
-  return <RecordTable recordType="career" />;
+  return <CareerRecordTable />;
 }
