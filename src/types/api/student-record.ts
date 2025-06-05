@@ -6,3 +6,13 @@ export type StudentRecord = {
   name: string;
   content: string;
 };
+
+export type CreateStudentRecord = {
+  name: string;
+  studentNumber: string;
+};
+
+export type CreateRecord = {
+  recordType: RecordType;
+  students: CreateStudentRecord[];
+};
