@@ -22,7 +22,7 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
   } else if (isError || !data) {
     content = <p className="text-[20px] font-bold">데이터를 불러오는 데 실패했습니다.</p>;
   } else if (data.length === 0) {
-    content = <EmptyRecord />;
+    content = <EmptyRecord recordType={recordType} />;
   }
 
   if (content) {
