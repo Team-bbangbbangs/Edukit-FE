@@ -6,6 +6,7 @@ import { useGetRocord } from '@/hooks/api/use-get-record';
 import type { RecordType } from '@/types/api/student-record';
 
 import EmptyRecord from './empty-record';
+import RecordDetailAdd from './record-detail-add';
 import RecordDetailEdit from './record-detail-edit';
 import RecordDetailView from './record-detail-view';
 
@@ -51,6 +52,19 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
             onEdit={() => setEditingId(record.id)}
           />
         ),
+      )}
+      {editingId === 'plus' ? (
+        <RecordDetailAdd recordType={recordType} onView={() => setEditingId(null)} />
+      ) : (
+        <tr>
+          <td
+            onClick={() => setEditingId('plus')}
+            colSpan={3}
+            className="py-3 text-center hover:bg-slate-300"
+          >
+            + 추가하기
+          </td>
+        </tr>
       )}
     </tbody>
   );
