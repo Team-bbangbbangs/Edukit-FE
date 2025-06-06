@@ -16,3 +16,8 @@ export type CreateRecord = {
   recordType: RecordType;
   students: CreateStudentRecord[];
 };
+
+export type PutRecordDetail = {
+  recordType: RecordType;
+  detailRecord: StudentRecord;
+};
