@@ -54,7 +54,7 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
         ),
       )}
       {editingId === 'plus' ? (
-        <RecordDetailAdd recordType={recordType} onView={() => setEditingId(null)} />
+        <RecordDetailAdd recordType={recordType} onCancel={() => setEditingId(null)} />
       ) : (
         <tr>
           <td

@@ -4,12 +4,12 @@ import { Input } from '@/components/input/input';
 import { useCreateRecordDetail } from '@/hooks/api/use-create-record-detail';
 import type { RecordType } from '@/types/api/student-record';
 
-interface RecordDetailEditProps {
+interface RecordDetailAddProps {
   recordType: RecordType;
-  onView: () => void;
+  onCancel: () => void;
 }
 
-export default function RecordDetailAdd({ recordType, onView }: RecordDetailEditProps) {
+export default function RecordDetailAdd({ recordType, onCancel }: RecordDetailAddProps) {
   const { mutate: createRecordDetail } = useCreateRecordDetail();
 
   const studentNumberRef = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ export default function RecordDetailAdd({ recordType, onView }: RecordDetailEdit
     const name = nameRef.current?.value || '';
     const content = contentRef.current?.value || '';
 
-    createRecordDetail({ recordType, studentNumber, name, content }, { onSuccess: onView });
+    createRecordDetail({ recordType, studentNumber, name, content }, { onSuccess: onCancel });
   };
 
   return (
@@ -38,7 +38,7 @@ export default function RecordDetailAdd({ recordType, onView }: RecordDetailEdit
       <td className="absolute right-0 top-14 flex gap-2">
         <button
           className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
-          onClick={onView}
+          onClick={onCancel}
         >
           취소하기
         </button>
