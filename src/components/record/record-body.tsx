@@ -1,12 +1,17 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useGetRocord } from '@/hooks/api/use-get-record';
 import type { RecordType } from '@/types/api/student-record';
 
 import EmptyRecord from './empty-record';
+import RecordDetailEdit from './record-detail-edit';
+import RecordDetailView from './record-detail-view';
 
 export default function RecordBody({ recordType }: { recordType: RecordType }) {
   const { data, isPending, isError } = useGetRocord(recordType);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const renderTableRow = (content: React.ReactNode) => (
     <tr>
@@ -31,13 +36,22 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
 
   return (
     <tbody className="[&_td]:border-b [&_td]:border-b-slate-300 [&_tr:last-child_td]:border-b-0">
-      {data?.map((record) => (
-        <tr key={record.id}>
-          <td className="py-2 pl-5 pr-2 align-middle">{record.studentNumber}</td>
-          <td className="p-2 align-middle">{record.name}</td>
-          <td className="p-2 align-middle">{record.content}</td>
-        </tr>
-      ))}
+      {data?.map((record) =>
+        editingId === record.id ? (
+          <RecordDetailEdit
+            key={record.id}
+            record={record}
+            recordType={recordType}
+            onView={() => setEditingId(null)}
+          />
+        ) : (
+          <RecordDetailView
+            key={record.id}
+            record={record}
+            onEdit={() => setEditingId(record.id)}
+          />
+        ),
+      )}
     </tbody>
   );
 }

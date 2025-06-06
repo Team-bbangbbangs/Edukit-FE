@@ -48,8 +48,7 @@ export default function CreateRecordModal({
       name: nameRefs.current[index]?.value || '',
     }));
 
-    createRecords({ recordType, students });
-    handleClose();
+    createRecords({ recordType, students }, { onSuccess: handleClose });
   };
 
   const handleClose = () => {
