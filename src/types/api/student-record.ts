@@ -12,7 +12,7 @@ export type CreateStudentRecord = {
   studentNumber: string;
 };
 
-export type CreateRecord = {
+export type CreateRecords = {
   recordType: RecordType;
   students: CreateStudentRecord[];
 };
@@ -20,4 +20,11 @@ export type CreateRecord = {
 export type PutRecordDetail = {
   recordType: RecordType;
   detailRecord: StudentRecord;
+};
+
+export type CreateRecordDetail = {
+  recordType: RecordType;
+  studentNumber: string;
+  name: string;
+  content: string;
 };

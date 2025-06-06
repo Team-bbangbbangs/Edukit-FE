@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 
 import { Input } from '@/components/input/input';
-import { useCreateRecord } from '@/hooks/api/use-create-record';
+import { useCreateRecords } from '@/hooks/api/use-create-records';
 import type { RecordType } from '@/types/api/student-record';
 
 import {
@@ -33,7 +33,7 @@ export default function CreateRecordModal({
   const studentNumberRefs = useRef<(HTMLInputElement | null)[]>([]);
   const nameRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const { mutate: createRecords } = useCreateRecord();
+  const { mutate: createRecords } = useCreateRecords();
 
   const handleRegister = () => {
     const count = Number(countInputRef.current?.value || 0);

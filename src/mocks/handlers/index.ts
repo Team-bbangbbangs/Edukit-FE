@@ -1,5 +1,6 @@
 import { authHandler } from './auth-handler';
-import { createRecords } from './create-record';
+import { createRecordDetail } from './create-record-detail';
+import { createRecords } from './create-records';
 import { deleteRecordDetail } from './delete-record-detail';
 import { getNoticeDetail } from './get-notice-detail';
 import { getNoticeList } from './get-notice-list';
@@ -14,4 +15,5 @@ export const handlers = [
   ...createRecords,
   ...putRecordDetail,
   ...deleteRecordDetail,
+  ...createRecordDetail,
 ];

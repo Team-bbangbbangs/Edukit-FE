@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { createRecords } from '@/services/student-manage/create-record';
+import { createRecordDetail } from '@/services/student-manage/create-record-detail';
 import type { Response } from '@/types/api/response';
-import type { CreateRecord } from '@/types/api/student-record';
+import type { CreateRecordDetail } from '@/types/api/student-record';
 
-export const useCreateRecord = () => {
-  return useMutation<Response<null>, Error, CreateRecord>({
-    mutationFn: createRecords,
+export const useCreateRecordDetail = () => {
+  return useMutation<Response<null>, Error, CreateRecordDetail>({
+    mutationFn: createRecordDetail,
     onSuccess: (data) => {
       console.log('생기부 데이터 생성 성공:', data);
     },
