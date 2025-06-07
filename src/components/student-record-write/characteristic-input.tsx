@@ -9,7 +9,7 @@ export default function CharacteristicInput({ recordType }: { recordType: Record
     <div className="flex flex-col gap-4">
       <div className="flex justify-between">
         <h2 className="text-[24px] font-bold">학생 특성 기입란</h2>
-        <button className="hover:slate-950 flex gap-2 rounded-md bg-slate-800 px-6 pb-1.5 pt-2 text-white">
+        <button className="flex gap-2 rounded-md bg-slate-800 px-6 pb-1.5 pt-2 text-white hover:bg-slate-950">
           <span>학생 1</span>
           <span>-</span>
         </button>
@@ -20,7 +20,7 @@ export default function CharacteristicInput({ recordType }: { recordType: Record
         className="h-60 border-slate-400 p-5 placeholder:text-slate-400"
       />
       <div className="flex justify-end">
-        <button className="hover:slate-950 w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white">
+        <button className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950">
           생성
         </button>
       </div>

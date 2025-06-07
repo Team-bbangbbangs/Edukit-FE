@@ -15,7 +15,7 @@ export default function RecordSummary({ recordType }: { recordType: RecordType }
         className="h-60 border-slate-400 p-5 placeholder:text-slate-400"
       />
       <div className="flex justify-end">
-        <button className="hover:slate-950 justify-end rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white">
+        <button className="justify-end rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950">
           저장
         </button>
       </div>
