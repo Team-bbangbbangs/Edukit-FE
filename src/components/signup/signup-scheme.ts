@@ -9,7 +9,9 @@ export const signUpScheme = z
       .email({ message: '이메일 형식이 유효하지 않습니다.' })
       .refine(
         (email) => {
-          const domain = email.split('@')[1];
+          const parts = email.split('@');
+          if (parts.length !== 2) return false;
+          const domain = parts[1];
           return allowedDomains.includes(domain);
         },
         { message: '교직 이메일이 아닙니다.' },

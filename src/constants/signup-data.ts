@@ -1,4 +1,4 @@
-export const allowedDomains: string[] = ['naver.com', 'daum.net'] as const;
+export const allowedDomains: string[] = ['naver.com', 'daum.net'];
 
 export const subjects: { value: string; label: string }[] = [
   { value: 'Korean', label: '국어' },
@@ -27,4 +27,4 @@ export const subjects: { value: string; label: string }[] = [
   { value: 'Tourism', label: '관광' },
   { value: 'Baking', label: '제과' },
   { value: 'SecondForeignLanguage', label: '제 2외국어 과목' },
-] as const;
+];

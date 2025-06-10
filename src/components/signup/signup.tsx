@@ -38,6 +38,7 @@ export default function SignUp() {
           이메일
         </label>
         <Input
+          id="email"
           className={`h-12 ${errors.email ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0' : ''}`}
           type="email"
           placeholder="교직 이메일을 작성해주세요"
@@ -46,9 +47,12 @@ export default function SignUp() {
         {errors.email ? <p className="text-sm text-red-500">{errors.email.message}</p> : null}
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="password">비밀번호</label>
+        <label className="font-bold" htmlFor="password">
+          비밀번호
+        </label>
         <Input
-          className={`h-12 pt-3 placeholder:text-[20px] ${errors.password ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0' : ''}`}
+          id="password"
+          className={`h-12 pt-3 text-[20px] ${errors.password ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0' : ''}`}
           type="password"
           placeholder="********"
           {...register('password')}
@@ -56,9 +60,12 @@ export default function SignUp() {
         {errors.password ? <p className="text-sm text-red-500">{errors.password.message}</p> : null}
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="confirmPassword">비밀번호 확인</label>
+        <label className="font-bold" htmlFor="confirmPassword">
+          비밀번호 확인
+        </label>
         <Input
-          className={`h-12 pt-3 placeholder:text-[20px] ${errors.confirmPassword ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0' : ''}`}
+          id="confirmPassword"
+          className={`h-12 pt-3 text-[20px] ${errors.confirmPassword ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0' : ''}`}
           type="password"
           placeholder="********"
           {...register('confirmPassword')}
@@ -68,12 +75,16 @@ export default function SignUp() {
         ) : null}
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="subject">담당 교과목</label>
+        <label className="font-bold" htmlFor="subject">
+          담당 교과목
+        </label>
         <Input className="h-12" type="text" {...register('subject')} />
         {errors.subject ? <p className="text-sm text-red-500">{errors.subject.message}</p> : null}
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="school">중 / 고등학교 선택</label>
+        <label id="school-label" className="font-bold">
+          중 / 고등학교 선택
+        </label>
         <Controller
           control={control}
           name="school"
@@ -81,6 +92,9 @@ export default function SignUp() {
             <div className="flex w-full overflow-hidden rounded-md border">
               <button
                 type="button"
+                role="radio"
+                aria-checked={field.value === 'middle'}
+                aria-labelledby="school-label"
                 onClick={() => field.onChange('middle')}
                 className={`flex-1 border-r py-2 text-center ${
                   field.value === 'middle' ? 'bg-black text-white' : 'bg-white text-black'
@@ -90,6 +104,9 @@ export default function SignUp() {
               </button>
               <button
                 type="button"
+                role="radio"
+                aria-checked={field.value === 'high'}
+                aria-labelledby="school-label"
                 onClick={() => field.onChange('high')}
                 className={`flex-1 py-2 text-center ${
                   field.value === 'high' ? 'bg-black text-white' : 'bg-white text-black'
