@@ -2,6 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 
+import Link from 'next/link';
+
 import { Input } from '@/components/input/input';
 import { useLogin } from '@/hooks/api/use-login';
 
@@ -77,9 +79,11 @@ export default function LoginModal({ open, onOpenChange }: LoginModalProps) {
           </form>
 
           <ModalFooter className="flex gap-4">
-            <span className="border-b border-black">아이디(이메일) 찾기</span>
-            <span className="border-b border-black">회원가입</span>
-            <span className="border-b border-black">비밀번호 찾기</span>
+            <span className="hover:underline">아이디(이메일) 찾기</span>
+            <Link href="/signup" className="hover:underline">
+              회원가입
+            </Link>
+            <span className="hover:underline">비밀번호 찾기</span>
           </ModalFooter>
         </ModalContent>
       </ModalPortal>
