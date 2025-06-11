@@ -1,6 +1,3 @@
-import Header from '@/components/header/header';
-import { SidebarProvider, SidebarTrigger } from '@/components/sidebar/base-sidebar';
-import MainSidebar from '@/components/sidebar/main-sidebar';
 import { MSWProvider } from '@/lib/msw-provider';
 import QueryProvider from '@/lib/tanstack-query-provider';
 
@@ -16,14 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="overflow-hidden">
         <MSWProvider>
-          <QueryProvider>
-            <Header />
-            <SidebarProvider>
-              <MainSidebar />
-              <SidebarTrigger className="fixed left-2 top-[72px]" />
-              <main className="h-[calc(100vh-64px)] w-full overflow-y-auto p-10">{children}</main>
-            </SidebarProvider>
-          </QueryProvider>
+          <QueryProvider>{children}</QueryProvider>
         </MSWProvider>
       </body>
     </html>

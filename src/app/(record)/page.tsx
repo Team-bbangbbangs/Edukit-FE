@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import landingPageImage from '../../public/images/landing-page-image.png';
+import landingPageImage from '../../../public/images/landing-page-image.png';
 
 export default function Page() {
   return (
