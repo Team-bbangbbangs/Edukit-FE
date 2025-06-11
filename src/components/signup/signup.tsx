@@ -7,20 +7,23 @@ import { useForm } from 'react-hook-form';
 
 import { Input } from '@/components/input/input';
 import { subjects } from '@/constants/signup-data';
+import { useSignup } from '@/hooks/api/use-signup';
 
-import { signUpScheme } from './signup-scheme';
+import { signupScheme } from './signup-scheme';
 
-import type { SignUpDataType } from './signup-scheme';
+import type { SignupDataType } from './signup-scheme';
 
-export default function SignUp() {
+export default function Signup() {
+  const { mutate: signup } = useSignup();
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue,
     watch,
-  } = useForm<SignUpDataType>({
-    resolver: zodResolver(signUpScheme),
+  } = useForm<SignupDataType>({
+    resolver: zodResolver(signupScheme),
     defaultValues: {
       email: '',
       password: '',
@@ -31,8 +34,10 @@ export default function SignUp() {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: SignUpDataType) => {
-    console.log(data);
+  const onSubmit = (data: SignupDataType) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { confirmPassword, ...signupData } = data;
+    signup(signupData);
   };
 
   const selectedSubjectValue = watch('subject');
