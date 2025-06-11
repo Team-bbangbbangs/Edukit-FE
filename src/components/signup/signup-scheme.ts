@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { allowedDomains } from '@/constants/signup-data';
 
-export const signUpScheme = z
+export const signupScheme = z
   .object({
     email: z
       .string()
@@ -45,4 +45,4 @@ export const signUpScheme = z
     message: '비밀번호가 일치하지 않습니다.',
   });
 
-export type SignUpDataType = z.infer<typeof signUpScheme>;
+export type SignupDataType = z.infer<typeof signupScheme>;
