@@ -1,4 +1,4 @@
-export type SchoolType = '“middleSchool' | 'highSchool';
+export type SchoolType = 'middle' | 'high';
 
 export type AccessTokenType = {
   id: string;
@@ -15,4 +15,11 @@ export type LoginResponse = {
 export type LoginProp = {
   email: string;
   password: string;
+};
+
+export type SignupTypes = {
+  email: string;
+  password: string;
+  subject: string;
+  school: string;
 };
