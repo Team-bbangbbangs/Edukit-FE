@@ -5,6 +5,8 @@ import { deleteRecordDetail } from './delete-record-detail';
 import { getNoticeDetail } from './get-notice-detail';
 import { getNoticeList } from './get-notice-list';
 import { getRecord } from './get-record';
+import { getVerifyEmail } from './get-verify-email';
+import { postSignup } from './post-signup';
 import { putRecordDetail } from './put-record-detail';
 
 export const handlers = [
@@ -16,4 +18,6 @@ export const handlers = [
   ...putRecordDetail,
   ...deleteRecordDetail,
   ...createRecordDetail,
+  ...postSignup,
+  ...getVerifyEmail,
 ];
