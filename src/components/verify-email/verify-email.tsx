@@ -2,26 +2,23 @@
 
 import { useEffect, useState } from 'react';
 
-import { useSearchParams } from 'next/navigation';
-
 import { useGetVerifyEmail } from '@/hooks/api/use-get-verify-email';
 
-export default function VerifyEmail() {
-  const searchParams = useSearchParams();
+interface VerifyEmailProps {
+  email?: string;
+  token?: string;
+}
 
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
-
-  const [message, setMessage] = useState('');
-
+export default function VerifyEmail({ email, token }: VerifyEmailProps) {
   const { mutate: getVerifyEmail } = useGetVerifyEmail();
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (email && token) {
       setMessage('이메일 인증 중...');
       getVerifyEmail({ email, token });
     } else if (email) {
-      setMessage(`가입하신 ${email} 주소로 인증 메일을 보냈습니다. 메일함을 확인해주세요.`);
+      setMessage(`${email} 주소로 인증 메일을 보냈습니다.`);
     } else {
       setMessage('잘못된 접근입니다.');
     }

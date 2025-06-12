@@ -1,11 +1,12 @@
-import { Suspense } from 'react';
-
 import VerifyEmail from '@/components/verify-email/verify-email';
 
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <VerifyEmail />
-    </Suspense>
-  );
+interface PageProps {
+  searchParams: {
+    email?: string;
+    token?: string;
+  };
+}
+
+export default function VerifyEmailPage({ searchParams }: PageProps) {
+  return <VerifyEmail email={searchParams.email} token={searchParams.token} />;
 }

@@ -12,9 +12,7 @@ export const useGetVerifyEmail = () => {
     mutationFn: ({ email, token }) => getVerifyEmail(email, token),
     onSuccess: (data) => {
       console.log('인증 성공:', data);
-      setTimeout(() => {
-        router.push('/');
-      }, 1000);
+      router.replace('/');
     },
     onError: (error) => {
       console.error('이메일 인증 실패:', error.message);

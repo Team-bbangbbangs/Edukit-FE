@@ -14,7 +14,7 @@ import { signupScheme } from './signup-scheme';
 import type { SignupDataType } from './signup-scheme';
 
 export default function Signup() {
-  const { mutate: signup } = useSignup();
+  const { mutate: signup, isPending } = useSignup();
 
   const {
     register,
@@ -247,6 +247,7 @@ export default function Signup() {
       <button
         type="submit"
         className="mt-4 h-12 rounded-md bg-slate-800 font-semibold text-white hover:bg-slate-950"
+        disabled={isPending}
       >
         가입하기
       </button>

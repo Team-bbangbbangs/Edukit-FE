@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const getVerifyEmail = [
-  http.get('api/v1/auth/verify-email', ({ request }) => {
+  http.get('/api/v1/auth/verify-email', ({ request }) => {
     const url = new URL(request.url);
     const email = url.searchParams.get('email');
     const token = url.searchParams.get('token');

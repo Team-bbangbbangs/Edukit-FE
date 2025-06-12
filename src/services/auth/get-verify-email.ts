@@ -1,5 +1,6 @@
-export const getVerifyEmail = async (email: string, token: string) => {
-  console.log(email, token);
+import type { Response } from '@/types/api/response';
+
+export const getVerifyEmail = async (email: string, token: string): Promise<Response<null>> => {
   const res = await fetch(
     `/api/v1/auth/verify-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`,
   );
@@ -9,5 +10,6 @@ export const getVerifyEmail = async (email: string, token: string) => {
     throw new Error(error.message || '이메일 인증에 실패했습니다.');
   }
 
-  return res.json();
+  const json: Response<null> = await res.json();
+  return json;
 };
