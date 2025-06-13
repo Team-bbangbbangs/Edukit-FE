@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import EmptyRecord from '@/components/record/empty-record';
 import { useGetStudentsName } from '@/hooks/api/use-get-students-name';
@@ -12,11 +12,15 @@ import AiResponse from './ai-response';
 import CharacteristicInput from './characteristic-input';
 import RecordSummary from './record-summary';
 
-export default function StudentRecordWrite({ recordType }: { recordType: RecordType }) {
+interface StudentRecordWriteProps {
+  recordType: RecordType;
+  recordId?: string;
+}
+
+export default function StudentRecordWrite({ recordType, recordId }: StudentRecordWriteProps) {
   const { data, isPending, isError } = useGetStudentsName(recordType, '2025-1');
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const recordId = searchParams.get('recordId');
+  const parsedRecordId = Number(recordId);
 
   useEffect(() => {
     if (!recordId && data && data.length > 0) {
@@ -41,10 +45,10 @@ export default function StudentRecordWrite({ recordType }: { recordType: RecordT
 
   return (
     <div className="flex flex-col gap-10">
-      <CharacteristicInput recordType={recordType} students={data} selectedId={Number(recordId)} />
+      <CharacteristicInput recordType={recordType} students={data} selectedId={parsedRecordId} />
       <AiResponse recordType={recordType} />
       <hr className="h-[1px] border-0 bg-black" />
-      <RecordSummary selectedId={Number(recordId)} />
+      <RecordSummary selectedId={parsedRecordId} />
     </div>
   );
 }
