@@ -28,3 +28,13 @@ export type CreateRecordDetail = {
   name: string;
   content: string;
 };
+
+export type StudentNameTypes = {
+  recordId: number;
+  studentName: string;
+};
+
+export type SummaryRecordTypes = {
+  description: string;
+  byteCount: number;
+};
