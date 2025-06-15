@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="border-#e5e7eb fixed top-0 z-50 flex h-16 w-full justify-between border-b bg-white px-10 py-3">
+    <header className="fixed top-0 z-50 flex h-16 w-full justify-between border-b bg-white px-10 py-3">
       <Link href="/" className="pt-1 text-2xl font-bold text-black">
         EduMate
       </Link>
