@@ -1,8 +1,6 @@
-import type { RecordType } from '@/types/api/student-record';
-
 const responses = [1, 2, 3];
 
-export default function AiResponse({ recordType }: { recordType: RecordType }) {
+export default function AiResponse({ selectedId }: { selectedId: number }) {
   return (
     <div className="flex flex-col gap-10">
       {responses.map((version) => (

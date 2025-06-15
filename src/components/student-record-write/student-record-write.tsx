@@ -45,8 +45,8 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
 
   return (
     <div className="flex flex-col gap-10">
-      <CharacteristicInput recordType={recordType} students={data} selectedId={parsedRecordId} />
-      <AiResponse recordType={recordType} />
+      <CharacteristicInput students={data} selectedId={parsedRecordId} />
+      <AiResponse selectedId={parsedRecordId} />
       <hr className="h-[1px] border-0 bg-black" />
       <RecordSummary selectedId={parsedRecordId} />
     </div>

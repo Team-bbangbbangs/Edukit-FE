@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Textarea } from '@/components/textarea/textarea';
 import { useGetSummaryRecordDetail } from '@/hooks/api/use-get-summary-record-detail';
 import { usePostSummaryRecordDetail } from '@/hooks/api/use-post-summary-record-detail';
+import { calculateByte } from '@/util/calculate-byte';
 
 export default function RecordSummary({ selectedId }: { selectedId: number }) {
   const [description, setDescription] = useState('');
@@ -16,7 +17,7 @@ export default function RecordSummary({ selectedId }: { selectedId: number }) {
   }, [data?.description]);
 
   const handleSave = () => {
-    const byteCount = new Blob([description]).size;
+    const byteCount = calculateByte(description);
 
     postSummaryRecordDetail({
       recordId: selectedId,
@@ -54,7 +55,7 @@ export default function RecordSummary({ selectedId }: { selectedId: number }) {
           저장
         </button>
       </div>
-      <span className="absolute bottom-14 right-2 text-slate-400">{`${data.byteCount}/1500`}</span>
+      <span className="absolute bottom-14 right-2 text-slate-400">{`${calculateByte(description)}/1500`}</span>
     </div>
   );
 }
