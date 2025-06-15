@@ -3,19 +3,16 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Textarea } from '@/components/textarea/textarea';
-import type { RecordType, StudentNameTypes } from '@/types/api/student-record';
+import { usePostPrompt } from '@/hooks/api/use-post-prompt';
+import type { StudentNameTypes } from '@/types/api/student-record';
 
 interface CharacteristicInputProps {
-  recordType: RecordType;
   students: StudentNameTypes[];
   selectedId: number;
 }
 
-export default function CharacteristicInput({
-  recordType,
-  students,
-  selectedId,
-}: CharacteristicInputProps) {
+export default function CharacteristicInput({ students, selectedId }: CharacteristicInputProps) {
+  const { mutate: postPrompt } = usePostPrompt();
   const characteristicInputTextRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
@@ -24,6 +21,15 @@ export default function CharacteristicInput({
   )?.studentName;
 
   const [open, setOpen] = useState(false);
+
+  const handleButtonClick = () => {
+    const value = characteristicInputTextRef.current?.value;
+    if (!value) {
+      alert('작성해주세요.');
+      return;
+    }
+    postPrompt({ recordId: selectedId, description: value });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,7 +69,10 @@ export default function CharacteristicInput({
         className="h-60 border-slate-400 p-5 placeholder:text-slate-400"
       />
       <div className="flex justify-end">
-        <button className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950">
+        <button
+          onClick={handleButtonClick}
+          className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
+        >
           생성
         </button>
       </div>
