@@ -40,6 +40,7 @@ export default function Header() {
           alt="profile image"
           className="hover:cursor-pointer"
           onClick={() => setOpen((prev) => !prev)}
+          width={40}
         />
         {open ? (
           <div ref={dropdownRef}>
