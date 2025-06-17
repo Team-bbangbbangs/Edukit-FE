@@ -4,10 +4,12 @@ import { createRecords } from './create-records';
 import { deleteRecordDetail } from './delete-record-detail';
 import { getNoticeDetail } from './get-notice-detail';
 import { getNoticeList } from './get-notice-list';
+import { getProfile } from './get-profile';
 import { getRecord } from './get-record';
 import { getStudentsName } from './get-students-name';
 import { getSummaryRecordDetail } from './get-summary-record-detail';
 import { getVerifyEmail } from './get-verify-email';
+import { postLogout } from './post-logout';
 import { postPrompt } from './post-prompt';
 import { postSignup } from './post-signup';
 import { postSummaryRecordDetail } from './post-summary-record-detail';
@@ -28,4 +30,6 @@ export const handlers = [
   ...postSummaryRecordDetail,
   ...getSummaryRecordDetail,
   ...postPrompt,
+  ...getProfile,
+  ...postLogout,
 ];
