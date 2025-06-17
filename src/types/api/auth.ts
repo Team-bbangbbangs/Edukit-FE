@@ -24,7 +24,7 @@ export type SignupTypes = {
   school: string;
 };
 
-export type userInfoTypes = {
+export type UserInfoTypes = {
   subject: string;
   email: string;
   isTeacherVerified: boolean;

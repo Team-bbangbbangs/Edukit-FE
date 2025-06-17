@@ -1,10 +1,10 @@
-import type { userInfoTypes } from '@/types/api/auth';
+import type { UserInfoTypes } from '@/types/api/auth';
 import type { Response } from '@/types/api/response';
 
-export const getProfile = async (): Promise<userInfoTypes> => {
+export const getProfile = async (): Promise<UserInfoTypes> => {
   const res = await fetch('/api/v1/users/profile');
 
-  const json: Response<userInfoTypes> = await res.json();
+  const json: Response<UserInfoTypes> = await res.json();
 
   if (!res.ok) {
     throw new Error(json.message || '유저 정보 불러오기 실패');

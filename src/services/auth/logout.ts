@@ -11,8 +11,7 @@ export const logout = async (): Promise<Response<void>> => {
   const json: Response<void> = await res.json();
 
   if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || '로그아웃 실패');
+    throw new Error(json.message || '로그아웃 실패');
   }
 
   return json;

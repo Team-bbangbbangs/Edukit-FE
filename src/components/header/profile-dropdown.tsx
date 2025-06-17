@@ -14,13 +14,20 @@ const SCHOOL_LABELS: Record<string, string> = {
 };
 
 export function ProfileDropDown() {
-  const { data, isPending } = useGetProfile();
+  const { data, isPending, isError } = useGetProfile();
   const { mutate: handleLogout } = useLogout();
 
   if (isPending) {
     return (
       <div className="absolute right-0 top-[50px] z-10 w-[300px] rounded-lg border bg-white p-4 shadow-lg">
         <div className="text-center text-sm text-gray-500">로딩중...</div>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="absolute right-0 top-[50px] z-10 w-[300px] rounded-lg border bg-white p-4 shadow-lg">
+        <div className="text-center text-sm text-red-500">프로필을 불러오지 못했습니다.</div>
       </div>
     );
   }

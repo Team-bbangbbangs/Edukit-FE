@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getProfile } from '@/services/auth/get-profile';
-import type { userInfoTypes } from '@/types/api/auth';
+import type { UserInfoTypes } from '@/types/api/auth';
 
 export const useGetProfile = () => {
-  return useQuery<userInfoTypes>({
+  return useQuery<UserInfoTypes>({
     queryKey: ['profile'],
     queryFn: () => getProfile(),
   });
