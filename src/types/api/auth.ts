@@ -23,3 +23,12 @@ export type SignupTypes = {
   subject: string;
   school: string;
 };
+
+export type UserInfoTypes = {
+  subject: string;
+  email: string;
+  isTeacherVerified: boolean;
+  school: string;
+  nickName: string;
+  semester: string;
+};
