@@ -1,50 +1,51 @@
 import { http, HttpResponse } from 'msw';
 
-import type { NoticeType, NoticeResponse } from '@/types/api/notice';
-import type { Response } from '@/types/api/response';
+import type { NoticeType } from '@/types/api/notice';
 
 const tags = ['공지', '이벤트'] as const;
 
 const notices: NoticeType[] = Array.from({ length: 80 }, (_, i) => ({
-  id: `${i + 1}`,
-  tag: tags[i % tags.length],
+  noticeId: `${i + 1}`,
+  category: tags[i % tags.length],
   title: `공지사항 제목 ${i + 1}`,
   createdAt: new Date(Date.now() - i * 1000 * 60 * 60).toISOString(),
 }));
 
+const PAGE_SIZE = 10;
+const CATEGORY_MAP: Record<string, string> = { '2': '공지', '3': '이벤트' };
+
 export const getNoticeList = [
-  http.get('/api/notice', ({ request }) => {
+  http.get('/api/v1/notices', ({ request }) => {
     const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '1', 10);
-    const tagParam = url.searchParams.get('tagId');
+    const page = Number(url.searchParams.get('page') ?? '1');
+    const categoryParam = url.searchParams.get('categoryId') ?? '';
 
-    const tagByNumber: Record<string, string> = { '2': '공지', '3': '이벤트' };
-    const tag = tagByNumber[tagParam || ''] || '';
+    const categoryFilter = CATEGORY_MAP[categoryParam] ?? '';
 
-    let filtered = notices;
-    if (tag) {
-      filtered = filtered.filter((n) => n.tag === tag);
-    }
+    const filteredNotices = categoryFilter
+      ? notices.filter((notice) => notice.category === categoryFilter)
+      : notices;
 
-    filtered = filtered.sort(
+    const sortedNotices = filteredNotices.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-    const pageSize = 10;
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const paginated = filtered.slice(start, end);
+    const startIdx = (page - 1) * PAGE_SIZE;
+    const paginatedNotices = sortedNotices.slice(startIdx, startIdx + PAGE_SIZE);
 
-    const response: Response<NoticeResponse> = {
-      status: 200,
-      code: 'EDMT-20002',
-      message: '요청에 성공했습니다.',
-      data: {
-        NoticeList: paginated,
-        maxPage: 8,
+    const totalPages = Math.ceil(filteredNotices.length / PAGE_SIZE);
+
+    return HttpResponse.json(
+      {
+        status: 200,
+        code: 'EDMT-20002',
+        message: '요청에 성공했습니다.',
+        data: {
+          notices: paginatedNotices,
+          totalPages,
+        },
       },
-    };
-
-    return HttpResponse.json(response);
+      { status: 200 },
+    );
   }),
 ];

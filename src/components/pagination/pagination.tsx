@@ -1,19 +1,19 @@
 import Link from 'next/link';
 
 interface PaginationProps {
-  tagId?: string;
+  categoryId?: string;
   nowPage?: string;
-  maxPage: number;
+  totalPages: number;
 }
 
 const paginationStyle = 'rounded-md min-w-8 h-8 flex items-center justify-center text-center p-1';
 
-export default function Pagination({ tagId, nowPage = '1', maxPage }: PaginationProps) {
+export default function Pagination({ categoryId, nowPage = '1', totalPages }: PaginationProps) {
   const currentPage = parseInt(nowPage, 10);
 
   const blockSize = 5;
   const startPageNumber = Math.floor((currentPage - 1) / blockSize) * blockSize + 1;
-  const endPageNumber = Math.min(startPageNumber + blockSize - 1, maxPage);
+  const endPageNumber = Math.min(startPageNumber + blockSize - 1, totalPages);
 
   const pageArr = Array.from(
     { length: endPageNumber - startPageNumber + 1 },
@@ -23,8 +23,8 @@ export default function Pagination({ tagId, nowPage = '1', maxPage }: Pagination
   const makeQuery = (page: number) => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
-    if (tagId) {
-      params.set('tagId', tagId);
+    if (categoryId) {
+      params.set('categoryId', categoryId);
     }
     return `?${params.toString()}`;
   };
@@ -58,7 +58,7 @@ export default function Pagination({ tagId, nowPage = '1', maxPage }: Pagination
         ),
       )}
 
-      {endPageNumber !== maxPage ? (
+      {endPageNumber !== totalPages ? (
         <Link
           href={makeQuery(endPageNumber + 1)}
           className={`${paginationStyle} hover:bg-slate-200`}

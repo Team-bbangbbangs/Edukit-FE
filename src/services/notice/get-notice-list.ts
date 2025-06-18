@@ -1,21 +1,27 @@
 import type { NoticeResponse } from '@/types/api/notice';
 import type { Response } from '@/types/api/response';
 
-export const getNoticeList = async ({ page, tagId }: { page?: string; tagId?: string }) => {
+export const getNoticeList = async ({
+  page,
+  categoryId,
+}: {
+  page?: string;
+  categoryId?: string;
+}): Promise<NoticeResponse> => {
   const query: Record<string, string> = {};
   if (page) {
     query.page = page;
   }
-  if (tagId) {
-    query.tagId = tagId;
+  if (categoryId) {
+    query.categoryId = categoryId;
   }
 
   const param = new URLSearchParams(query).toString();
 
   const url =
     param.length === 0
-      ? `http://localhost:9090/api/notice`
-      : `http://localhost:9090/api/notice?${param}`;
+      ? `${process.env.API_URL}/api/v1/notices`
+      : `${process.env.API_URL}/api/v1/notices?${param}`;
 
   const res = await fetch(url, {
     cache: 'no-store',
@@ -28,5 +34,9 @@ export const getNoticeList = async ({ page, tagId }: { page?: string; tagId?: st
 
   const json: Response<NoticeResponse> = await res.json();
 
-  return json;
+  if (!json.data) {
+    throw new Error('데이터 fetch 실패');
+  }
+
+  return json.data;
 };

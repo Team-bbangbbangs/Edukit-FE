@@ -2,7 +2,7 @@ import type { DetailNoticeType } from '@/types/api/notice';
 import type { Response } from '@/types/api/response';
 
 export const getNoticeDetail = async (id: string) => {
-  const url = `http://localhost:9090/api/notice/${id}`;
+  const url = `${process.env.API_URL}/api/v1/notices/${id}`;
 
   const res = await fetch(url, {
     cache: 'no-store',
@@ -15,5 +15,5 @@ export const getNoticeDetail = async (id: string) => {
 
   const json: Response<DetailNoticeType> = await res.json();
 
-  return json;
+  return json.data;
 };
