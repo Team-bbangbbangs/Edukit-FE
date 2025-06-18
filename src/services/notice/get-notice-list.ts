@@ -7,7 +7,7 @@ export const getNoticeList = async ({
 }: {
   page?: string;
   categoryId?: string;
-}) => {
+}): Promise<NoticeResponse> => {
   const query: Record<string, string> = {};
   if (page) {
     query.page = page;
@@ -33,6 +33,10 @@ export const getNoticeList = async ({
   }
 
   const json: Response<NoticeResponse> = await res.json();
+
+  if (!json.data) {
+    throw new Error('데이터 fetch 실패');
+  }
 
   return json.data;
 };

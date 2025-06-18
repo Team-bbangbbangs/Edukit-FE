@@ -28,7 +28,7 @@ export default async function NoticePage({ searchParams }: PageProps) {
       {data?.notices ? <NoticeList notice={data.notices} /> : null}
 
       {data?.totalPages ? (
-        <Pagination categoryId={categoryId} nowPage={page} maxPage={data.totalPages} />
+        <Pagination categoryId={categoryId} nowPage={page} totalPages={data.totalPages} />
       ) : null}
     </div>
   );

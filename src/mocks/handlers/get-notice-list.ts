@@ -41,7 +41,7 @@ export const getNoticeList = [
         code: 'EDMT-20002',
         message: '요청에 성공했습니다.',
         data: {
-          NoticeList: paginatedNotices,
+          notices: paginatedNotices,
           totalPages,
         },
       },
