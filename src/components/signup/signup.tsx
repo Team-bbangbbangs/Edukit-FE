@@ -15,6 +15,7 @@ import type { SignupDataType } from './signup-scheme';
 
 export default function Signup() {
   const { mutate: signup, isPending } = useSignup();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const {
     register,
@@ -37,7 +38,11 @@ export default function Signup() {
   const onSubmit = (data: SignupDataType) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...signupData } = data;
-    signup(signupData);
+    signup(signupData, {
+      onSuccess: () => {
+        setIsSuccess(true);
+      },
+    });
   };
 
   const selectedSubjectValue = watch('subject');
@@ -102,155 +107,176 @@ export default function Signup() {
     }
   }, [selectedIndex]);
 
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-8 text-center">
+        <h2 className="text-2xl font-bold">가입 완료</h2>
+        <p className="text-gray-700">
+          가입하신 이메일로 인증 메일을 보냈습니다.
+          <br />
+          메일함을 확인해주세요.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex w-[400px] flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="email">
-          이메일
-        </label>
-        <Input
-          id="email"
-          className={`h-12 ${
-            errors.email ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0' : ''
-          }`}
-          type="email"
-          placeholder="교직 이메일을 작성해주세요"
-          {...register('email')}
-        />
-        {errors.email ? <p className="text-sm text-red-500">{errors.email.message}</p> : null}
-      </div>
+    <div className="flex w-full flex-col items-center justify-center gap-4">
+      <h2 className="text-[26px] font-bold">회원가입</h2>
 
-      <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="password">
-          비밀번호
-        </label>
-        <Input
-          id="password"
-          className={`h-12 pt-3 text-[20px] ${
-            errors.password
-              ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0'
-              : ''
-          }`}
-          type="password"
-          placeholder="********"
-          {...register('password')}
-        />
-        {errors.password ? <p className="text-sm text-red-500">{errors.password.message}</p> : null}
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="confirmPassword">
-          비밀번호 확인
-        </label>
-        <Input
-          id="confirmPassword"
-          className={`h-12 pt-3 text-[20px] ${
-            errors.confirmPassword
-              ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0'
-              : ''
-          }`}
-          type="password"
-          placeholder="********"
-          {...register('confirmPassword')}
-        />
-        {errors.confirmPassword ? (
-          <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
-        ) : null}
-      </div>
-
-      <div className="relative flex flex-col gap-2">
-        <label className="font-bold" id="subject">
-          담당 교과목
-        </label>
-        <button
-          type="button"
-          className="h-12 w-full rounded-md border bg-white text-black hover:bg-slate-200"
-          onClick={handleButtonClick}
-        >
-          {selectedSubjectValue
-            ? subjects.find((subject) => subject.value === selectedSubjectValue)?.label
-            : '담당 교과목 선택'}
-        </button>
-        {open ? (
-          <div className="absolute top-[86px] w-full rounded-lg border bg-slate-100">
-            <input
-              ref={inputRef}
-              type="text"
-              value={comboBoxInput}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              onBlur={() => setOpen(false)}
-              className="h-12 w-full rounded-t-lg pl-2"
-            />
-            <div className="max-h-52 overflow-y-scroll border-t px-1 py-2">
-              {filteredSubjects.length === 0 ? (
-                <div className="flex h-52 items-center justify-center text-slate-700">
-                  검색 결과가 없습니다.
-                </div>
-              ) : (
-                filteredSubjects.map((subject, index) => (
-                  <div
-                    key={subject.value}
-                    ref={(el) => {
-                      itemRefs.current[index] = el;
-                    }}
-                    onMouseDown={() => {
-                      handleSelectSubject(subject.value, subject.label);
-                    }}
-                    className={`flex h-10 cursor-pointer items-center rounded-md hover:bg-slate-200 ${
-                      index === selectedIndex ? 'bg-slate-300' : ''
-                    }`}
-                  >
-                    <span className="pl-2">{subject.label}</span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        ) : null}
-        {errors.subject ? <p className="text-sm text-red-500">{errors.subject.message}</p> : null}
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label id="school-label" className="font-bold">
-          중 / 고등학교 선택
-        </label>
-        <div className="flex w-full overflow-hidden rounded-md border">
-          <button
-            type="button"
-            role="radio"
-            aria-checked={watch('school') === 'middle'}
-            aria-labelledby="school-label"
-            onClick={() => setValue('school', 'middle', { shouldValidate: true })}
-            className={`flex-1 border-r py-2 text-center ${
-              watch('school') === 'middle' ? 'bg-black text-white' : 'bg-white text-black'
+      <form onSubmit={handleSubmit(onSubmit)} className="flex w-[400px] flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="font-bold" htmlFor="email">
+            이메일
+          </label>
+          <Input
+            id="email"
+            className={`h-12 ${
+              errors.email
+                ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0'
+                : ''
             }`}
-          >
-            중학교
-          </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={watch('school') === 'high'}
-            aria-labelledby="school-label"
-            onClick={() => setValue('school', 'high', { shouldValidate: true })}
-            className={`flex-1 py-2 text-center ${
-              watch('school') === 'high' ? 'bg-black text-white' : 'bg-white text-black'
-            }`}
-          >
-            고등학교
-          </button>
+            type="email"
+            placeholder="교직 이메일을 작성해주세요"
+            {...register('email')}
+          />
+          {errors.email ? <p className="text-sm text-red-500">{errors.email.message}</p> : null}
         </div>
-        {errors.school ? <p className="text-sm text-red-500">{errors.school.message}</p> : null}
-      </div>
 
-      <button
-        type="submit"
-        className="mt-4 h-12 rounded-md bg-slate-800 font-semibold text-white hover:bg-slate-950"
-        disabled={isPending}
-      >
-        가입하기
-      </button>
-    </form>
+        <div className="flex flex-col gap-2">
+          <label className="font-bold" htmlFor="password">
+            비밀번호
+          </label>
+          <Input
+            id="password"
+            className={`h-12 pt-3 text-[20px] ${
+              errors.password
+                ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0'
+                : ''
+            }`}
+            type="password"
+            placeholder="********"
+            {...register('password')}
+          />
+          {errors.password ? (
+            <p className="text-sm text-red-500">{errors.password.message}</p>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="font-bold" htmlFor="confirmPassword">
+            비밀번호 확인
+          </label>
+          <Input
+            id="confirmPassword"
+            className={`h-12 pt-3 text-[20px] ${
+              errors.confirmPassword
+                ? 'border border-red-500 focus-visible:border-2 focus-visible:ring-0'
+                : ''
+            }`}
+            type="password"
+            placeholder="********"
+            {...register('confirmPassword')}
+          />
+          {errors.confirmPassword ? (
+            <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+          ) : null}
+        </div>
+
+        <div className="relative flex flex-col gap-2">
+          <label className="font-bold" id="subject">
+            담당 교과목
+          </label>
+          <button
+            type="button"
+            className="h-12 w-full rounded-md border bg-white text-black hover:bg-slate-200"
+            onClick={handleButtonClick}
+          >
+            {selectedSubjectValue
+              ? subjects.find((subject) => subject.value === selectedSubjectValue)?.label
+              : '담당 교과목 선택'}
+          </button>
+          {open ? (
+            <div className="absolute top-[86px] w-full rounded-lg border bg-slate-100">
+              <input
+                ref={inputRef}
+                type="text"
+                value={comboBoxInput}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                onBlur={() => setOpen(false)}
+                className="h-12 w-full rounded-t-lg pl-2"
+              />
+              <div className="max-h-52 overflow-y-scroll border-t px-1 py-2">
+                {filteredSubjects.length === 0 ? (
+                  <div className="flex h-52 items-center justify-center text-slate-700">
+                    검색 결과가 없습니다.
+                  </div>
+                ) : (
+                  filteredSubjects.map((subject, index) => (
+                    <div
+                      key={subject.value}
+                      ref={(el) => {
+                        itemRefs.current[index] = el;
+                      }}
+                      onMouseDown={() => {
+                        handleSelectSubject(subject.value, subject.label);
+                      }}
+                      className={`flex h-10 cursor-pointer items-center rounded-md hover:bg-slate-200 ${
+                        index === selectedIndex ? 'bg-slate-300' : ''
+                      }`}
+                    >
+                      <span className="pl-2">{subject.label}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          ) : null}
+          {errors.subject ? <p className="text-sm text-red-500">{errors.subject.message}</p> : null}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label id="school-label" className="font-bold">
+            중 / 고등학교 선택
+          </label>
+          <div className="flex w-full overflow-hidden rounded-md border">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={watch('school') === 'middle'}
+              aria-labelledby="school-label"
+              onClick={() => setValue('school', 'middle', { shouldValidate: true })}
+              className={`flex-1 border-r py-2 text-center ${
+                watch('school') === 'middle' ? 'bg-black text-white' : 'bg-white text-black'
+              }`}
+            >
+              중학교
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={watch('school') === 'high'}
+              aria-labelledby="school-label"
+              onClick={() => setValue('school', 'high', { shouldValidate: true })}
+              className={`flex-1 py-2 text-center ${
+                watch('school') === 'high' ? 'bg-black text-white' : 'bg-white text-black'
+              }`}
+            >
+              고등학교
+            </button>
+          </div>
+          {errors.school ? <p className="text-sm text-red-500">{errors.school.message}</p> : null}
+        </div>
+
+        <button
+          type="submit"
+          className="mt-4 h-12 rounded-md bg-slate-800 font-semibold text-white hover:bg-slate-950"
+          disabled={isPending}
+        >
+          가입하기
+        </button>
+      </form>
+    </div>
   );
 }
