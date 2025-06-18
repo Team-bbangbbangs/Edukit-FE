@@ -1,34 +1,34 @@
+import NoticeCategorys from '@/components/notice/notice-categorys';
 import NoticeList from '@/components/notice/notice-list';
-import NoticeTags from '@/components/notice/notice-tags';
 import Pagination from '@/components/pagination/pagination';
 import { getNoticeList } from '@/services/notice/get-notice-list';
 
 interface PageProps {
   searchParams?: {
     page?: string;
-    tagId?: string;
+    categoryId?: string;
   };
 }
 
 export default async function NoticePage({ searchParams }: PageProps) {
   const page = searchParams?.page;
-  const tagId = searchParams?.tagId;
+  const categoryId = searchParams?.categoryId;
 
-  const notices = await getNoticeList({
+  const data = await getNoticeList({
     page,
-    tagId,
+    categoryId,
   });
 
   return (
     <div className="w-full px-10">
       <h2 className="text-[26px] font-bold">공지사항</h2>
 
-      <NoticeTags tagId={tagId} />
+      <NoticeCategorys categoryId={categoryId} />
 
-      {notices.data?.NoticeList ? <NoticeList notice={notices.data.NoticeList} /> : null}
+      {data?.notices ? <NoticeList notice={data.notices} /> : null}
 
-      {notices.data?.maxPage ? (
-        <Pagination tagId={tagId} nowPage={page} maxPage={notices.data.maxPage} />
+      {data?.totalPages ? (
+        <Pagination categoryId={categoryId} nowPage={page} maxPage={data.totalPages} />
       ) : null}
     </div>
   );
