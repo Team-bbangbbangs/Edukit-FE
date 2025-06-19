@@ -1,7 +1,7 @@
 import type { UserInfoTypes } from '@/types/api/auth';
 import type { Response } from '@/types/api/response';
 
-export const getProfile = async (accessToken: string): Promise<UserInfoTypes> => {
+export const getProfile = async (accessToken: string | null): Promise<UserInfoTypes> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/profile`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
