@@ -1,16 +1,29 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { useRouter } from 'next/navigation';
+
+import { useAuth } from '@/contexts/auth/use-auth';
 import { logout } from '@/services/auth/logout';
 import type { Response } from '@/types/api/response';
 
 export const useLogout = () => {
+  const { accessToken, setAccessToken } = useAuth();
+  const router = useRouter();
+
   return useMutation<Response<void>, Error>({
-    mutationFn: logout,
-    onSuccess: (data) => {
-      console.log('로그아웃 성공:', data);
+    mutationFn: async () => {
+      if (!accessToken) {
+        throw new Error('로그인 상태가 아닙니다.');
+      }
+      return logout(accessToken);
     },
-    onError: (error) => {
-      console.error('로그아웃 실패:', error.message);
+    onSuccess: () => {
+      setAccessToken(null);
+      router.push('/');
+    },
+    onError: () => {
+      setAccessToken(null);
+      router.push('/');
     },
   });
 };
