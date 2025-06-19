@@ -1,15 +1,7 @@
 export type SchoolType = 'middle' | 'high';
 
-export type AccessTokenType = {
-  id: string;
-  role: string;
-};
-
-export type LoginResponse = {
-  accessToken: AccessTokenType;
-  nickName: string;
-  school: SchoolType;
-  profileImage: string;
+export type AuthResponse = {
+  accessToken: string;
 };
 
 export type LoginProp = {
@@ -29,6 +21,5 @@ export type UserInfoTypes = {
   email: string;
   isTeacherVerified: boolean;
   school: string;
-  nickName: string;
-  semester: string;
+  nickname: string;
 };
