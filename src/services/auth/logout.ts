@@ -1,10 +1,11 @@
 import type { Response } from '@/types/api/response';
 
-export const logout = async (): Promise<Response<void>> => {
-  const res = await fetch('/api/v1/auth/logout', {
+export const logout = async (accessToken: string): Promise<Response<void>> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
