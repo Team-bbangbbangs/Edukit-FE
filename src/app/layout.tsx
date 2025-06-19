@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/contexts/auth/auth-provider';
 import { MSWProvider } from '@/lib/msw-provider';
 import QueryProvider from '@/lib/tanstack-query-provider';
 
@@ -13,7 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="overflow-hidden">
         <MSWProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
         </MSWProvider>
       </body>
     </html>
