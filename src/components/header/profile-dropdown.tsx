@@ -34,19 +34,19 @@ export function ProfileDropDown() {
 
   if (!data) return null;
 
-  const { nickName, isTeacherVerified, school, semester } = data;
+  const { nickname, isTeacherVerified, school } = data;
 
   return (
     <div className="absolute right-0 top-[50px] z-10 flex w-[300px] flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg">
       <div className="flex gap-4">
         <Link href={'/mypage'}>
-          <Image src={ProfileImage} alt={`${nickName}의 프로필 이미지`} width={60} height={60} />
+          <Image src={ProfileImage} alt={`${nickname}의 프로필 이미지`} width={60} height={60} />
         </Link>
         <div className="flex flex-col justify-center">
           <Link href={'/mypage'}>
             <div className="flex items-center gap-1 font-bold">
               <Home size={20} />
-              <span className="pt-[2px] text-[20px]">{nickName}</span>
+              <span className="pt-[2px] text-[20px]">{nickname}</span>
               <span className="pt-[2px] text-[24px]">{'>'}</span>
             </div>
           </Link>
@@ -60,7 +60,7 @@ export function ProfileDropDown() {
         </div>
       </div>
       <div className="flex w-full justify-between">
-        <div className="rounded-sm bg-slate-100 px-10 py-2 text-sm">{semester}학기</div>
+        <div className="rounded-sm bg-slate-100 px-10 py-2 text-sm">2025-1학기</div>
         <button
           type="button"
           className="rounded-sm bg-slate-100 px-8 py-2 text-sm hover:bg-slate-200"

@@ -24,7 +24,7 @@ export default function Mypage() {
       <div className="mt-5 flex gap-4">
         <Image src={ProfileImage} alt="profile image" width={100} />
         <div className="flex flex-col justify-center gap-1">
-          <span className="text-lg font-bold">{data.nickName}</span>
+          <span className="text-lg font-bold">{data.nickname}</span>
           <div>
             <span className="text-sm text-slate-600">인증 상태 : </span>
             {data.isTeacherVerified ? (
