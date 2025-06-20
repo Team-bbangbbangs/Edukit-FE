@@ -3,9 +3,9 @@ import { http, HttpResponse } from 'msw';
 import { RECORD_DATA } from '@/constants/record-data';
 import type { RecordType } from '@/types/api/student-record';
 
-export const getRecord = [
+export const getRecords = [
   http.get<never, { recordType: RecordType }>(
-    '/api/v1/student-records/:recordType',
+    '/api/v1/student-records/:recordType?semester=2025-1',
     ({ params }) => {
       const { recordType } = params;
       const records = RECORD_DATA[recordType];
