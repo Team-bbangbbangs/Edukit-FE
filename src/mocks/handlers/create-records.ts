@@ -6,7 +6,7 @@ export const createRecords = [
   http.post('/api/v1/create-student-records', async ({ request }) => {
     const body = (await request.json()) as CreateRecords;
 
-    if (!body || !Array.isArray(body.students) || body.students.length === 0) {
+    if (!body || !Array.isArray(body.studentRecords) || body.studentRecords.length === 0) {
       return HttpResponse.json(
         { status: 400, code: 'EDMT-40001', message: '잘못된 요청 데이터' },
         { status: 400 },

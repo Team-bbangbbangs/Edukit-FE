@@ -3,7 +3,7 @@ import type { CreateRecordDetail } from '@/types/api/student-record';
 
 export const createRecordDetail = async ({
   recordType,
-  name,
+  studentName,
   studentNumber,
   content,
 }: CreateRecordDetail): Promise<Response<null>> => {
@@ -12,7 +12,7 @@ export const createRecordDetail = async ({
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ recordType, name, studentNumber, content }),
+    body: JSON.stringify({ recordType, studentName, studentNumber, content }),
   });
 
   const json: Response<null> = await res.json();
