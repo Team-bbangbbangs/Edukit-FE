@@ -17,6 +17,10 @@ export default function Header() {
 
   const isLogIn = !!accessToken;
 
+  const handleCloseDropdown = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -50,7 +54,7 @@ export default function Header() {
             />
             {open ? (
               <div ref={dropdownRef}>
-                <ProfileDropDown />
+                <ProfileDropDown onClose={handleCloseDropdown} />
               </div>
             ) : null}
           </>

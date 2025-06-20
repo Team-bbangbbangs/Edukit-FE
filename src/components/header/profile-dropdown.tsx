@@ -13,7 +13,11 @@ const SCHOOL_LABELS: Record<string, string> = {
   high: '고등학교',
 };
 
-export function ProfileDropDown() {
+interface ProfileDropDownProps {
+  onClose: () => void;
+}
+
+export function ProfileDropDown({ onClose }: ProfileDropDownProps) {
   const { data, isPending, isError } = useGetProfile();
   const { mutate: handleLogout } = useLogout();
 
@@ -39,11 +43,11 @@ export function ProfileDropDown() {
   return (
     <div className="absolute right-0 top-[50px] z-10 flex w-[300px] flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg">
       <div className="flex gap-4">
-        <Link href={'/mypage'}>
+        <Link href={'/mypage'} onClick={() => onClose()}>
           <Image src={ProfileImage} alt={`${nickname}의 프로필 이미지`} width={60} height={60} />
         </Link>
         <div className="flex flex-col justify-center">
-          <Link href={'/mypage'}>
+          <Link href={'/mypage'} onClick={() => onClose()}>
             <div className="flex items-center gap-1 font-bold">
               <Home size={20} />
               <span className="pt-[2px] text-[20px]">{nickname}</span>
@@ -53,7 +57,7 @@ export function ProfileDropDown() {
           {isTeacherVerified ? (
             <span className="text-sm text-gray-600">{SCHOOL_LABELS[school]} 교사</span>
           ) : (
-            <Link href={'/mypage'}>
+            <Link href={'/mypage'} onClick={() => onClose()}>
               <span className="text-sm text-red-500 hover:underline">교사 인증 필요</span>
             </Link>
           )}

@@ -1,16 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { useRouter } from 'next/navigation';
+
+import { useAuth } from '@/contexts/auth/use-auth';
 import { login } from '@/services/auth/login';
 import type { LoginProp, AuthResponse } from '@/types/api/auth';
 
 export const useLogin = () => {
+  const router = useRouter();
+
+  const { setAccessToken } = useAuth();
+
   return useMutation<AuthResponse, Error, LoginProp>({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log('로그인 성공:', data);
-    },
-    onError: (error) => {
-      console.error('로그인 실패:', error.message);
+      setAccessToken(data.accessToken);
+      router.push('/');
     },
   });
 };

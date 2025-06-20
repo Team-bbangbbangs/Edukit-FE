@@ -3,6 +3,7 @@
 import { CheckCircle2 } from 'lucide-react';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { useGetProfile } from '@/hooks/api/use-get-profile';
 
@@ -12,10 +13,24 @@ export default function Mypage() {
   const { data, isPending, isError } = useGetProfile();
 
   if (isError) {
-    return <div>데이터를 불러오지 못했습니다..!</div>;
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4">
+        <p className="text-[26px] font-bold">로그인 후 접근 가능합니다.</p>
+        <Link
+          href={'/login'}
+          className="rounded-md bg-slate-800 px-8 py-4 text-[20px] font-bold text-white hover:bg-slate-950"
+        >
+          로그인하기
+        </Link>
+      </div>
+    );
   }
   if (isPending) {
-    return <div>데이터를 불러오는 중입니다..!</div>;
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-[26px] font-bold">데이터를 불러오는 중입니다..!</p>
+      </div>
+    );
   }
 
   return (
