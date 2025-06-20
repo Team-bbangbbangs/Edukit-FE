@@ -31,7 +31,7 @@ export default function CreateRecordModal({
   const [studentCount, setStudentCount] = useState(0);
 
   const studentNumberRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const nameRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const studentNameRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const { mutate: createRecords } = useCreateRecords();
 
@@ -42,13 +42,19 @@ export default function CreateRecordModal({
     setStudentCount(count);
   };
 
-  const handleSubmit = () => {
-    const students = Array.from({ length: studentCount }, (_, index) => ({
-      studentNumber: studentNumberRefs.current[index]?.value || '',
-      name: nameRefs.current[index]?.value || '',
-    }));
+  const semesterRef = useRef<HTMLInputElement>(null);
 
-    createRecords({ recordType, students }, { onSuccess: handleClose });
+  const handleSubmit = () => {
+    const semester = semesterRef.current?.value;
+    if (!semester) return;
+
+    const studentRecords = Array.from({ length: studentCount }, (_, index) => ({
+      studentNumber: studentNumberRefs.current[index]?.value || '',
+      studentName: studentNameRefs.current[index]?.value || '',
+    }));
+    console.log(studentRecords);
+
+    createRecords({ recordType, studentRecords, semester }, { onSuccess: handleClose });
   };
 
   const handleClose = () => {
@@ -62,25 +68,37 @@ export default function CreateRecordModal({
         <ModalOverlay />
         <ModalContent aria-describedby={undefined} className="max-w-xl rounded-xl px-16 py-5 pt-10">
           <ModalHeader className="w-full">
-            <ModalTitle className="mb-5 flex items-center justify-center gap-2 text-[24px]">
-              <span>학생</span>
-              <Input
-                type="text"
-                ref={countInputRef}
-                className="ml-2 w-20 p-2 pt-3 text-right"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleRegister();
-                  }
-                }}
-              />
-              <span>명</span>
-              <button
-                onClick={handleRegister}
-                className="ml-2 rounded-md bg-blue-800 px-4 pb-1.5 pt-2 text-[16px] font-bold text-white hover:bg-blue-950"
-              >
-                등록
-              </button>
+            <ModalTitle className="mb-5 flex flex-col items-center justify-center gap-1 text-[24px]">
+              <div className="flex gap-2">
+                <span>학기</span>
+                <Input
+                  ref={semesterRef}
+                  className="ml-2 w-[86px] p-2 pt-3 text-black"
+                  type="text"
+                  defaultValue="2025-1"
+                  disabled
+                />
+              </div>
+              <div className="flex gap-2">
+                <span>학생</span>
+                <Input
+                  type="text"
+                  ref={countInputRef}
+                  className="ml-2 w-20 p-2 pt-3 text-right"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleRegister();
+                    }
+                  }}
+                />
+                <span>명</span>
+                <button
+                  onClick={handleRegister}
+                  className="ml-2 rounded-md bg-blue-800 px-4 pb-1.5 pt-2 text-[16px] font-bold text-white hover:bg-blue-950"
+                >
+                  등록
+                </button>
+              </div>
             </ModalTitle>
           </ModalHeader>
           <div className="max-h-96 min-h-96 w-full overflow-y-auto rounded-xl bg-slate-100 p-5">
@@ -102,7 +120,7 @@ export default function CreateRecordModal({
                   type="text"
                   placeholder="이름"
                   ref={(name) => {
-                    nameRefs.current[index] = name;
+                    studentNameRefs.current[index] = name;
                   }}
                   className="text-white placeholder:text-slate-400"
                 />
