@@ -5,10 +5,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components/input/input';
-import { useAuth } from '@/contexts/auth/use-auth';
 import { useLogin } from '@/hooks/api/use-login';
 
 type LoginFormData = {
@@ -17,26 +15,20 @@ type LoginFormData = {
 };
 
 export default function Login() {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  const { setAccessToken } = useAuth();
-
   const [isError, setIsError] = useState('');
 
   const { mutate: login, isPending } = useLogin();
 
   const onSubmit = (formData: LoginFormData) => {
+    setIsError('');
+
     login(formData, {
-      onSuccess: (data) => {
-        setAccessToken(data.accessToken);
-        router.push('/');
-      },
       onError: (error) => {
         setIsError(error.message);
       },
