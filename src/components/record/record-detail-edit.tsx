@@ -17,18 +17,18 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
   const { mutate: deleteRecordDetail } = useDeleteRecordDetail();
 
   const studentNumberRef = useRef<HTMLInputElement>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
+  const studentNameRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     const updatedStudentNumber = studentNumberRef.current?.value || '';
-    const updatedName = nameRef.current?.value || '';
+    const updatedName = studentNameRef.current?.value || '';
     const updatedContent = contentRef.current?.value || '';
 
     const detailRecord: StudentRecord = {
       ...record,
       studentNumber: updatedStudentNumber,
-      name: updatedName,
+      studentName: updatedName,
       content: updatedContent,
     };
 
@@ -36,7 +36,7 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
   };
 
   const handleDelete = () => {
-    deleteRecordDetail(record.id);
+    deleteRecordDetail(record.recordDetailId);
   };
 
   return (
@@ -45,7 +45,7 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
         <Input defaultValue={record.studentNumber} ref={studentNumberRef} className="w-full p-1" />
       </td>
       <td className="py-2 pl-5">
-        <Input defaultValue={record.name} ref={nameRef} className="w-full p-1" />
+        <Input defaultValue={record.studentName} ref={studentNameRef} className="w-full p-1" />
       </td>
       <td className="py-2 pl-5">
         <Input defaultValue={record.content} ref={contentRef} className="w-full p-1" />

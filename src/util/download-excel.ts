@@ -25,7 +25,7 @@ export const downloadExcel = async (data: StudentRecord[], recordType: RecordTyp
 
   const extractData = data.map((record) => ({
     studentNumber: record.studentNumber,
-    name: record.name,
+    name: record.studentName,
     content: record.content,
   }));
 
