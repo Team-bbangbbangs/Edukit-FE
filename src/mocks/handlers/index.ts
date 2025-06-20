@@ -4,7 +4,7 @@ import { deleteRecordDetail } from './delete-record-detail';
 import { getNoticeDetail } from './get-notice-detail';
 import { getNoticeList } from './get-notice-list';
 import { getProfile } from './get-profile';
-import { getRecord } from './get-record';
+import { getRecords } from './get-records';
 import { getStudentsName } from './get-students-name';
 import { getSummaryRecordDetail } from './get-summary-record-detail';
 import { getVerifyEmail } from './get-verify-email';
@@ -18,7 +18,7 @@ import { putRecordDetail } from './put-record-detail';
 
 export const handlers = [
   ...postLogin,
-  ...getRecord,
+  ...getRecords,
   ...getNoticeList,
   ...getNoticeDetail,
   ...createRecords,

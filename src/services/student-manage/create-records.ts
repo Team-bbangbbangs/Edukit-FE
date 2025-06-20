@@ -1,20 +1,23 @@
 import type { Response } from '@/types/api/response';
-import type { RecordType, CreateStudentRecord } from '@/types/api/student-record';
+import type { CreateRecords } from '@/types/api/student-record';
 
 export const createRecords = async ({
   recordType,
-  students,
-}: {
-  recordType: RecordType;
-  students: CreateStudentRecord[];
-}): Promise<Response<null>> => {
-  const res = await fetch('/api/v1/create-student-records', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  studentRecords,
+  semester,
+  accessToken,
+}: CreateRecords): Promise<Response<null>> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/student-records/${recordType}/students/batch`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: JSON.stringify({ recordType, studentRecords, semester }),
     },
-    body: JSON.stringify({ recordType, students }),
-  });
+  );
 
   const json: Response<null> = await res.json();
 

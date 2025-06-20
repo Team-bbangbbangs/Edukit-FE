@@ -1,20 +1,29 @@
 export type RecordType = 'subject' | 'behavior' | 'career' | 'free' | 'club';
 
 export type StudentRecord = {
-  id: string;
+  recordDetailId: string;
   studentNumber: string;
-  name: string;
+  studentName: string;
   content: string;
 };
 
+export type StudentsResponse = {
+  students: StudentRecord[];
+};
+
 export type CreateStudentRecord = {
-  name: string;
+  studentName: string;
   studentNumber: string;
 };
 
-export type CreateRecords = {
+export type CreateRecordsInput = {
   recordType: RecordType;
-  students: CreateStudentRecord[];
+  studentRecords: CreateStudentRecord[];
+  semester: string;
+};
+
+export type CreateRecords = CreateRecordsInput & {
+  accessToken: string | null;
 };
 
 export type PutRecordDetail = {
@@ -25,7 +34,7 @@ export type PutRecordDetail = {
 export type CreateRecordDetail = {
   recordType: RecordType;
   studentNumber: string;
-  name: string;
+  studentName: string;
   content: string;
 };
 

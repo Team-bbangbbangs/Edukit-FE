@@ -13,15 +13,18 @@ export default function RecordDetailAdd({ recordType, onCancel }: RecordDetailAd
   const { mutate: createRecordDetail } = useCreateRecordDetail();
 
   const studentNumberRef = useRef<HTMLInputElement>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
+  const studentNameRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLInputElement>(null);
 
   const handleCreate = () => {
     const studentNumber = studentNumberRef.current?.value || '';
-    const name = nameRef.current?.value || '';
+    const studentName = studentNameRef.current?.value || '';
     const content = contentRef.current?.value || '';
 
-    createRecordDetail({ recordType, studentNumber, name, content }, { onSuccess: onCancel });
+    createRecordDetail(
+      { recordType, studentNumber, studentName, content },
+      { onSuccess: onCancel },
+    );
   };
 
   return (
@@ -30,7 +33,7 @@ export default function RecordDetailAdd({ recordType, onCancel }: RecordDetailAd
         <Input ref={studentNumberRef} className="w-full p-1" />
       </td>
       <td className="py-2 pl-5">
-        <Input ref={nameRef} className="w-full p-1" />
+        <Input ref={studentNameRef} className="w-full p-1" />
       </td>
       <td className="py-2 pl-5">
         <Input ref={contentRef} className="w-full p-1" />
