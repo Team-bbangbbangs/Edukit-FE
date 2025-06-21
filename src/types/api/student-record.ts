@@ -45,7 +45,7 @@ export type CreateRecordDetail = {
   studentRecord: StudentRecordTypes;
 };
 
-export type CreateRecordDeatilRequestTypes = CreateRecordDetail & {
+export type CreateRecordDetailRequestTypes = CreateRecordDetail & {
   accessToken: string | null;
 };
 
