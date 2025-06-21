@@ -4,7 +4,15 @@ export type StudentRecord = {
   recordDetailId: string;
   studentNumber: string;
   studentName: string;
-  content: string;
+  description: string;
+};
+
+export type UpdateStudentRecordTypes = {
+  recordDetailId: string;
+  studentNumber: string;
+  studentName: string;
+  description: string;
+  byteCount: number;
 };
 
 export type StudentsResponse = {
@@ -26,16 +34,26 @@ export type CreateRecords = CreateRecordsInput & {
   accessToken: string | null;
 };
 
-export type PutRecordDetail = {
-  recordType: RecordType;
-  detailRecord: StudentRecord;
+export type PatchRecordDetail = {
+  accessToken: string | null;
+  updateStudentRecord: UpdateStudentRecordTypes;
 };
 
 export type CreateRecordDetail = {
   recordType: RecordType;
+  semester: string;
+  studentRecord: StudentRecordTypes;
+};
+
+export type CreateRecordDeatilRequestTypes = CreateRecordDetail & {
+  accessToken: string | null;
+};
+
+export type StudentRecordTypes = {
   studentNumber: string;
   studentName: string;
-  content: string;
+  description: string;
+  byteCount: number;
 };
 
 export type StudentNameTypes = {
@@ -46,4 +64,9 @@ export type StudentNameTypes = {
 export type SummaryRecordTypes = {
   description: string;
   byteCount: number;
+};
+
+export type DeleteRecordDetailTypes = {
+  recordId: string;
+  accessToken: string | null;
 };
