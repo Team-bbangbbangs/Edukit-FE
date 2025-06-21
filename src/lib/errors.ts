@@ -16,3 +16,7 @@ export const isUnauthorizedError = (error: unknown): boolean => {
 export const isNotFoundError = (error: unknown): boolean => {
   return error instanceof ApiError && error.code === 'EDMT-4040201';
 };
+
+export const isNotPermissionError = (error: unknown): boolean => {
+  return error instanceof ApiError && error.code === 'EDMT-4030101';
+};
