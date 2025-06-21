@@ -20,13 +20,13 @@ export const downloadExcel = async (data: StudentRecord[], recordType: RecordTyp
   worksheet.columns = [
     { header: '학번', key: 'studentNumber', width: 15 },
     { header: '이름', key: 'name', width: 15 },
-    { header: title, key: 'content', width: 300 },
+    { header: title, key: 'description', width: 300 },
   ];
 
   const extractData = data.map((record) => ({
     studentNumber: record.studentNumber,
     name: record.studentName,
-    content: record.content,
+    description: record.description,
   }));
 
   extractData.forEach((record) => {
