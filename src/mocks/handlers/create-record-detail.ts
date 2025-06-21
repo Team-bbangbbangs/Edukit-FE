@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 import type { CreateRecordDetail } from '@/types/api/student-record';
 
 export const createRecordDetail = [
-  http.post('/api/v1/create-student-record-detail', async ({ request }) => {
+  http.post('/api/v1/student-records/:recordType/students', async ({ request }) => {
     const body = (await request.json()) as CreateRecordDetail;
 
     if (!body) {

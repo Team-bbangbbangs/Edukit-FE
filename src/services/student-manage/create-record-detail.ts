@@ -1,19 +1,23 @@
 import type { Response } from '@/types/api/response';
-import type { CreateRecordDetail } from '@/types/api/student-record';
+import type { CreateRecordDeatilRequestTypes } from '@/types/api/student-record';
 
 export const createRecordDetail = async ({
+  accessToken,
   recordType,
-  studentName,
-  studentNumber,
-  content,
-}: CreateRecordDetail): Promise<Response<null>> => {
-  const res = await fetch('/api/v1/create-student-record-detail', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  studentRecord,
+  semester,
+}: CreateRecordDeatilRequestTypes): Promise<Response<null>> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/student-records/${recordType}/students`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: JSON.stringify({ semester, studentRecord }),
     },
-    body: JSON.stringify({ recordType, studentName, studentNumber, content }),
-  });
+  );
 
   const json: Response<null> = await res.json();
 
