@@ -2,8 +2,13 @@ import { useRef } from 'react';
 
 import { Input } from '@/components/input/input';
 import { useDeleteRecordDetail } from '@/hooks/api/use-delete-record-detail';
-import { usePutRecordDetail } from '@/hooks/api/use-put-record-detail';
-import type { RecordType, StudentRecord } from '@/types/api/student-record';
+import { usePatchRecordDetail } from '@/hooks/api/use-patch-record-detail';
+import type {
+  RecordType,
+  StudentRecord,
+  UpdateStudentRecordTypes,
+} from '@/types/api/student-record';
+import { calculateByte } from '@/util/calculate-byte';
 
 interface RecordDetailEditProps {
   record: StudentRecord;
@@ -12,31 +17,33 @@ interface RecordDetailEditProps {
 }
 
 export default function RecordDetailEdit({ record, recordType, onView }: RecordDetailEditProps) {
-  const { mutate: putRecordDetail } = usePutRecordDetail();
+  const { mutate: patchRecordDetail } = usePatchRecordDetail();
 
   const { mutate: deleteRecordDetail } = useDeleteRecordDetail();
 
   const studentNumberRef = useRef<HTMLInputElement>(null);
   const studentNameRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     const updatedStudentNumber = studentNumberRef.current?.value || '';
     const updatedName = studentNameRef.current?.value || '';
-    const updatedContent = contentRef.current?.value || '';
+    const updatedDescription = descriptionRef.current?.value || '';
+    const updatedByteCount = calculateByte(updatedDescription);
 
-    const detailRecord: StudentRecord = {
+    const updateStudentRecord: UpdateStudentRecordTypes = {
       ...record,
       studentNumber: updatedStudentNumber,
       studentName: updatedName,
-      content: updatedContent,
+      description: updatedDescription,
+      byteCount: updatedByteCount,
     };
 
-    putRecordDetail({ recordType, detailRecord }, { onSuccess: onView });
+    patchRecordDetail({ recordType, updateStudentRecord }, { onSuccess: onView });
   };
 
   const handleDelete = () => {
-    deleteRecordDetail(record.recordDetailId);
+    deleteRecordDetail({ recordType, recordId: record.recordDetailId });
   };
 
   return (
@@ -48,7 +55,7 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
         <Input defaultValue={record.studentName} ref={studentNameRef} className="w-full p-1" />
       </td>
       <td className="py-2 pl-5">
-        <Input defaultValue={record.content} ref={contentRef} className="w-full p-1" />
+        <Input defaultValue={record.description} ref={descriptionRef} className="w-full p-1" />
       </td>
       <td className="absolute right-0 top-14 flex gap-2">
         <button

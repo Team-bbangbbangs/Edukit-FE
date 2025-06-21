@@ -8,13 +8,13 @@ import { getRecords } from './get-records';
 import { getStudentsName } from './get-students-name';
 import { getSummaryRecordDetail } from './get-summary-record-detail';
 import { getVerifyEmail } from './get-verify-email';
+import { patchRecordDetail } from './patch-record-detail';
 import { patchReissue } from './patch-reissue';
 import { postLogin } from './post-login';
 import { postLogout } from './post-logout';
 import { postPrompt } from './post-prompt';
 import { postSignup } from './post-signup';
 import { postSummaryRecordDetail } from './post-summary-record-detail';
-import { putRecordDetail } from './put-record-detail';
 
 export const handlers = [
   ...postLogin,
@@ -22,7 +22,7 @@ export const handlers = [
   ...getNoticeList,
   ...getNoticeDetail,
   ...createRecords,
-  ...putRecordDetail,
+  ...patchRecordDetail,
   ...deleteRecordDetail,
   ...createRecordDetail,
   ...postSignup,

@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Input } from '@/components/input/input';
 import { useCreateRecordDetail } from '@/hooks/api/use-create-record-detail';
 import type { RecordType } from '@/types/api/student-record';
+import { calculateByte } from '@/util/calculate-byte';
 
 interface RecordDetailAddProps {
   recordType: RecordType;
@@ -14,17 +15,17 @@ export default function RecordDetailAdd({ recordType, onCancel }: RecordDetailAd
 
   const studentNumberRef = useRef<HTMLInputElement>(null);
   const studentNameRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null);
 
   const handleCreate = () => {
-    const studentNumber = studentNumberRef.current?.value || '';
-    const studentName = studentNameRef.current?.value || '';
-    const content = contentRef.current?.value || '';
+    const studentRecord = {
+      studentNumber: studentNumberRef.current?.value || '',
+      studentName: studentNameRef.current?.value || '',
+      description: descriptionRef.current?.value || '',
+      byteCount: calculateByte(descriptionRef.current?.value || ''),
+    };
 
-    createRecordDetail(
-      { recordType, studentNumber, studentName, content },
-      { onSuccess: onCancel },
-    );
+    createRecordDetail({ recordType, studentRecord, semester: '2025-1' }, { onSuccess: onCancel });
   };
 
   return (
@@ -36,7 +37,7 @@ export default function RecordDetailAdd({ recordType, onCancel }: RecordDetailAd
         <Input ref={studentNameRef} className="w-full p-1" />
       </td>
       <td className="py-2 pl-5">
-        <Input ref={contentRef} className="w-full p-1" />
+        <Input ref={descriptionRef} className="w-full p-1" />
       </td>
       <td className="absolute right-0 top-14 flex gap-2">
         <button

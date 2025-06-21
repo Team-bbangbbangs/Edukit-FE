@@ -1,17 +1,23 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useAuth } from '@/contexts/auth/use-auth';
 import { createRecordDetail } from '@/services/student-manage/create-record-detail';
 import type { Response } from '@/types/api/response';
 import type { CreateRecordDetail } from '@/types/api/student-record';
 
 export const useCreateRecordDetail = () => {
+  const { accessToken } = useAuth();
+  const queryClient = useQueryClient();
+
   return useMutation<Response<null>, Error, CreateRecordDetail>({
-    mutationFn: createRecordDetail,
-    onSuccess: (data) => {
-      console.log('생기부 데이터 생성 성공:', data);
+    mutationFn: (params) => createRecordDetail({ ...params, accessToken }),
+    onSuccess: (data: Response<null>, variables: CreateRecordDetail) => {
+      queryClient.invalidateQueries({
+        queryKey: ['records', variables.recordType],
+      });
     },
     onError: (error) => {
-      console.error('생기부 데이터 생성 실패:', error.message);
+      alert(error.message);
     },
   });
 };

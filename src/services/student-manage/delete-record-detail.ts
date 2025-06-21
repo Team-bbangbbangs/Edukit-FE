@@ -1,7 +1,17 @@
 import type { Response } from '@/types/api/response';
+import type { DeleteRecordDetailTypes } from '@/types/api/student-record';
 
-export const deleteRecordDetail = async (recordId: string): Promise<Response<null>> => {
-  const res = await fetch(`/api/v1/delete-student-record-detail/${recordId}`, { method: 'DELETE' });
+export const deleteRecordDetail = async ({
+  recordId,
+  accessToken,
+}: DeleteRecordDetailTypes): Promise<Response<null>> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/student-records/${recordId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    },
+  });
 
   const json: Response<null> = await res.json();
 

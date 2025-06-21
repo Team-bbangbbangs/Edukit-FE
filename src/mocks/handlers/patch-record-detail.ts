@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { PutRecordDetail } from '@/types/api/student-record';
+import type { UpdateStudentRecordTypes } from '@/types/api/student-record';
 
-export const putRecordDetail = [
-  http.put('/api/v1/put-student-record-detail', async ({ request }) => {
-    const body = (await request.json()) as PutRecordDetail;
+export const patchRecordDetail = [
+  http.patch('/api/v1/student-records/:recordId', async ({ request }) => {
+    const body = (await request.json()) as UpdateStudentRecordTypes;
 
     if (!body) {
       return HttpResponse.json(

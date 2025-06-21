@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const deleteRecordDetail = [
-  http.delete('/api/v1/delete-student-record-detail/:recordId', ({ params }) => {
+  http.delete('/api/v1/student-records/:recordId', ({ params }) => {
     const { recordId } = params;
 
     if (!recordId) {
