@@ -7,13 +7,15 @@ import Link from 'next/link';
 import { useGetRecords } from '@/hooks/api/use-get-records';
 import type { RecordType } from '@/types/api/student-record';
 
+import EmailVerification from './email-verification';
 import EmptyRecord from './empty-record';
 import RecordDetailAdd from './record-detail-add';
 import RecordDetailEdit from './record-detail-edit';
 import RecordDetailView from './record-detail-view';
 
 export default function RecordBody({ recordType }: { recordType: RecordType }) {
-  const { data, isPending, isError, isUnauthorized, isNotFound } = useGetRecords(recordType);
+  const { data, isPending, isError, isUnauthorized, isNotFound, isNotPermission } =
+    useGetRecords(recordType);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const renderTableRow = (content: React.ReactNode) => (
@@ -39,6 +41,8 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
         </Link>
       </>
     );
+  } else if (isNotPermission) {
+    content = <EmailVerification />;
   } else if (isNotFound) {
     content = <EmptyRecord recordType={recordType} />;
   } else if (isError || !data) {

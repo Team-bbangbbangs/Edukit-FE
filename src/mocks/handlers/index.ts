@@ -13,6 +13,7 @@ import { patchReissue } from './patch-reissue';
 import { postLogin } from './post-login';
 import { postLogout } from './post-logout';
 import { postPrompt } from './post-prompt';
+import { postSendEmail } from './post-send-email';
 import { postSignup } from './post-signup';
 import { postSummaryRecordDetail } from './post-summary-record-detail';
 
@@ -34,4 +35,5 @@ export const handlers = [
   ...getProfile,
   ...postLogout,
   ...patchReissue,
+  ...postSendEmail,
 ];
