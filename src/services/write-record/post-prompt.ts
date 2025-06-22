@@ -1,27 +1,38 @@
 import type { Response } from '@/types/api/response';
+import type { AiResponseData } from '@/types/api/student-record';
 
 interface PostPromptParams {
   recordId: number;
-  description: string;
+  prompt: string;
+  accessToken: string | null;
 }
 
 export const postPrompt = async ({
   recordId,
-  description,
-}: PostPromptParams): Promise<Response<null>> => {
-  const res = await fetch(`/api/v1/student-records/prompt/${recordId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  prompt,
+  accessToken,
+}: PostPromptParams): Promise<AiResponseData> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/student-records/ai-generate/${recordId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: JSON.stringify({ prompt }),
     },
-    body: JSON.stringify({ description }),
-  });
+  );
 
-  const json: Response<null> = await res.json();
+  const json: Response<AiResponseData> = await res.json();
 
   if (!res.ok) {
     throw new Error(json.message || '생기부 프롬프팅 전송 실패');
   }
 
-  return json;
+  if (!json.data) {
+    throw new Error('응답 데이터가 없습니다.');
+  }
+
+  return json.data;
 };
