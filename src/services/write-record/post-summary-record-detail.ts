@@ -3,20 +3,26 @@ import type { SummaryRecordTypes } from '@/types/api/student-record';
 
 interface PostSummaryRecordDetailParams extends SummaryRecordTypes {
   recordId: number;
+  accessToken: string | null;
 }
 
 export const postSummaryRecordDetail = async ({
   recordId,
   description,
   byteCount,
+  accessToken,
 }: PostSummaryRecordDetailParams): Promise<Response<null>> => {
-  const res = await fetch(`/api/v1/student-records/detail/${recordId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/student-records/detail/${recordId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: JSON.stringify({ description, byteCount }),
     },
-    body: JSON.stringify({ description, byteCount }),
-  });
+  );
 
   const json: Response<null> = await res.json();
 

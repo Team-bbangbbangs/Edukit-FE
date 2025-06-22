@@ -1,15 +1,28 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useAuth } from '@/contexts/auth/use-auth';
 import { postSummaryRecordDetail } from '@/services/write-record/post-summary-record-detail';
+import type { Response } from '@/types/api/response';
+
+interface PostSummaryParams {
+  recordId: number;
+  description: string;
+  byteCount: number;
+}
 
 export const usePostSummaryRecordDetail = () => {
-  return useMutation({
-    mutationFn: postSummaryRecordDetail,
-    onSuccess: (data) => {
-      console.log('생기부 데이터 생성 성공:', data);
+  const { accessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation<Response<null>, Error, PostSummaryParams>({
+    mutationFn: (params) => postSummaryRecordDetail({ ...params, accessToken }),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['summary-record-detail', variables.recordId],
+      });
     },
     onError: (error) => {
-      console.error('생기부 데이터 생성 실패:', error.message);
+      alert(error.message);
     },
   });
 };
