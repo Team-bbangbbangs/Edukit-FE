@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 
+import SaveSummaryRecordModal from '@/components/modal/save-summary-record-modal';
 import { Textarea } from '@/components/textarea/textarea';
 import { useGetSummaryRecordDetail } from '@/hooks/api/use-get-summary-record-detail';
 import { usePostSummaryRecordDetail } from '@/hooks/api/use-post-summary-record-detail';
 import { calculateByte } from '@/util/calculate-byte';
 
 export default function RecordSummary({ selectedId }: { selectedId: number }) {
+  const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState('');
   const { mutate: postSummaryRecordDetail } = usePostSummaryRecordDetail();
   const { data, isPending, isError } = useGetSummaryRecordDetail(selectedId);
@@ -19,11 +21,21 @@ export default function RecordSummary({ selectedId }: { selectedId: number }) {
   const handleSave = () => {
     const byteCount = calculateByte(description);
 
-    postSummaryRecordDetail({
-      recordId: selectedId,
-      description,
-      byteCount,
-    });
+    postSummaryRecordDetail(
+      {
+        recordId: selectedId,
+        description,
+        byteCount,
+      },
+      {
+        onSuccess: () => {
+          setModalOpen(true);
+        },
+        onError: (error) => {
+          alert(error.message);
+        },
+      },
+    );
   };
 
   if (isError) {
@@ -56,6 +68,7 @@ export default function RecordSummary({ selectedId }: { selectedId: number }) {
         </button>
       </div>
       <span className="absolute bottom-14 right-2 text-slate-400">{`${calculateByte(description)}/1500`}</span>
+      <SaveSummaryRecordModal open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
 }

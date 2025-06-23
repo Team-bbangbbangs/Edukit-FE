@@ -70,3 +70,14 @@ export type DeleteRecordDetailTypes = {
   recordId: string;
   accessToken: string | null;
 };
+
+export type PostPrompt = {
+  recordId: number;
+  prompt: string;
+};
+
+export interface AiResponseData {
+  description1: string;
+  description2: string;
+  description3: string;
+}
