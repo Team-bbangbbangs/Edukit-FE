@@ -101,20 +101,20 @@ export default function CreateRecordModal({
               </div>
             </ModalTitle>
           </ModalHeader>
-          <div className="max-h-96 min-h-96 w-full overflow-y-auto rounded-xl bg-slate-100 p-5">
+          <div className="max-h-96 min-h-96 w-full overflow-y-auto rounded-xl border border-black p-5">
             {Array.from({ length: studentCount }, (_, index) => (
               <div
                 key={index}
-                className="mb-2 flex items-center justify-center gap-2 rounded-xl bg-slate-700 p-2"
+                className="mb-2 flex items-center justify-center gap-2 rounded-xl bg-white p-2"
               >
-                <span className="w-8 text-white">{index + 1}</span>
+                <span className="w-8 text-black">{index + 1}</span>
                 <Input
                   type="text"
                   placeholder="학번"
                   ref={(studentNumber) => {
                     studentNumberRefs.current[index] = studentNumber;
                   }}
-                  className="text-white placeholder:text-slate-400"
+                  className="text-black placeholder:text-slate-700"
                 />
                 <Input
                   type="text"
@@ -122,7 +122,7 @@ export default function CreateRecordModal({
                   ref={(name) => {
                     studentNameRefs.current[index] = name;
                   }}
-                  className="text-white placeholder:text-slate-400"
+                  className="text-black placeholder:text-slate-700"
                 />
               </div>
             ))}

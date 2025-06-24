@@ -20,6 +20,9 @@ export const useDeleteRecordDetail = () => {
       queryClient.invalidateQueries({
         queryKey: ['records', variables.recordType],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['studentsName', variables.recordType],
+      });
     },
     onError: (error) => {
       alert(error.message);
