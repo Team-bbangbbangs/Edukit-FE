@@ -9,7 +9,7 @@ export const useGetStudentsName = (recordType: RecordType, semester: string) => 
   const { accessToken } = useAuth();
 
   const query = useQuery<StudentNameTypes[]>({
-    queryKey: ['studentsName', recordType, semester],
+    queryKey: ['studentsName', recordType],
     queryFn: () => getStudentsName(recordType, semester, accessToken),
     retry: 1,
     staleTime: 10 * 60 * 1000,

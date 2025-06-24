@@ -15,6 +15,9 @@ export const useCreateRecords = () => {
       queryClient.invalidateQueries({
         queryKey: ['records', variables.recordType],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['studentsName', variables.recordType],
+      });
     },
     onError: (error) => {
       console.error('생기부 데이터 생성 실패:', error.message);
