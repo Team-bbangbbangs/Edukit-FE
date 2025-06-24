@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 
-import Link from 'next/link';
-
+import NotAuthorizedError from '@/components/error/not-authorized-error';
+import NotFoundError from '@/components/error/not-found-error';
+import NotPermissionError from '@/components/error/not-permission-error';
 import { useGetRecords } from '@/hooks/api/use-get-records';
 import type { RecordType } from '@/types/api/student-record';
 
-import EmailVerification from './email-verification';
-import EmptyRecord from './empty-record';
 import RecordDetailAdd from './record-detail-add';
 import RecordDetailEdit from './record-detail-edit';
 import RecordDetailView from './record-detail-view';
@@ -30,25 +29,15 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
   if (isPending) {
     content = <p className="text-[20px] font-bold">데이터를 불러오는 중입니다.</p>;
   } else if (isUnauthorized) {
-    content = (
-      <>
-        <p className="text-[20px] font-bold">로그인이 필요합니다.</p>
-        <Link
-          href="/login"
-          className="rounded-md bg-slate-800 px-4 py-2 text-white hover:bg-slate-950"
-        >
-          로그인
-        </Link>
-      </>
-    );
+    content = <NotAuthorizedError />;
   } else if (isNotPermission) {
-    content = <EmailVerification />;
+    content = <NotPermissionError />;
   } else if (isNotFound) {
-    content = <EmptyRecord recordType={recordType} />;
+    content = <NotFoundError recordType={recordType} />;
   } else if (isError || !data) {
     content = <p className="text-[20px] font-bold">데이터를 불러오는 데 실패했습니다.</p>;
   } else if (data.students.length === 0) {
-    content = <EmptyRecord recordType={recordType} />;
+    content = <NotFoundError recordType={recordType} />;
   }
 
   if (content) {

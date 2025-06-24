@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import EmptyRecord from '@/components/record/empty-record';
+import DefaultError from '@/components/error/default-error';
+import NotAuthorizedError from '@/components/error/not-authorized-error';
+import NotFoundError from '@/components/error/not-found-error';
+import NotPermissionError from '@/components/error/not-permission-error';
 import { useGetStudentsName } from '@/hooks/api/use-get-students-name';
 import type { RecordType, AiResponseData } from '@/types/api/student-record';
 
@@ -18,10 +21,8 @@ interface StudentRecordWriteProps {
 }
 
 export default function StudentRecordWrite({ recordType, recordId }: StudentRecordWriteProps) {
-  const { data, isPending, isError, isNotFound, isUnauthorized } = useGetStudentsName(
-    recordType,
-    '2025-1',
-  );
+  const { data, isPending, isError, isNotFound, isUnauthorized, isNotPermission } =
+    useGetStudentsName(recordType, '2025-1');
   const router = useRouter();
   const parsedRecordId = Number(recordId);
 
@@ -48,27 +49,23 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
   }
 
   if (isNotFound) {
-    return (
-      <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-        <EmptyRecord recordType={recordType} />
-      </div>
-    );
+    return <NotFoundError recordType={recordType} />;
   }
 
   if (isUnauthorized) {
-    return <div>로그인해주세요.</div>;
+    return <NotAuthorizedError />;
+  }
+
+  if (isNotPermission) {
+    return <NotPermissionError />;
   }
 
   if (isError) {
-    return <div>에러입니다.</div>;
+    return <DefaultError />;
   }
 
   if (data && data.length === 0) {
-    return (
-      <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-        <EmptyRecord recordType={recordType} />
-      </div>
-    );
+    return <NotFoundError recordType={recordType} />;
   }
 
   return (

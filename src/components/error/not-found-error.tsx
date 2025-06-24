@@ -2,15 +2,14 @@
 
 import { useState } from 'react';
 
+import CreateRecordModal from '@/components/modal/create-record-modal';
 import type { RecordType } from '@/types/api/student-record';
 
-import CreateRecordModal from '../modal/create-record-modal';
-
-export default function EmptyRecord({ recordType }: { recordType: RecordType }) {
+export default function NotFoundError({ recordType }: { recordType: RecordType }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2">
       <p className="text-[20px] font-bold">아직 등록된 생활기록부가 없어요</p>
       <button
         onClick={() => setOpen(true)}
@@ -21,6 +20,6 @@ export default function EmptyRecord({ recordType }: { recordType: RecordType }) 
       </button>
 
       <CreateRecordModal open={open} onOpenChange={setOpen} recordType={recordType} />
-    </>
+    </div>
   );
 }

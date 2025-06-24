@@ -18,7 +18,6 @@ export default async function VerifyEmailPage({ searchParams }: PageProps) {
       await getVerifyEmail(id, code);
       isSuccess = true;
     } catch (e) {
-      console.log(e);
       isSuccess = false;
     }
   }
@@ -33,7 +32,7 @@ export default async function VerifyEmailPage({ searchParams }: PageProps) {
       ) : (
         <>
           <h1 className="text-2xl font-bold text-red-700">이메일 인증에 실패했습니다.</h1>
-          <p className="mt-2 text-gray-600">이제 모든 서비스를 이용하실 수 있습니다.</p>
+          <p className="mt-2 text-gray-600">이미 만료된 인증 코드입니다.</p>
         </>
       )}
     </div>

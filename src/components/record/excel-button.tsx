@@ -5,9 +5,9 @@ import type { RecordType } from '@/types/api/student-record';
 import { downloadExcel } from '@/util/download-excel';
 
 export default function ExcelButton({ recordType }: { recordType: RecordType }) {
-  const { data } = useGetRecords(recordType);
+  const { data, isPending, isError } = useGetRecords(recordType);
 
-  if (!data || data.students.length === 0) return null;
+  if (isPending || isError || !data || data.students.length === 0) return null;
 
   return (
     <button
