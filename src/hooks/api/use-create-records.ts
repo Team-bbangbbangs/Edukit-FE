@@ -20,7 +20,7 @@ export const useCreateRecords = () => {
       });
     },
     onError: (error) => {
-      console.error('생기부 데이터 생성 실패:', error.message);
+      alert(error.message);
     },
   });
 };
