@@ -1,21 +1,23 @@
-import { createRecordDetail } from './create-record-detail';
-import { createRecords } from './create-records';
-import { deleteRecordDetail } from './delete-record-detail';
-import { getNoticeDetail } from './get-notice-detail';
-import { getNoticeList } from './get-notice-list';
-import { getProfile } from './get-profile';
-import { getRecords } from './get-records';
-import { getStudentsName } from './get-students-name';
-import { getSummaryRecordDetail } from './get-summary-record-detail';
-import { getVerifyEmail } from './get-verify-email';
-import { patchRecordDetail } from './patch-record-detail';
-import { patchReissue } from './patch-reissue';
-import { postLogin } from './post-login';
-import { postLogout } from './post-logout';
-import { postPrompt } from './post-prompt';
-import { postSendEmail } from './post-send-email';
-import { postSignup } from './post-signup';
-import { postSummaryRecordDetail } from './post-summary-record-detail';
+import { getProfile } from './auth/get-profile';
+import { getVerifyEmail } from './auth/get-verify-email';
+import { patchResetPassword } from './auth/patch-reset-password';
+import { postLogin } from './auth/post-login';
+import { postLogout } from './auth/post-logout';
+import { postSendEmail } from './auth/post-send-email';
+import { postVerifyEmail } from './auth/post-verify-email';
+import { reissue } from './auth/reissue';
+import { signup } from './auth/signup';
+import { getNoticeDetail } from './notice/get-notice-detail';
+import { getNoticeList } from './notice/get-notice-list';
+import { createRecordDetail } from './student-manage/create-record-detail';
+import { createRecords } from './student-manage/create-records';
+import { deleteRecordDetail } from './student-manage/delete-record-detail';
+import { getRecords } from './student-manage/get-records';
+import { patchRecordDetail } from './student-manage/patch-record-detail';
+import { getStudentsName } from './write-record/get-students-name';
+import { getSummaryRecordDetail } from './write-record/get-summary-record-detail';
+import { postPrompt } from './write-record/post-prompt';
+import { postSummaryRecordDetail } from './write-record/post-summary-record-detail';
 
 export const handlers = [
   ...postLogin,
@@ -26,7 +28,7 @@ export const handlers = [
   ...patchRecordDetail,
   ...deleteRecordDetail,
   ...createRecordDetail,
-  ...postSignup,
+  ...signup,
   ...getVerifyEmail,
   ...getStudentsName,
   ...postSummaryRecordDetail,
@@ -34,6 +36,8 @@ export const handlers = [
   ...postPrompt,
   ...getProfile,
   ...postLogout,
-  ...patchReissue,
+  ...reissue,
   ...postSendEmail,
+  ...postVerifyEmail,
+  ...patchResetPassword,
 ];

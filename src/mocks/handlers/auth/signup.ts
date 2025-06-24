@@ -2,11 +2,11 @@ import { http, HttpResponse } from 'msw';
 
 import type { SignupTypes } from '@/types/api/auth';
 
-export const postSignup = [
+export const signup = [
   http.post('/api/v1/auth/signup', async ({ request }) => {
-    const { email, password } = (await request.json()) as SignupTypes;
+    const { email } = (await request.json()) as SignupTypes;
 
-    if (email === 'test@naver.com' && password === 'ab12345678') {
+    if (email === 'test@naver.com') {
       return HttpResponse.json(
         {
           status: 401,

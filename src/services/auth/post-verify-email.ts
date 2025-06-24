@@ -1,6 +1,6 @@
 import type { Response } from '@/types/api/response';
 
-export const postFindPassword = async (email: string): Promise<Response<null>> => {
+export const postVerifyEmail = async (email: string): Promise<Response<null>> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/find-password`, {
     method: 'POST',
     headers: {

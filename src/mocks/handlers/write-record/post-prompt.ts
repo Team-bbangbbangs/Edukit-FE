@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const postPrompt = [
-  http.post('/api/v1/student-records/prompt/:recordId', async ({ params }) => {
+  http.post('/api/v1/student-records/ai-generate/:recordId', async ({ params }) => {
     const { recordId } = params;
 
     if (!recordId) {

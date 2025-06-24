@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { postFindPassword } from '@/services/auth/post-find-password';
+import { postVerifyEmail } from '@/services/auth/post-verify-email';
 import type { Response } from '@/types/api/response';
 
-export const usePostFindPassword = () => {
+export const usePostVerifyEmail = () => {
   return useMutation<Response<null>, Error, string>({
-    mutationFn: postFindPassword,
+    mutationFn: postVerifyEmail,
   });
 };
