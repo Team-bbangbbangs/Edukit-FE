@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { Input } from '@/components/input/input';
 import { emailSchema } from '@/components/signup/signup-scheme';
-import { usePostFindPassword } from '@/hooks/api/use-post-find-password';
+import { usePostVerifyEmail } from '@/hooks/api/use-post-verify-email';
 
 const emailVerificationSchema = z.object({
   email: emailSchema,
@@ -20,7 +20,7 @@ interface EmailVerificationFormProps {
 
 export function EmailVerificationForm({ onSuccess }: EmailVerificationFormProps) {
   const [serverError, setServerError] = useState('');
-  const { mutate: postFindPassword, isPending } = usePostFindPassword();
+  const { mutate: postVerifyEmail, isPending } = usePostVerifyEmail();
 
   const {
     register,
@@ -32,7 +32,7 @@ export function EmailVerificationForm({ onSuccess }: EmailVerificationFormProps)
 
   const onSubmit = (data: EmailVerificationData) => {
     setServerError('');
-    postFindPassword(data.email, {
+    postVerifyEmail(data.email, {
       onSuccess: () => {
         onSuccess(data.email);
       },
