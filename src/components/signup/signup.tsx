@@ -9,7 +9,7 @@ import { Input } from '@/components/input/input';
 import { subjects } from '@/constants/signup-data';
 import { useSignup } from '@/hooks/api/use-signup';
 
-import { signupScheme } from './signup-scheme';
+import { signupSchema } from './signup-scheme';
 
 import type { SignupDataType } from './signup-scheme';
 
@@ -24,7 +24,7 @@ export default function Signup() {
     setValue,
     watch,
   } = useForm<SignupDataType>({
-    resolver: zodResolver(signupScheme),
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: '',
       password: '',
