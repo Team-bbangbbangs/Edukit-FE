@@ -3,10 +3,10 @@ import { http, HttpResponse } from 'msw';
 export const getVerifyEmail = [
   http.get('/api/v1/auth/verify-email', ({ request }) => {
     const url = new URL(request.url);
-    const email = url.searchParams.get('email');
-    const token = url.searchParams.get('token');
+    const id = url.searchParams.get('id');
+    const code = url.searchParams.get('code');
 
-    if (email === 'test@naver.com' && token === 'abc') {
+    if (id === 'test@naver.com' && code === 'abc') {
       return HttpResponse.json({
         status: 200,
         code: 'EDMT-20002',

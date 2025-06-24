@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-export const patchReissue = [
+export const reissue = [
   http.patch('/api/v1/auth/reissue', () => {
     return HttpResponse.json({
       status: 200,
