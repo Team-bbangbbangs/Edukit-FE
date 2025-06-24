@@ -1,8 +1,10 @@
 import { getProfile } from './auth/get-profile';
 import { getVerifyEmail } from './auth/get-verify-email';
+import { patchResetPassword } from './auth/patch-reset-password';
 import { postLogin } from './auth/post-login';
 import { postLogout } from './auth/post-logout';
 import { postSendEmail } from './auth/post-send-email';
+import { postVerifyEmail } from './auth/post-verify-email';
 import { reissue } from './auth/reissue';
 import { signup } from './auth/signup';
 import { getNoticeDetail } from './notice/get-notice-detail';
@@ -36,4 +38,6 @@ export const handlers = [
   ...postLogout,
   ...reissue,
   ...postSendEmail,
+  ...postVerifyEmail,
+  ...patchResetPassword,
 ];
