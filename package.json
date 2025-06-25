@@ -17,6 +17,27 @@
       "prettier --write"
     ]
   },
+  "dependencies": {
+    "next": "14.2.26",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@hookform/resolvers": "^5.1.1",
+    "@radix-ui/react-collapsible": "^1.1.11",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@tanstack/react-query": "^5.77.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "lucide-react": "^0.511.0",
+    "react-hook-form": "^7.56.4",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.25.57"
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
@@ -41,11 +62,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "msw": "^2.8.2",
-    "next": "14.2.26",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "tailwindcss": "^3.4.3",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
@@ -55,23 +73,5 @@
     "workerDirectory": [
       "public"
     ]
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^5.1.1",
-    "@radix-ui/react-collapsible": "^1.1.11",
-    "@radix-ui/react-dialog": "^1.1.14",
-    "@radix-ui/react-separator": "^1.1.7",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-tooltip": "^1.2.7",
-    "@tanstack/react-query": "^5.77.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "exceljs": "^4.4.0",
-    "file-saver": "^2.0.5",
-    "lucide-react": "^0.511.0",
-    "react-hook-form": "^7.56.4",
-    "tailwind-merge": "^3.3.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.25.57"
   }
 }
