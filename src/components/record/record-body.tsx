@@ -5,6 +5,7 @@ import { useState } from 'react';
 import NotAuthorizedError from '@/components/error/not-authorized-error';
 import NotFoundError from '@/components/error/not-found-error';
 import NotPermissionError from '@/components/error/not-permission-error';
+import Loading from '@/components/loading/loading';
 import { useGetRecords } from '@/hooks/api/use-get-records';
 import type { RecordType } from '@/types/api/student-record';
 
@@ -27,7 +28,7 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
 
   let content: React.ReactNode;
   if (isPending) {
-    content = <p className="text-[20px] font-bold">데이터를 불러오는 중입니다.</p>;
+    content = <Loading />;
   } else if (isUnauthorized) {
     content = <NotAuthorizedError />;
   } else if (isNotPermission) {

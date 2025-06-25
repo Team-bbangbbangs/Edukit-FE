@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import DefaultError from '@/components/error/default-error';
+import Loading from '@/components/loading/loading';
 import { useGetProfile } from '@/hooks/api/use-get-profile';
 import { useLogout } from '@/hooks/api/use-logout';
 
@@ -23,11 +24,7 @@ export function ProfileDropDown({ onClose }: ProfileDropDownProps) {
   const { mutate: handleLogout } = useLogout();
 
   if (isPending) {
-    return (
-      <div className="absolute right-0 top-[50px] z-10 w-[300px] rounded-lg border bg-white p-4 shadow-lg">
-        <div className="text-center text-sm text-gray-500">로딩중...</div>
-      </div>
-    );
+    return <Loading />;
   }
   if (isError) {
     return <DefaultError />;

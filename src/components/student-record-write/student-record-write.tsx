@@ -8,6 +8,7 @@ import DefaultError from '@/components/error/default-error';
 import NotAuthorizedError from '@/components/error/not-authorized-error';
 import NotFoundError from '@/components/error/not-found-error';
 import NotPermissionError from '@/components/error/not-permission-error';
+import Loading from '@/components/loading/loading';
 import { useGetStudentsName } from '@/hooks/api/use-get-students-name';
 import type { RecordType, AiResponseData } from '@/types/api/student-record';
 
@@ -45,7 +46,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
   };
 
   if (isPending) {
-    return <div>로딩중입니다.</div>;
+    return <Loading />;
   }
 
   if (isNotFound) {
