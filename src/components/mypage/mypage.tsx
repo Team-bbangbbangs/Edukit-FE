@@ -5,6 +5,7 @@ import { CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import Loading from '@/components/loading/loading';
 import { useGetProfile } from '@/hooks/api/use-get-profile';
 
 import ProfileImage from '../../../public/images/profile-image.png';
@@ -26,11 +27,7 @@ export default function Mypage() {
     );
   }
   if (isPending) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-[26px] font-bold">데이터를 불러오는 중입니다..!</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

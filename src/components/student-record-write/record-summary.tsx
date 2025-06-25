@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import DefaultError from '@/components/error/default-error';
+import Loading from '@/components/loading/loading';
 import SaveSummaryRecordModal from '@/components/modal/save-summary-record-modal';
 import { Textarea } from '@/components/textarea/textarea';
 import { useGetSummaryRecordDetail } from '@/hooks/api/use-get-summary-record-detail';
@@ -43,7 +44,7 @@ export default function RecordSummary({ selectedId }: { selectedId: number }) {
     return <DefaultError />;
   }
   if (isPending) {
-    return <div>데이터를 불러오는 중입니다..!</div>;
+    return <Loading />;
   }
 
   return (

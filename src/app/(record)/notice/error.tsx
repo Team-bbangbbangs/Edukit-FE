@@ -3,8 +3,6 @@
 import Link from 'next/link';
 
 export default function Error({ error }: { error: Error }) {
-  console.error('에러 발생:', error);
-
   return (
     <div className="h-screen w-full p-10">
       <Link
