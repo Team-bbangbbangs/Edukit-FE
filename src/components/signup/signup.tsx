@@ -5,6 +5,8 @@ import { useState, useRef, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import Link from 'next/link';
+
 import { Input } from '@/components/input/input';
 import { subjects } from '@/constants/signup-data';
 import { useSignup } from '@/hooks/api/use-signup';
@@ -109,13 +111,19 @@ export default function Signup() {
 
   if (isSuccess) {
     return (
-      <div className="flex flex-col items-center gap-4 py-8 text-center">
-        <h2 className="text-2xl font-bold">가입 완료</h2>
-        <p className="text-gray-700">
+      <div className="flex flex-col items-center gap-10 py-8 text-center">
+        <h2 className="text-4xl font-bold">가입 완료</h2>
+        <p className="text-2xl text-gray-700">
           가입하신 이메일로 인증 메일을 보냈습니다.
           <br />
           메일함을 확인해주세요.
         </p>
+        <Link
+          href="/"
+          className="rounded-md bg-slate-800 px-6 py-3 text-2xl text-white hover:bg-slate-950"
+        >
+          서비스로 돌아가기
+        </Link>
       </div>
     );
   }
