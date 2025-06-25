@@ -1,4 +1,4 @@
-import { Home, Inbox, Calendar, Settings } from 'lucide-react';
+import { Home, Inbox, Calendar } from 'lucide-react';
 
 interface SidebarChildConfig {
   title: string;
@@ -49,13 +49,7 @@ export const SIDEBAR_CONFIG: SidebarItem[] = [
   {
     type: 'link',
     title: '공지사항',
-    url: 'notice',
+    url: '/notice',
     icon: Calendar,
-  },
-  {
-    type: 'link',
-    title: '충전하기',
-    url: 'charge',
-    icon: Settings,
   },
 ];
