@@ -101,17 +101,14 @@ export default function MainSidebar() {
                   asChild
                   className={cn(
                     'transition-colors duration-200',
-                    isActive(item.url) && [
-                      'bg-slate-200 text-slate-700 hover:bg-slate-200',
-                      'dark:bg-slate-9200 dark:text-slate-300 dark:hover:bg-slate-900',
-                    ],
+                    isActive(item.url) && 'bg-slate-200 text-slate-700 hover:bg-slate-200',
                   )}
                 >
                   <Link href={item.url}>
                     <item.icon
                       className={cn(
                         'transition-colors duration-200',
-                        isActive(item.url) && 'text-slate-600 dark:text-slate-400',
+                        isActive(item.url) && 'text-slate-600',
                       )}
                     />
                     <span
