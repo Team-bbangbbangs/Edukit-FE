@@ -19,3 +19,16 @@ export type NoticeResponse = {
   notices: NoticeType[];
   totalPages: number;
 };
+
+export type PostAdminNotice = {
+  categoryId: number;
+  title: string;
+  content: string;
+  accessToken: string | null;
+};
+
+export type PostAdminNoticeRequest = {
+  categoryId: number;
+  title: string;
+  content: string;
+};

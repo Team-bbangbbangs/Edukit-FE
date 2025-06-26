@@ -1,5 +1,7 @@
+import EmptyNotice from '@/components/notice/empty-notice';
 import NoticeCategorys from '@/components/notice/notice-categorys';
 import NoticeList from '@/components/notice/notice-list';
+import WriteNoticeButton from '@/components/notice/write-notice-button';
 import Pagination from '@/components/pagination/pagination';
 import { getNoticeList } from '@/services/notice/get-notice-list';
 
@@ -20,16 +22,18 @@ export default async function NoticePage({ searchParams }: PageProps) {
   });
 
   return (
-    <div className="w-full px-10">
+    <div className="h-full w-full px-10">
       <h2 className="text-[26px] font-bold">공지사항</h2>
 
       <NoticeCategorys categoryId={categoryId} />
 
-      {data?.notices ? <NoticeList notice={data.notices} /> : null}
+      {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <EmptyNotice />}
 
-      {data?.totalPages ? (
+      {data.totalPages ? (
         <Pagination categoryId={categoryId} nowPage={page} totalPages={data.totalPages} />
       ) : null}
+
+      <WriteNoticeButton />
     </div>
   );
 }
