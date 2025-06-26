@@ -9,6 +9,7 @@ import { AuthContext } from './auth-context';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if (res) {
           setAccessToken(res.accessToken);
+          setIsAdmin(res.isAdmin);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
@@ -28,6 +30,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, isAdmin, setIsAdmin }}>
+      {children}
+    </AuthContext.Provider>
   );
 };

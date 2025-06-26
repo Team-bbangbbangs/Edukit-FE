@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const isLogin = request.cookies.get('isLogin')?.value;
+  const isLogin = request.cookies.get('refreshToken')?.value;
   const { pathname } = request.nextUrl;
 
   const authPages = ['/login', '/signup', '/verify-email'];
