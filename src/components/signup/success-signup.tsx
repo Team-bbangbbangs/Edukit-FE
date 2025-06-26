@@ -23,7 +23,7 @@ export default function SuccessSignup() {
   };
 
   useEffect(() => {
-    const checkEmailVeification = () => {
+    const checkEmailVerification = () => {
       const isVerified = localStorage.getItem('emailVerified');
       const verifiedAt = localStorage.getItem('emailVerifiedAt');
 
@@ -44,7 +44,7 @@ export default function SuccessSignup() {
       }
     };
 
-    const interval = setInterval(checkEmailVeification, 1000);
+    const interval = setInterval(checkEmailVerification, 1000);
 
     return () => {
       clearInterval(interval);
