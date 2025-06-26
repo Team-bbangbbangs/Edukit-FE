@@ -2,6 +2,7 @@ export type SchoolType = 'middle' | 'high';
 
 export type AuthResponse = {
   accessToken: string;
+  isAdmin: boolean;
 };
 
 export type LoginProp = {

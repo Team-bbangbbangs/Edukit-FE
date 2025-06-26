@@ -9,12 +9,13 @@ import type { LoginProp, AuthResponse } from '@/types/api/auth';
 export const useLogin = () => {
   const router = useRouter();
 
-  const { setAccessToken } = useAuth();
+  const { setAccessToken, setIsAdmin } = useAuth();
 
   return useMutation<AuthResponse, Error, LoginProp>({
     mutationFn: login,
     onSuccess: (data) => {
       setAccessToken(data.accessToken);
+      setIsAdmin(data.isAdmin);
       router.push('/');
     },
   });
