@@ -5,7 +5,7 @@ import landingPageImage from '../../../public/images/landing-page-image.png';
 
 export default function Page() {
   return (
-    <article className="mt-10 flex h-screen w-full flex-col items-center gap-8">
+    <article className="flex flex-col items-center gap-8">
       <Image src={landingPageImage} alt="랜딩 페이지 이미지" width={1000} />
       <div className="flex max-w-[1000px] gap-4">
         <Link
