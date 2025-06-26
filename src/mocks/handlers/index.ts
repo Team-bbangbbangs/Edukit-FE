@@ -9,6 +9,7 @@ import { reissue } from './auth/reissue';
 import { signup } from './auth/signup';
 import { getNoticeDetail } from './notice/get-notice-detail';
 import { getNoticeList } from './notice/get-notice-list';
+import { postAdminNotice } from './notice/post-admin-notice';
 import { createRecordDetail } from './student-manage/create-record-detail';
 import { createRecords } from './student-manage/create-records';
 import { deleteRecordDetail } from './student-manage/delete-record-detail';
@@ -40,4 +41,5 @@ export const handlers = [
   ...postSendEmail,
   ...postVerifyEmail,
   ...patchResetPassword,
+  ...postAdminNotice,
 ];
