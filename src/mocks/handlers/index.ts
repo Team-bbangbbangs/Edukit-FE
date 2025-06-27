@@ -7,8 +7,10 @@ import { postSendEmail } from './auth/post-send-email';
 import { postVerifyEmail } from './auth/post-verify-email';
 import { reissue } from './auth/reissue';
 import { signup } from './auth/signup';
+import { deleteAdminNotice } from './notice/delete-admin-notice';
 import { getNoticeDetail } from './notice/get-notice-detail';
 import { getNoticeList } from './notice/get-notice-list';
+import { patchAdminNotice } from './notice/patch-admin-notice';
 import { postAdminNotice } from './notice/post-admin-notice';
 import { createRecordDetail } from './student-manage/create-record-detail';
 import { createRecords } from './student-manage/create-records';
@@ -42,4 +44,6 @@ export const handlers = [
   ...postVerifyEmail,
   ...patchResetPassword,
   ...postAdminNotice,
+  ...patchAdminNotice,
+  ...deleteAdminNotice,
 ];
