@@ -33,7 +33,7 @@ export default function EditNotice({ notice }: EditNoticeProps) {
     const title = titleRef.current?.value;
     const content = contentRef.current?.value;
 
-    if (!title || !content?.trim()) {
+    if (!title?.trim() || !content?.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
