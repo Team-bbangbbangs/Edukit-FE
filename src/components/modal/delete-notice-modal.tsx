@@ -33,7 +33,7 @@ export default function DeleteNoticeModal({
         <ModalContent aria-describedby={undefined} className="max-w-md rounded-xl px-8 py-6">
           <ModalHeader className="w-full">
             <ModalTitle className="flex flex-col items-center justify-center gap-4 text-[20px]">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <div className="flex h-16 w-16 items-center justify-center">
                 <TriangleAlert className="h-8 w-8 text-red-600" />
               </div>
               <span className="text-gray-800">정말 삭제하시겠습니까?</span>
