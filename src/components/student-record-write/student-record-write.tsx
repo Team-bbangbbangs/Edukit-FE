@@ -77,9 +77,9 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
         onGenerationStart={handleGenerationStart}
         onResponseGenerated={handleAiResponseGenerated}
       />
-      <AiResponse selectedId={parsedRecordId} responses={aiResponses} isGenerating={isGenerating} />
+      <AiResponse recordType={recordType} responses={aiResponses} isGenerating={isGenerating} />
       <hr className="h-[1px] border-0 bg-black" />
-      <RecordSummary selectedId={parsedRecordId} />
+      <RecordSummary selectedId={parsedRecordId} recordType={recordType} />
     </div>
   );
 }
