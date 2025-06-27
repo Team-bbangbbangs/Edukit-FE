@@ -7,7 +7,7 @@ import { logout } from '@/services/auth/logout';
 import type { Response } from '@/types/api/response';
 
 export const useLogout = () => {
-  const { accessToken, setAccessToken } = useAuth();
+  const { accessToken, setAccessToken, setIsAdmin } = useAuth();
   const router = useRouter();
 
   return useMutation<Response<void>, Error>({
@@ -19,10 +19,12 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       setAccessToken(null);
+      setIsAdmin(false);
       router.push('/');
     },
     onError: () => {
       setAccessToken(null);
+      setIsAdmin(false);
       router.push('/');
     },
   });

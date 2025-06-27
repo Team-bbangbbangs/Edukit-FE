@@ -20,15 +20,32 @@ export type NoticeResponse = {
   totalPages: number;
 };
 
-export type PostAdminNotice = {
+export type AdminNotice = {
   categoryId: number;
   title: string;
   content: string;
   accessToken: string | null;
 };
 
-export type PostAdminNoticeRequest = {
+export type AdminNoticeRequest = {
   categoryId: number;
   title: string;
   content: string;
+};
+
+export type PatchAdminNotice = AdminNotice & {
+  id: string;
+};
+
+export type PatchAdminNoticeRequest = AdminNoticeRequest & {
+  id: string;
+};
+
+export type DeleteAdminNotice = {
+  id: string;
+  accessToken: string | null;
+};
+
+export type DeleteAdminNoticeRequest = {
+  id: string;
 };

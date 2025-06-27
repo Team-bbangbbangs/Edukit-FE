@@ -52,7 +52,11 @@ export default function CreateRecordModal({
       studentNumber: studentNumberRefs.current[index]?.value || '',
       studentName: studentNameRefs.current[index]?.value || '',
     }));
-    console.log(studentRecords);
+
+    if (studentRecords.length === 0) {
+      alert('학생 이름과 학번을 최소 1명 이상 입력해주세요.');
+      return;
+    }
 
     createRecords({ recordType, studentRecords, semester }, { onSuccess: handleClose });
   };

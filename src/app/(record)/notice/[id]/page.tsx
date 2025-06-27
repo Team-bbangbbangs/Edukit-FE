@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import EditDeleteNoticeButton from '@/components/notice/edit-delete-notice-button';
 import { getNoticeDetail } from '@/services/notice/get-notice-detail';
 import { formatDate } from '@/util/formatDate';
 
@@ -16,17 +17,20 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <div className="w-full px-10">
-      <h2 className="mb-10 text-[26px] font-bold">{data?.category}</h2>
-      <h3 className="text-[20px] font-bold">{data?.title}</h3>
-      <span className="text-[14px] text-slate-600">{data ? formatDate(data.createdAt) : ''}</span>
+      <h2 className="mb-10 text-[26px] font-bold">{data.category}</h2>
+      <h3 className="text-[20px] font-bold">{data.title}</h3>
+      <span className="text-[14px] text-slate-600">{formatDate(data.createdAt)}</span>
       <hr />
-      <p className="mb-16 mt-10">{data?.content}</p>
-      <Link
-        href={'/notice'}
-        className="rounded-md border border-slate-600 px-5 py-2 hover:bg-slate-400"
-      >
-        돌아가기
-      </Link>
+      <p className="mb-16 mt-10">{data.content}</p>
+      <div className="flex justify-between">
+        <Link
+          href={'/notice'}
+          className="rounded-md border border-slate-600 px-5 py-2 hover:bg-slate-400"
+        >
+          돌아가기
+        </Link>
+        <EditDeleteNoticeButton id={id} />
+      </div>
     </div>
   );
 }

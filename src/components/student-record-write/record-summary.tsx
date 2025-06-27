@@ -6,9 +6,16 @@ import SaveSummaryRecordModal from '@/components/modal/save-summary-record-modal
 import { Textarea } from '@/components/textarea/textarea';
 import { useGetSummaryRecordDetail } from '@/hooks/api/use-get-summary-record-detail';
 import { usePostSummaryRecordDetail } from '@/hooks/api/use-post-summary-record-detail';
+import type { RecordType } from '@/types/api/student-record';
 import { calculateByte } from '@/util/calculate-byte';
 
-export default function RecordSummary({ selectedId }: { selectedId: number }) {
+interface RecordSummaryProps {
+  selectedId: number;
+  recordType: RecordType;
+}
+
+export default function RecordSummary({ selectedId, recordType }: RecordSummaryProps) {
+  console.log(recordType);
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState('');
   const { mutate: postSummaryRecordDetail } = usePostSummaryRecordDetail();
@@ -69,7 +76,9 @@ export default function RecordSummary({ selectedId }: { selectedId: number }) {
           저장
         </button>
       </div>
-      <span className="absolute bottom-14 right-2 text-slate-400">{`${calculateByte(description)}/1500`}</span>
+      <span className="absolute bottom-14 right-2 text-slate-400">
+        {calculateByte(description)}/{recordType === 'career' ? '2100' : '1500'}
+      </span>
       <SaveSummaryRecordModal open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
