@@ -15,5 +15,9 @@ export const getNoticeDetail = async (id: string) => {
 
   const json: Response<DetailNoticeType> = await res.json();
 
+  if (!json.data) {
+    throw new Error('공지사항을 찾을 수 없습니다.');
+  }
+
   return json.data;
 };
