@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/input/input';
 import { Textarea } from '@/components/textarea/textarea';
 import { usePostAdminNotice } from '@/hooks/api/use-post-admin-notice';
+import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 
 const baseStyle = 'rounded-full px-5 py-1 pt-1.5 text-center font-bold text-[14px]';
 
@@ -33,7 +34,8 @@ export default function WriteNotice() {
     postAdminNotice(
       { title, content, categoryId: selectedTag },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await revalidateNotice();
           router.push('/notice');
         },
       },
