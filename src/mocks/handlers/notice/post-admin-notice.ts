@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { PostAdminNoticeRequest } from '@/types/api/notice';
+import type { AdminNoticeRequest } from '@/types/api/notice';
 
 export const postAdminNotice = [
   http.post('/api/v1/admin/notices', async ({ request }) => {
-    const body = (await request.json()) as PostAdminNoticeRequest;
+    const body = (await request.json()) as AdminNoticeRequest;
 
     if (body.categoryId !== 2 && body.categoryId !== 3) {
       return HttpResponse.json(

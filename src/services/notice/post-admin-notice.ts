@@ -1,4 +1,4 @@
-import type { PostAdminNotice } from '@/types/api/notice';
+import type { AdminNotice } from '@/types/api/notice';
 import type { Response } from '@/types/api/response';
 
 export const postAdminNotice = async ({
@@ -6,7 +6,7 @@ export const postAdminNotice = async ({
   title,
   content,
   accessToken,
-}: PostAdminNotice): Promise<Response<null>> => {
+}: AdminNotice): Promise<Response<null>> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/notices`, {
     method: 'POST',
     headers: {
