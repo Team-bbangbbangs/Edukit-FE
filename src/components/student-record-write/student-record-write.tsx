@@ -74,6 +74,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
       <CharacteristicInput
         students={data}
         selectedId={parsedRecordId}
+        recordType={recordType}
         onGenerationStart={handleGenerationStart}
         onResponseGenerated={handleAiResponseGenerated}
       />
