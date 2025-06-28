@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const isLogin = request.cookies.get('refreshToken')?.value;
   const { pathname } = request.nextUrl;
 
-  const authPages = ['/login', '/signup', '/verify-email'];
+  const authPages = ['/login', '/verify-email'];
 
   if (isLogin && authPages.includes(pathname)) {
     return NextResponse.redirect(new URL('/', request.url));
@@ -15,5 +15,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/signup', '/verify-email'],
+  matcher: ['/login', '/verify-email'],
 };

@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 
+import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/set-user';
 import { reissue } from '@/services/auth/reissue';
 
 import { AuthContext } from './auth-context';
@@ -16,12 +17,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const res = await reissue();
 
-        if (res) {
+        if (res?.accessToken) {
           setAccessToken(res.accessToken);
           setIsAdmin(res.isAdmin);
+
+          setAmplitudeUserFromAccessToken({
+            accessToken: res.accessToken,
+            isAdmin: res.isAdmin,
+          });
         }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (e) {
+      } catch {
         setAccessToken(null);
       }
     };
