@@ -1,3 +1,4 @@
+import AnalyticsProvider from '@/components/analytics/analytics-provider';
 import { AuthProvider } from '@/contexts/auth/auth-provider';
 import { MSWProvider } from '@/lib/msw-provider';
 import QueryProvider from '@/lib/tanstack-query-provider';
@@ -15,7 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="overflow-hidden">
         <MSWProvider>
           <QueryProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              <AnalyticsProvider>{children}</AnalyticsProvider>
+            </AuthProvider>
           </QueryProvider>
         </MSWProvider>
       </body>
