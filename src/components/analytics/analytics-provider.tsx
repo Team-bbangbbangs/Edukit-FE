@@ -50,7 +50,8 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
       referrer: document.referrer || 'Direct',
       landing_page: pathname,
     });
-  }, [pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 2. 페이지별 체류 시간 추적
   useEffect(() => {
