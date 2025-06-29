@@ -1,0 +1,12 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(awk '!/^\s*#/' "$COMMIT_MSG_FILE")
+
+IS_HEADER_FORMAT_VALID='^[A-Z]+-[0-9]+ (feat|fix|docs|refactor|test|style|chore) : .+'
+
+# --- header ---
+if ! echo "$COMMIT_MSG" | grep -E "$IS_HEADER_FORMAT_VALID" > /dev/null; then
+    echo "🚨 커밋 메시지는 [JIRA-KEY] [type] : [message] 형식이어야 합니다. (예시: EDMT-46 chore : 초기 설정)"
+    exit 1
+fi
