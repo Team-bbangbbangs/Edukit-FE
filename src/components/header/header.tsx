@@ -68,7 +68,10 @@ export default function Header() {
               ) : null}
             </>
           ) : (
-            <Link href="/login" className="rounded-full bg-black px-4 py-2 text-white">
+            <Link
+              href="/login"
+              className="flex h-10 items-center justify-center rounded-full bg-black px-6 text-white"
+            >
               로그인
             </Link>
           )}

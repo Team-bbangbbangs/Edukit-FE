@@ -17,9 +17,7 @@ export const allowedDomains: string[] = [
   'gne.go.kr',
   'jje.go.kr',
   'jbedu.kr',
-  'naver.com',
-  'gmail.com',
-  'g.skku.edu',
+  'edukit.co.kr',
 ];
 
 export const subjects: { value: string; label: string }[] = [
