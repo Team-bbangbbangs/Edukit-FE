@@ -1,17 +1,35 @@
 'use client';
 
+import { useState } from 'react';
+
 import { CheckCircle2 } from 'lucide-react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Loading from '@/components/loading/loading';
+import EmailSentModal from '@/components/modal/email-sent-modal';
 import { useGetProfile } from '@/hooks/api/use-get-profile';
+import { usePostSendEmail } from '@/hooks/api/use-post-send-email';
 
 import ProfileImage from '../../../public/images/profile-image.png';
 
 export default function Mypage() {
   const { data, isPending, isError } = useGetProfile();
+  const [open, setOpen] = useState(false);
+
+  const { mutate: postSendEmail } = usePostSendEmail();
+
+  const handleSendEmail = () => {
+    postSendEmail(undefined, {
+      onSuccess: () => {
+        setOpen(true);
+      },
+      onError: (error) => {
+        alert(error.message);
+      },
+    });
+  };
 
   if (isError) {
     return (
@@ -42,14 +60,17 @@ export default function Mypage() {
             {data.isTeacherVerified ? (
               <span className="text-sm font-bold">교사 인증 완료</span>
             ) : (
-              <span className="text-sm text-red-500 underline hover:cursor-pointer">
+              <span
+                onClick={handleSendEmail}
+                className="text-sm text-red-500 underline hover:cursor-pointer"
+              >
                 교사 인증 필요
               </span>
             )}
           </div>
           <div>
             <span className="text-sm text-slate-600">과목 : </span>
-            <span>{data.subject}</span>
+            <span className="text-sm font-bold">{data.subject}</span>
           </div>
         </div>
       </div>
@@ -74,11 +95,12 @@ export default function Mypage() {
         <span className="text-lg">{data.email}</span>
       </div>
       <hr />
-      <div className="flex w-full gap-10 px-4">
+      <div className="flex w-full gap-7 px-4">
         <span className="text-slate-500">비밀번호</span>
         <span className="pt-1 text-lg">********</span>
       </div>
       <hr />
+      <EmailSentModal open={open} onOpenChange={setOpen} />
     </div>
   );
 }
