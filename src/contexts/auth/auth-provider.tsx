@@ -11,6 +11,7 @@ import { AuthContext } from './auth-context';
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -28,11 +29,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch {
         setAccessToken(null);
+      } finally {
+        setIsReady(true);
       }
     };
 
     initializeAuth();
   }, []);
+
+  if (!isReady) return null;
 
   return (
     <AuthContext.Provider value={{ accessToken, setAccessToken, isAdmin, setIsAdmin }}>
