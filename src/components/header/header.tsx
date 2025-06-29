@@ -42,7 +42,7 @@ export default function Header() {
       <Link href="/" className="pt-1 text-2xl font-bold text-black">
         EduMate
       </Link>
-      <div className="flex gap-4">
+      <div className="flex items-center gap-4">
         <a
           href="https://walla.my/survey/tBoiYaly9xugPKLhAyRx"
           target="_blank"
