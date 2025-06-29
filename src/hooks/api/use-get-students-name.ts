@@ -11,11 +11,7 @@ export const useGetStudentsName = (recordType: RecordType, semester: string) => 
   const query = useQuery<StudentNameTypes[]>({
     queryKey: ['studentsName', recordType],
     queryFn: () => getStudentsName(recordType, semester, accessToken),
-    retry: 1,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    retry: 0,
   });
 
   return {

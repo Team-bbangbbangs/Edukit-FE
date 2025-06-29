@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import DeleteNoticeModal from '@/components/modal/delete-notice-modal';
+import DeleteConfirmModal from '@/components/modal/delete-confirm-modal';
 import { useAuth } from '@/contexts/auth/use-auth';
 import { useDeleteAdminNotice } from '@/hooks/api/use-delete-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
@@ -47,7 +47,7 @@ export default function EditDeleteNoticeButton({ id }: { id: string }) {
       >
         삭제하기
       </button>
-      <DeleteNoticeModal open={open} onOpenChange={setOpen} onDelete={handleDelete} />
+      <DeleteConfirmModal open={open} onOpenChange={setOpen} onDelete={handleDelete} />
     </div>
   ) : null;
 }

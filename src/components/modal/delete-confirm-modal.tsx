@@ -11,17 +11,17 @@ import {
   ModalPortal,
 } from './base-modal';
 
-interface DeleteNoticeModalProps {
+interface DeleteConfirmModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onDelete: () => void;
 }
 
-export default function DeleteNoticeModal({
+export default function DeleteConfirmModal({
   open,
   onOpenChange,
   onDelete,
-}: DeleteNoticeModalProps) {
+}: DeleteConfirmModalProps) {
   const handleCancel = () => {
     onOpenChange(false);
   };

@@ -3,6 +3,8 @@ import { saveAs } from 'file-saver';
 
 import type { RecordType, StudentRecord } from '@/types/api/student-record';
 
+import { getYearAndMonthAndDay } from './get-korea-formatted-time-stamp';
+
 const recordTypeToTitle: Record<RecordType, string> = {
   subject: '세부능력 및 특기사항',
   behavior: '행동특성 및 종합의견',
@@ -12,7 +14,7 @@ const recordTypeToTitle: Record<RecordType, string> = {
 };
 
 export const downloadExcel = async (data: StudentRecord[], recordType: RecordType) => {
-  const title = recordTypeToTitle[recordType];
+  const title = `${recordTypeToTitle[recordType]} ${getYearAndMonthAndDay()}`;
 
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet(title);
@@ -20,7 +22,7 @@ export const downloadExcel = async (data: StudentRecord[], recordType: RecordTyp
   worksheet.columns = [
     { header: '학번', key: 'studentNumber', width: 15 },
     { header: '이름', key: 'name', width: 15 },
-    { header: title, key: 'description', width: 300 },
+    { header: recordTypeToTitle[recordType], key: 'description', width: 300 },
   ];
 
   const extractData = data.map((record) => ({

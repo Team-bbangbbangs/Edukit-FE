@@ -15,5 +15,6 @@ export const useGetSummaryRecordDetail = (recordId: number) => {
     gcTime: 10 * 60 * 1000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    retry: 0,
   });
 };
