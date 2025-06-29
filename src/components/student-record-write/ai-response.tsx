@@ -1,3 +1,4 @@
+import Loading from '@/components/loading/loading';
 import type { AiResponseData, RecordType } from '@/types/api/student-record';
 import { calculateByte } from '@/util/calculate-byte';
 
@@ -10,7 +11,12 @@ interface AiResponseProps {
 export default function AiResponse({ responses, isGenerating, recordType }: AiResponseProps) {
   const getContentForVersion = (version: number) => {
     if (isGenerating) {
-      return '생성 중입니다...';
+      return (
+        <div className="flex flex-col gap-2">
+          <Loading />
+          <p className="text-[14px] text-slate-500">20초정도 소요됩니다.</p>
+        </div>
+      );
     }
 
     if (!responses) {
@@ -40,32 +46,44 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="relative">
-        <h4 className="mb-2 font-bold">(버전 1)</h4>
-        <div className="min-h-40 rounded-lg border border-slate-400 p-5">
-          <p className={`whitespace-pre-wrap ${getTextColor()}`}>{getContentForVersion(1)}</p>
+      <div className="flex flex-col gap-2">
+        <h4 className="font-bold">(버전 1)</h4>
+        <div
+          className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
+            isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
+          } ${getTextColor()}`}
+        >
+          {getContentForVersion(1)}
         </div>
-        <span className="absolute bottom-1 right-2 text-slate-400">
+        <span className="flex justify-end text-slate-400">
           {getTextLength(1)}/{recordType === 'career' ? '2100' : '1500'}
         </span>
       </div>
 
-      <div className="relative">
-        <h4 className="mb-2 font-bold">(버전 2)</h4>
-        <div className="min-h-40 rounded-lg border border-slate-400 p-5">
-          <p className={`whitespace-pre-wrap ${getTextColor()}`}>{getContentForVersion(2)}</p>
+      <div className="flex flex-col gap-2">
+        <h4 className="font-bold">(버전 2)</h4>
+        <div
+          className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
+            isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
+          } ${getTextColor()}`}
+        >
+          {getContentForVersion(2)}
         </div>
-        <span className="absolute bottom-1 right-2 text-slate-400">
+        <span className="flex justify-end text-slate-400">
           {getTextLength(2)}/{recordType === 'career' ? '2100' : '1500'}
         </span>
       </div>
 
-      <div className="relative">
-        <h4 className="mb-2 font-bold">(버전 3)</h4>
-        <div className="min-h-40 rounded-lg border border-slate-400 p-5">
-          <p className={`whitespace-pre-wrap ${getTextColor()}`}>{getContentForVersion(3)}</p>
+      <div className="flex flex-col gap-2">
+        <h4 className="font-bold">(버전 3)</h4>
+        <div
+          className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
+            isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
+          } ${getTextColor()}`}
+        >
+          {getContentForVersion(3)}
         </div>
-        <span className="absolute bottom-1 right-2 text-slate-400">
+        <span className="flex justify-end text-slate-400">
           {getTextLength(3)}/{recordType === 'career' ? '2100' : '1500'}
         </span>
       </div>
