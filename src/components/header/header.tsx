@@ -42,27 +42,37 @@ export default function Header() {
       <Link href="/" className="pt-1 text-2xl font-bold text-black">
         EduMate
       </Link>
-      <div className="relative flex">
-        {isLogIn ? (
-          <>
-            <Image
-              src={ProfileImage}
-              alt="profile image"
-              className="hover:cursor-pointer"
-              onClick={() => setOpen((prev) => !prev)}
-              width={40}
-            />
-            {open ? (
-              <div ref={dropdownRef}>
-                <ProfileDropDown onClose={handleCloseDropdown} />
-              </div>
-            ) : null}
-          </>
-        ) : (
-          <Link href="/login" className="rounded-full bg-black px-4 py-2 text-white">
-            로그인
-          </Link>
-        )}
+      <div className="flex gap-4">
+        <a
+          href="https://walla.my/survey/tBoiYaly9xugPKLhAyRx"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
+        >
+          설문조사 참여하기
+        </a>
+        <div className="relative">
+          {isLogIn ? (
+            <>
+              <Image
+                src={ProfileImage}
+                alt="profile image"
+                className="hover:cursor-pointer"
+                onClick={() => setOpen((prev) => !prev)}
+                width={40}
+              />
+              {open ? (
+                <div ref={dropdownRef}>
+                  <ProfileDropDown onClose={handleCloseDropdown} />
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <Link href="/login" className="rounded-full bg-black px-4 py-2 text-white">
+              로그인
+            </Link>
+          )}
+        </div>
       </div>
     </header>
   );
