@@ -28,8 +28,6 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
   const studentNameRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const [textareaHeight, setTextareaHeight] = useState<number>(0);
-
   const [open, setOpen] = useState(false);
 
   const resizeTextarea = () => {
@@ -37,7 +35,6 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
     if (el) {
       el.style.height = 'auto';
       el.style.height = `${el.scrollHeight}px`;
-      setTextareaHeight(el.scrollHeight + 15);
     }
   };
 
@@ -72,54 +69,51 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
 
   return (
     <>
-      <tr className="relative">
-        <td className="py-2 pl-5">
+      <tr>
+        <td className="py-2 pl-5 align-middle">
           <Input
             defaultValue={record.studentNumber}
             ref={studentNumberRef}
             className="w-full p-1"
           />
         </td>
-        <td className="py-2 pl-5">
+        <td className="py-2 pl-5 align-middle">
           <Input defaultValue={record.studentName} ref={studentNameRef} className="w-full p-1" />
         </td>
-        <td className="py-2 pl-5">
-          <Textarea
-            ref={textareaRef}
-            defaultValue={record.description}
-            className="min-h-0 w-full resize-none p-1 text-sm"
-            style={{
-              lineHeight: 'inherit',
-              fontSize: 'inherit',
-              overflow: 'hidden',
-            }}
-            onInput={resizeTextarea}
-          />
-        </td>
-        <td
-          className="absolute right-0 flex gap-2 border-none"
-          style={{
-            top: `${textareaHeight}px`,
-          }}
-        >
-          <button
-            className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
-            onClick={onView}
-          >
-            취소하기
-          </button>
-          <button
-            className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
-            onClick={handleSave}
-          >
-            수정하기
-          </button>
-          <button
-            className="rounded-md bg-red-600 px-4 pb-1.5 pt-2 text-white hover:bg-red-700"
-            onClick={handleOpenDeleteModal}
-          >
-            삭제하기
-          </button>
+        <td className="py-2 pl-5 align-middle">
+          <div className="space-y-3">
+            <Textarea
+              ref={textareaRef}
+              defaultValue={record.description}
+              className="min-h-0 w-full resize-none p-1 text-sm"
+              style={{
+                lineHeight: 'inherit',
+                fontSize: 'inherit',
+                overflow: 'hidden',
+              }}
+              onInput={resizeTextarea}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
+                onClick={onView}
+              >
+                취소하기
+              </button>
+              <button
+                className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
+                onClick={handleSave}
+              >
+                수정하기
+              </button>
+              <button
+                className="rounded-md bg-red-600 px-4 pb-1.5 pt-2 text-white hover:bg-red-700"
+                onClick={handleOpenDeleteModal}
+              >
+                삭제하기
+              </button>
+            </div>
+          </div>
         </td>
       </tr>
       <DeleteConfirmModal open={open} onOpenChange={setOpen} onDelete={handleDelete} />

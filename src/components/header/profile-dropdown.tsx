@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Home } from 'lucide-react';
 
 import Image from 'next/image';
@@ -5,8 +7,10 @@ import Link from 'next/link';
 
 import DefaultError from '@/components/error/default-error';
 import Loading from '@/components/loading/loading';
+import EmailSentModal from '@/components/modal/email-sent-modal';
 import { useGetProfile } from '@/hooks/api/use-get-profile';
 import { useLogout } from '@/hooks/api/use-logout';
+import { usePostSendEmail } from '@/hooks/api/use-post-send-email';
 
 import ProfileImage from '../../../public/images/profile-image.png';
 
@@ -22,9 +26,27 @@ interface ProfileDropDownProps {
 export function ProfileDropDown({ onClose }: ProfileDropDownProps) {
   const { data, isPending, isError } = useGetProfile();
   const { mutate: handleLogout } = useLogout();
+  const [open, setOpen] = useState(false);
+
+  const { mutate: postSendEmail } = usePostSendEmail();
+
+  const handleSendEmail = () => {
+    postSendEmail(undefined, {
+      onSuccess: () => {
+        setOpen(true);
+      },
+      onError: (error) => {
+        alert(error.message);
+      },
+    });
+  };
 
   if (isError) {
-    return <DefaultError />;
+    return (
+      <div className="absolute right-0 top-[50px] z-10 flex h-[148px] w-[300px] flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg">
+        <DefaultError />
+      </div>
+    );
   }
 
   if (!data) return null;
@@ -57,9 +79,12 @@ export function ProfileDropDown({ onClose }: ProfileDropDownProps) {
               {isTeacherVerified ? (
                 <span className="text-sm text-gray-600">{SCHOOL_LABELS[school]} 교사</span>
               ) : (
-                <Link href={'/mypage'} onClick={() => onClose()}>
-                  <span className="text-sm text-red-500 hover:underline">교사 인증 필요</span>
-                </Link>
+                <span
+                  className="cursor-pointer text-sm text-red-500 hover:underline"
+                  onClick={handleSendEmail}
+                >
+                  교사 인증 필요
+                </span>
               )}
             </div>
           </div>
@@ -73,6 +98,7 @@ export function ProfileDropDown({ onClose }: ProfileDropDownProps) {
               로그아웃
             </button>
           </div>
+          <EmailSentModal open={open} onOpenChange={setOpen} />
         </>
       )}
     </div>
