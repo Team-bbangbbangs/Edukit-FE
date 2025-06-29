@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import DefaultError from '@/components/error/default-error';
+import { useRouter } from 'next/navigation';
+
 import Loading from '@/components/loading/loading';
 import SaveSummaryRecordModal from '@/components/modal/save-summary-record-modal';
 import { Textarea } from '@/components/textarea/textarea';
@@ -17,6 +18,7 @@ interface RecordSummaryProps {
 }
 
 export default function RecordSummary({ selectedId, recordType }: RecordSummaryProps) {
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState('');
   const { mutate: postSummaryRecordDetail } = usePostSummaryRecordDetail();
@@ -54,14 +56,14 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
   };
 
   if (isError) {
-    return <DefaultError />;
+    router.push(`write-${recordType}`);
   }
   if (isPending) {
     return <Loading />;
   }
 
   return (
-    <div className="relative flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <h4 className="font-bold">종합</h4>
       <Textarea
         value={description}
@@ -69,6 +71,9 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
         placeholder="완성본을 적어주세요."
         className="h-60 border-slate-400 p-5 placeholder:text-slate-400"
       />
+      <span className="flex justify-end text-slate-400">
+        {calculateByte(description)}/{recordType === 'career' ? '2100' : '1500'}
+      </span>
       <div className="flex justify-end">
         <button
           disabled={!description.trim()}
@@ -82,9 +87,7 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
           저장
         </button>
       </div>
-      <span className="absolute bottom-14 right-2 text-slate-400">
-        {calculateByte(description)}/{recordType === 'career' ? '2100' : '1500'}
-      </span>
+
       <SaveSummaryRecordModal open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
