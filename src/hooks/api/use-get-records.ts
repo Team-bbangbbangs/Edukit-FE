@@ -11,7 +11,7 @@ export const useGetRecords = (recordType: RecordType) => {
   const query = useQuery<StudentsResponse>({
     queryKey: ['records', recordType],
     queryFn: () => getRecords({ recordType, accessToken, semester: '2025-1' }),
-    retry: 1,
+    retry: 0,
   });
 
   return {
