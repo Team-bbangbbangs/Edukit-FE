@@ -13,3 +13,16 @@ export const getKoreaFormattedTimeStamp = (): string => {
 
   return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
 };
+
+export const getYearAndMonthAndDay = (): string => {
+  const now = new Date();
+
+  const kstString = now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
+  const kstDate = new Date(kstString);
+
+  const yyyy = kstDate.getFullYear();
+  const mm = String(kstDate.getMonth() + 1).padStart(2, '0');
+  const dd = String(kstDate.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+};
