@@ -56,7 +56,7 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
   };
 
   if (isError) {
-    router.push(`write-${recordType}`);
+    router.push(`/write-${recordType}`);
   }
   if (isPending) {
     return <Loading />;
