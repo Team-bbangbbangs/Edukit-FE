@@ -9,7 +9,9 @@
     "lint": "next lint",
     "prepare": "husky",
     "precommit": "pnpm lint-staged",
-    "mock-server": "tsx src/mock-server/server.ts"
+    "mock-server": "tsx src/mock-server/server.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [
@@ -46,6 +48,7 @@
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.26.0",
     "@mswjs/http-middleware": "^0.10.3",
+    "@playwright/test": "^1.53.1",
     "@types/express": "^5.0.2",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
