@@ -8,7 +8,9 @@ export const initAmplitude = () => {
   const apiKey = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
   if (!apiKey) return;
 
-  init(apiKey);
+  init(apiKey, {
+    defaultTracking: false,
+  });
   isInitialized = true;
 };
 
