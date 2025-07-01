@@ -49,7 +49,7 @@ export default function Header() {
           rel="noopener noreferrer"
           className="rounded-full bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
         >
-          설문조사 참여하기
+          피드백 작성하기
         </a>
         <div className="relative">
           {isLogIn ? (
