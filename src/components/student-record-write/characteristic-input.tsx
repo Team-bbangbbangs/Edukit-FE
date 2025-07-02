@@ -4,15 +4,11 @@ import { useRouter } from 'next/navigation';
 
 import { Textarea } from '@/components/textarea/textarea';
 import { usePostPrompt } from '@/hooks/api/use-post-prompt';
-import { trackEvent } from '@/lib/amplitude/amplitude';
-import type { StudentNameTypes, AiResponseData, RecordType } from '@/types/api/student-record';
-import { calculateByte } from '@/util/calculate-byte';
-import { getKoreaFormattedTimeStamp } from '@/util/get-korea-formatted-time-stamp';
+import type { StudentNameTypes, AiResponseData } from '@/types/api/student-record';
 
 interface CharacteristicInputProps {
   students: StudentNameTypes[];
   selectedId: number;
-  recordType: RecordType;
   onGenerationStart: () => void;
   onResponseGenerated: (data: AiResponseData) => void;
 }
@@ -20,7 +16,6 @@ interface CharacteristicInputProps {
 export default function CharacteristicInput({
   students,
   selectedId,
-  recordType,
   onGenerationStart,
   onResponseGenerated,
 }: CharacteristicInputProps) {
@@ -40,12 +35,6 @@ export default function CharacteristicInput({
       alert('내용을 입력해주세요.');
       return;
     }
-
-    trackEvent('AI 기능 사용', {
-      recordType: recordType,
-      inputLength: calculateByte(value),
-      timestamp: getKoreaFormattedTimeStamp(),
-    });
 
     onGenerationStart();
     postPrompt(
