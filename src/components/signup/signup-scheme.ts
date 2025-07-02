@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { allowedDomains } from '@/constants/signup-data';
+import { getValidDomains } from '@/constants/signup-data';
 
 export const emailSchema = z
   .string()
@@ -11,7 +11,9 @@ export const emailSchema = z
       const parts = email.split('@');
       if (parts.length !== 2) return false;
       const domain = parts[1];
-      return allowedDomains.includes(domain);
+
+      const validDomains = getValidDomains();
+      return validDomains.includes(domain);
     },
     { message: '교직 이메일이 아닙니다.' },
   );

@@ -16,12 +16,28 @@ import {
   SidebarHeader,
 } from '@/components/sidebar/base-sidebar';
 import { SIDEBAR_CONFIG } from '@/configs/sidebar-config';
+import { useAuth } from '@/contexts/auth/use-auth';
+import { trackEvent } from '@/lib/amplitude/amplitude';
 import { cn } from '@/lib/utils';
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible';
 
+const eventMap: Record<string, string> = {
+  '/manage-subject': 'click_manageSubject',
+  '/manage-behavior': 'click_manageBehavior',
+  '/manage-career': 'click_manageCareer',
+  '/manage-free': 'click_manageFree',
+  '/manage-club': 'click_manageClub',
+  '/write-subject': 'click_writeSubject',
+  '/write-behavior': 'click_writeBehavior',
+  '/write-career': 'click_writeCareer',
+  '/write-free': 'click_writeFree',
+  '/write-club': 'click_writeClub',
+};
+
 export default function MainSidebar() {
   const pathname = usePathname();
+  const { accessToken } = useAuth();
 
   const isActive = (url: string) => {
     return pathname === url || pathname.startsWith(url + '/');
@@ -78,15 +94,16 @@ export default function MainSidebar() {
                                 'bg-slate-200 text-slate-800 hover:bg-slate-200',
                             )}
                           >
-                            <Link href={child.url}>
-                              <span
-                                className={cn(
-                                  'pt-[2px] text-[14px] transition-colors duration-200',
-                                  isActive(child.url) && 'font-semibold',
-                                )}
-                              >
-                                {child.title}
-                              </span>
+                            <Link
+                              href={child.url}
+                              onClick={() => {
+                                const eventName = eventMap[child.url];
+                                if (eventName) {
+                                  trackEvent(eventName, accessToken);
+                                }
+                              }}
+                            >
+                              <span>{child.title}</span>
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

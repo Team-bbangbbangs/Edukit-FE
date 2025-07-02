@@ -13,6 +13,7 @@ export const signup = async ({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password, subject, school }),
+    credentials: 'include',
   });
 
   const json: Response<AuthResponse> = await res.json();
