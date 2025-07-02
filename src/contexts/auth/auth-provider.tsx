@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 
-import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/set-user';
+import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/amplitude';
 import { reissue } from '@/services/auth/reissue';
 
 import { AuthContext } from './auth-context';
@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
           setAmplitudeUserFromAccessToken({
             accessToken: res.accessToken,
-            isAdmin: res.isAdmin,
           });
         }
       } catch {

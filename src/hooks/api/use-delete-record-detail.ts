@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '@/contexts/auth/use-auth';
+import { increaseTotalStudent } from '@/lib/amplitude/amplitude';
 import { deleteRecordDetail } from '@/services/student-manage/delete-record-detail';
 import type { Response } from '@/types/api/response';
 import type { RecordType } from '@/types/api/student-record';
@@ -23,6 +24,7 @@ export const useDeleteRecordDetail = () => {
       queryClient.invalidateQueries({
         queryKey: ['studentsName', variables.recordType],
       });
+      increaseTotalStudent(variables.recordType, -1, accessToken, 'click_deleteStudent');
     },
     onError: (error) => {
       alert(error.message);

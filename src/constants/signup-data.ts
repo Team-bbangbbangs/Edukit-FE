@@ -1,4 +1,4 @@
-export const allowedDomains: string[] = [
+const allowedDomains: string[] = [
   'sen.go.kr',
   'pen.go.kr',
   'dge.go.kr',
@@ -19,6 +19,15 @@ export const allowedDomains: string[] = [
   'jbedu.kr',
   'edukit.co.kr',
 ];
+
+const developmentAllowedDomains: string[] = [...allowedDomains, 'naver.com', 'gmail.com'];
+
+export const getValidDomains = (): string[] => {
+  const isDevelopment =
+    process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_APP_ENV === 'development';
+
+  return isDevelopment ? developmentAllowedDomains : allowedDomains;
+};
 
 export const subjects: { value: string; label: string }[] = [
   { value: '국어', label: '국어' },

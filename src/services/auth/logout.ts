@@ -7,6 +7,7 @@ export const logout = async (accessToken: string): Promise<Response<void>> => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
+    credentials: 'include',
   });
 
   const json: Response<void> = await res.json();

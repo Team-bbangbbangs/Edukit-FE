@@ -7,10 +7,8 @@ import SaveSummaryRecordModal from '@/components/modal/save-summary-record-modal
 import { Textarea } from '@/components/textarea/textarea';
 import { useGetSummaryRecordDetail } from '@/hooks/api/use-get-summary-record-detail';
 import { usePostSummaryRecordDetail } from '@/hooks/api/use-post-summary-record-detail';
-import { trackEvent } from '@/lib/amplitude/amplitude';
 import type { RecordType } from '@/types/api/student-record';
 import { calculateByte } from '@/util/calculate-byte';
-import { getKoreaFormattedTimeStamp } from '@/util/get-korea-formatted-time-stamp';
 
 interface RecordSummaryProps {
   selectedId: number;
@@ -32,11 +30,6 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
 
   const handleSave = () => {
     const byteCount = calculateByte(description);
-    trackEvent('생활기록부 문장 확정', {
-      recordType: recordType,
-      inputLength: byteCount,
-      timestamp: getKoreaFormattedTimeStamp(),
-    });
 
     postSummaryRecordDetail(
       {
