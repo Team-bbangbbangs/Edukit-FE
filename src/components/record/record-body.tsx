@@ -37,8 +37,6 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
     content = <NotFoundError recordType={recordType} />;
   } else if (isError || !data) {
     content = <p className="text-[20px] font-bold">데이터를 불러오는 데 실패했습니다.</p>;
-  } else if (data.students.length === 0) {
-    content = <NotFoundError recordType={recordType} />;
   }
 
   if (content) {
