@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/contexts/auth/use-auth';
-import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/set-user';
+import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/amplitude';
 import { login } from '@/services/auth/login';
 import type { LoginProp, AuthResponse } from '@/types/api/auth';
 
@@ -20,7 +20,6 @@ export const useLogin = () => {
 
       setAmplitudeUserFromAccessToken({
         accessToken: data.accessToken,
-        isAdmin: data.isAdmin,
       });
 
       router.push('/');
