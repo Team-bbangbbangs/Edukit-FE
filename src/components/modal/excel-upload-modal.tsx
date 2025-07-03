@@ -66,6 +66,10 @@ export default function ExcelUploadModal({
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('파일 크기가 너무 큽니다. 10MB 이하의 파일을 업로드해주세요.');
+      return;
+    }
 
     setIsUploading(true);
 
