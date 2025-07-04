@@ -9,6 +9,8 @@ interface AiResponseProps {
 }
 
 export default function AiResponse({ responses, isGenerating, recordType }: AiResponseProps) {
+  const bytesLimit = recordType === 'career' ? 2100 : 1500;
+
   const getContentForVersion = (version: number) => {
     if (isGenerating) {
       return (
@@ -20,7 +22,7 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
     }
 
     if (!responses) {
-      return '프롬프트를 입력하고 생성 버튼을 눌러주세요.';
+      return '학생 특성 기입란을 입력하고 생성 버튼을 눌러주세요.';
     }
 
     const descriptions = [responses.description1, responses.description2, responses.description3];
@@ -55,9 +57,12 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
         >
           {getContentForVersion(1)}
         </div>
-        <span className="flex justify-end text-slate-400">
-          {getTextLength(1)}/{recordType === 'career' ? '2100' : '1500'}
-        </span>
+        <div className="flex justify-end">
+          <span className={`${bytesLimit < getTextLength(1) ? 'text-red-600' : 'text-slate-400'}`}>
+            {getTextLength(1)}
+          </span>
+          <span className="text-slate-400">/{bytesLimit} Bytes</span>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -69,9 +74,12 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
         >
           {getContentForVersion(2)}
         </div>
-        <span className="flex justify-end text-slate-400">
-          {getTextLength(2)}/{recordType === 'career' ? '2100' : '1500'}
-        </span>
+        <div className="flex justify-end">
+          <span className={`${bytesLimit < getTextLength(2) ? 'text-red-600' : 'text-slate-400'}`}>
+            {getTextLength(2)}
+          </span>
+          <span className="text-slate-400">/{bytesLimit} Bytes</span>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -83,9 +91,12 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
         >
           {getContentForVersion(3)}
         </div>
-        <span className="flex justify-end text-slate-400">
-          {getTextLength(3)}/{recordType === 'career' ? '2100' : '1500'}
-        </span>
+        <div className="flex justify-end">
+          <span className={`${bytesLimit < getTextLength(3) ? 'text-red-600' : 'text-slate-400'}`}>
+            {getTextLength(3)}
+          </span>
+          <span className="text-slate-400">/{bytesLimit} Bytes</span>
+        </div>
       </div>
     </div>
   );
