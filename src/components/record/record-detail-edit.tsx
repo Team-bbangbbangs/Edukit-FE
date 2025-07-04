@@ -1,12 +1,13 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Input } from '@/components/input/input';
 import DeleteConfirmModal from '@/components/modal/delete-confirm-modal';
 import { Textarea } from '@/components/textarea/textarea';
 import { useDeleteRecordDetail } from '@/hooks/api/use-delete-record-detail';
 import { usePatchRecordDetail } from '@/hooks/api/use-patch-record-detail';
+import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
 import type {
   RecordType,
   StudentRecord,
@@ -26,17 +27,9 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
 
   const studentNumberRef = useRef<HTMLInputElement>(null);
   const studentNameRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { textareaRef, resizeTextarea } = useAutoResizeTextarea(record.description);
 
   const [open, setOpen] = useState(false);
-
-  const resizeTextarea = () => {
-    const el = textareaRef.current;
-    if (el) {
-      el.style.height = 'auto';
-      el.style.height = `${el.scrollHeight}px`;
-    }
-  };
 
   const handleSave = () => {
     const updatedStudentNumber = studentNumberRef.current?.value || '';
@@ -62,10 +55,6 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
   const handleDelete = () => {
     deleteRecordDetail({ recordType, recordId: record.recordDetailId });
   };
-
-  useLayoutEffect(() => {
-    resizeTextarea();
-  }, [record.description]);
 
   return (
     <>
