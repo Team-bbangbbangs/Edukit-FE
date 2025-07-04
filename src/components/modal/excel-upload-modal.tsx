@@ -39,6 +39,7 @@ export default function ExcelUploadModal({
 
   const [uploadedStudents, setUploadedStudents] = useState<StudentData[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const { mutate: createRecords } = useCreateRecords();
 
@@ -63,9 +64,7 @@ export default function ExcelUploadModal({
     saveAs(blob, '학생목록_템플릿.xlsx');
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const processFile = async (file: File) => {
     if (file.size > 10 * 1024 * 1024) {
       alert('파일 크기가 너무 큽니다. 10MB 이하의 파일을 업로드해주세요.');
       return;
@@ -113,6 +112,32 @@ export default function ExcelUploadModal({
     }
   };
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processFile(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
   const handleSubmit = () => {
     const semester = semesterRef.current?.value;
     if (!semester) {
@@ -150,7 +175,7 @@ export default function ExcelUploadModal({
     <Modal open={open} onOpenChange={handleClose}>
       <ModalPortal>
         <ModalOverlay />
-        <ModalContent aria-describedby={undefined} className="max-w-[778px] rounded-xl p-5">
+        <ModalContent aria-describedby={undefined} className="max-w-[688px] rounded-xl p-5">
           <ModalHeader className="w-full">
             <ModalTitle className="mb-5 flex flex-col items-center justify-center gap-3 text-[24px]">
               <div className="flex items-center gap-2">
@@ -170,12 +195,14 @@ export default function ExcelUploadModal({
             </ModalTitle>
           </ModalHeader>
 
-          <div className="flex items-center justify-center gap-4">
-            <div className="flex flex-col items-center justify-center gap-2 rounded-lg bg-blue-50 p-4">
-              <h3 className="font-semibold">1단계: 템플릿 다운로드</h3>
-              <p className="text-sm text-gray-600">
-                먼저 엑셀 템플릿을 다운로드하여 학생 정보를 입력해주세요.
-              </p>
+          <div className="flex items-stretch justify-center gap-4">
+            <div className="flex max-w-xs flex-1 flex-col items-center justify-between gap-3 rounded-lg bg-blue-50 p-6">
+              <div className="text-center">
+                <h3 className="mb-2 font-semibold">1단계: 템플릿 다운로드</h3>
+                <p className="text-sm text-gray-600">
+                  먼저 엑셀 템플릿을 다운로드하여 학생 정보를 입력해주세요.
+                </p>
+              </div>
               <button
                 onClick={downloadTemplate}
                 className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
@@ -184,22 +211,67 @@ export default function ExcelUploadModal({
               </button>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-2 rounded-lg bg-green-50 px-[30px] py-[18px]">
-              <h3 className="font-semibold">2단계: 파일 업로드</h3>
-              <p className="text-sm text-gray-600">
-                학생 정보를 입력한 엑셀 파일을 업로드해주세요.
-              </p>
+            <div className="flex max-w-xs flex-1 flex-col items-center justify-between gap-3 rounded-lg bg-green-50 p-6">
+              <div className="text-center">
+                <h3 className="mb-2 font-semibold">2단계: 파일 업로드</h3>
+                <p className="text-sm text-gray-600">
+                  학생 정보를 입력한 엑셀 파일을 업로드해주세요.
+                </p>
+              </div>
+
               <input
                 ref={fileInputRef}
                 type="file"
                 accept=".xlsx,.xls"
                 onChange={handleFileUpload}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-green-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-green-700 hover:file:bg-green-100"
+                className="hidden"
                 disabled={isUploading}
               />
-              {isUploading ? (
-                <p className="mt-2 text-sm text-blue-600">파일을 처리하는 중...</p>
-              ) : null}
+
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                className={`w-full cursor-pointer rounded-lg border-2 border-dashed p-4 text-center transition-all duration-200 ${
+                  isDragOver
+                    ? 'border-green-400 bg-green-100'
+                    : 'border-gray-300 hover:border-green-400 hover:bg-green-100'
+                } ${isUploading ? 'pointer-events-none opacity-50' : ''} `}
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  <div
+                    className={`flex h-8 w-8 items-center justify-center rounded-full ${isDragOver ? 'bg-green-200' : 'bg-gray-200'} `}
+                  >
+                    {isUploading ? (
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-green-500 border-t-transparent" />
+                    ) : (
+                      <svg
+                        className={`h-4 w-4 ${isDragOver ? 'text-green-600' : 'text-gray-500'}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                    )}
+                  </div>
+
+                  <div className="text-xs">
+                    <p className="font-medium text-gray-700">
+                      {isUploading ? '업로드 중...' : '파일 업로드'}
+                    </p>
+                    <p className="text-gray-500">
+                      {isDragOver ? '파일을 놓아주세요' : '드래그하거나 클릭'}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
