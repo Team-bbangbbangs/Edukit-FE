@@ -24,6 +24,9 @@ export const usePatchRecordDetail = () => {
       queryClient.invalidateQueries({
         queryKey: ['studentsName', variables.recordType],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['summary-record-detail', variables.updateStudentRecord.recordDetailId],
+      });
     },
     onError: (error) => {
       alert(error.message);

@@ -1,9 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
 import { Textarea } from '@/components/textarea/textarea';
 import { usePostPrompt } from '@/hooks/api/use-post-prompt';
+import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
 import type { StudentNameTypes, AiResponseData } from '@/types/api/student-record';
 
 interface CharacteristicInputProps {
@@ -20,7 +21,10 @@ export default function CharacteristicInput({
   onResponseGenerated,
 }: CharacteristicInputProps) {
   const { mutate: postPrompt, isPending } = usePostPrompt();
-  const characteristicInputTextRef = useRef<HTMLTextAreaElement>(null);
+  const { textareaRef: characteristicInputTextRef, resizeTextarea } = useAutoResizeTextarea(
+    '',
+    240,
+  );
   const router = useRouter();
 
   const selectedStudentName = students.find(
@@ -88,8 +92,14 @@ export default function CharacteristicInput({
 
       <Textarea
         ref={characteristicInputTextRef}
-        placeholder="내용을 입력해주세요."
-        className="h-60 border-slate-400 p-5 placeholder:text-slate-400"
+        placeholder="내용을 입력해주세요. (학생의 활동 내용이나 특성을 작성해주시면 생활기록부 지침에 맞게 작성해드립니다)"
+        className="min-h-60 resize-none border-slate-400 p-5 placeholder:text-slate-400"
+        style={{
+          lineHeight: 'inherit',
+          fontSize: 'inherit',
+          overflow: 'hidden',
+        }}
+        onInput={resizeTextarea}
       />
       <div className="flex justify-end">
         <button

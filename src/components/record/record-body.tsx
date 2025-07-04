@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import NotAuthorizedError from '@/components/error/not-authorized-error';
-import NotFoundError from '@/components/error/not-found-error';
 import NotPermissionError from '@/components/error/not-permission-error';
 import Loading from '@/components/loading/loading';
 import { useGetRecords } from '@/hooks/api/use-get-records';
@@ -26,6 +25,26 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
     </tr>
   );
 
+  if (isNotFound) {
+    return (
+      <tbody className="[&_td]:border-b [&_td]:border-b-slate-300 [&_tr:last-child_td]:border-b-0">
+        {editingId === 'plus' ? (
+          <RecordDetailAdd recordType={recordType} onCancel={() => setEditingId(null)} />
+        ) : (
+          <tr>
+            <td
+              onClick={() => setEditingId('plus')}
+              colSpan={3}
+              className="py-3 text-center hover:bg-slate-300"
+            >
+              + 추가하기
+            </td>
+          </tr>
+        )}
+      </tbody>
+    );
+  }
+
   let content: React.ReactNode;
   if (isPending) {
     content = <Loading />;
@@ -33,8 +52,6 @@ export default function RecordBody({ recordType }: { recordType: RecordType }) {
     content = <NotAuthorizedError />;
   } else if (isNotPermission) {
     content = <NotPermissionError />;
-  } else if (isNotFound) {
-    content = <NotFoundError recordType={recordType} />;
   } else if (isError || !data) {
     content = <p className="text-[20px] font-bold">데이터를 불러오는 데 실패했습니다.</p>;
   }
