@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { CheckCircle2, ChevronDown } from 'lucide-react';
 
@@ -18,12 +18,25 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
   const [subject, setSubject] = useState(profile.subject);
   const [school, setSchool] = useState(profile.school);
   const [isSubjectDropdownOpen, setIsSubjectDropdownOpen] = useState(false);
-  const [isCheckingNickname, setIsCheckingNickname] = useState(true);
+  const [isNicknameValidated, setIsNicknameValidated] = useState(true);
 
   const { mutate: getCheckValidNickname, isPending: isCheckingValidNickname } =
     useGetCheckValidNickname();
 
   const { mutate: patchProfile, isPending } = usePatchProfile();
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsSubjectDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSchoolChange = (school: 'middle' | 'high') => {
     setSchool(school);
@@ -33,11 +46,13 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
     getCheckValidNickname(nickname, {
       onSuccess: (data) => {
         if (!data.isDuplicated && !data.isInvalid) {
-          setIsCheckingNickname(true);
+          setIsNicknameValidated(true);
           alert('사용 가능한 닉네임입니다!');
         } else if (data.isDuplicated) {
+          setIsNicknameValidated(false);
           alert('현재 사용 중인 닉네임입니다.');
         } else if (data.isInvalid) {
+          setIsNicknameValidated(false);
           alert('금칙어가 들어갔습니다. 다른 닉네임을 사용해주세요.');
         }
       },
@@ -47,14 +62,14 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
     if (e.target.value !== profile.nickname) {
-      setIsCheckingNickname(false);
+      setIsNicknameValidated(false);
     } else {
-      setIsCheckingNickname(true);
+      setIsNicknameValidated(true);
     }
   };
 
   const handleSave = () => {
-    if (nickname !== profile.nickname && !isCheckingNickname) {
+    if (nickname !== profile.nickname && !isNicknameValidated) {
       alert('닉네임 중복확인을 해주세요.');
       return;
     }
@@ -99,7 +114,7 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
 
       <div className="flex items-center gap-4">
         <span className="w-16 text-sm text-slate-600">과목</span>
-        <div className="relative max-w-xs flex-1">
+        <div className="relative max-w-xs flex-1" ref={dropdownRef}>
           <button
             onClick={() => setIsSubjectDropdownOpen(!isSubjectDropdownOpen)}
             className="w-full rounded-md border border-gray-300 bg-white p-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -163,7 +178,7 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
         <button
           onClick={handleSave}
           className="rounded-md bg-slate-800 px-4 py-2 text-white hover:bg-slate-950 disabled:cursor-not-allowed disabled:bg-gray-400"
-          disabled={isPending || !isCheckingNickname}
+          disabled={isPending || !isNicknameValidated}
         >
           저장
         </button>
