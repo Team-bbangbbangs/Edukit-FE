@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Loading from '@/components/loading/loading';
 import { useGetProfile } from '@/hooks/api/use-get-profile';
 
+import BasicInfo from './basic-info';
 import ProfileEdit from './profile-edit';
 import ProfileView from './profile-view';
 
@@ -51,17 +52,7 @@ export default function Mypage() {
       )}
 
       <h2 className="text-[30px] font-bold">기본 정보</h2>
-      <hr />
-      <div className="flex w-full gap-10 px-4">
-        <span className="text-slate-500">이메일</span>
-        <span className="text-lg">{data.email}</span>
-      </div>
-      <hr />
-      <div className="flex w-full gap-7 px-4">
-        <span className="text-slate-500">비밀번호</span>
-        <span className="pt-1 text-lg">********</span>
-      </div>
-      <hr />
+      <BasicInfo email={data.email} />
     </div>
   );
 }

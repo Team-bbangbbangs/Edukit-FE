@@ -5,7 +5,7 @@ export const logout = async (accessToken: string): Promise<Response<void>> => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
     credentials: 'include',
   });
