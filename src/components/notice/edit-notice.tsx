@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components//input/input';
-import { Textarea } from '@/components/textarea/textarea';
+import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-editor';
 import { usePatchAdminNotice } from '@/hooks/api/use-patch-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 import type { DetailNoticeType } from '@/types/api/notice';
@@ -25,13 +25,13 @@ export default function EditNotice({ notice }: EditNoticeProps) {
   const [selectedTag, setSelectedTag] = useState(CATEGORY_MAP[notice.category]);
 
   const titleRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const editorRef = useRef<TipTapEditorRef>(null);
 
   const { mutate: putAdminNotice } = usePatchAdminNotice();
 
   const handleSubmit = () => {
     const title = titleRef.current?.value;
-    const content = contentRef.current?.value;
+    const content = editorRef.current?.getHTML();
 
     if (!title?.trim() || !content?.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
@@ -77,15 +77,14 @@ export default function EditNotice({ notice }: EditNoticeProps) {
         ref={titleRef}
         defaultValue={notice?.title || ''}
         placeholder="제목"
-        className="w-full max-w-2xl"
+        className="w-full max-w-4xl"
       />
 
-      <Textarea
-        ref={contentRef}
-        defaultValue={notice?.content || ''}
-        placeholder="내용을 입력하세요."
-        rows={15}
-        className="w-full max-w-2xl"
+      <TipTapEditor
+        ref={editorRef}
+        initialContent={notice?.content || ''}
+        placeholder="내용을 입력해주세요."
+        className="w-full max-w-4xl"
       />
 
       <div className="flex gap-4">

@@ -37,7 +37,7 @@ export default function EditDeleteNoticeButton({ id }: { id: string }) {
     <div className="flex justify-end gap-2">
       <Link
         href={`/notice/edit-notice/${id}`}
-        className="rounded-md bg-slate-800 px-4 py-2 text-white hover:bg-slate-950"
+        className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
       >
         수정하기
       </Link>
