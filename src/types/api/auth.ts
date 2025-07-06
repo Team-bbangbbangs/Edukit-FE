@@ -47,3 +47,19 @@ export type GetCheckValidNicknameRequest = {
   nickname: string;
   accessToken: string | null;
 };
+
+export type PatchEmail = {
+  email: string;
+  accessToken: string | null;
+};
+
+export type PatchAfterLoginPasswordProps = {
+  currentPassword: string;
+  newPassword: string;
+};
+
+export type PatchAfterLoginPassword = {
+  currentPassword: string;
+  newPassword: string;
+  accessToken: string | null;
+};
