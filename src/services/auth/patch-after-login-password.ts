@@ -10,7 +10,7 @@ export const patchAfterLoginPassword = async ({
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
     body: JSON.stringify({ currentPassword, newPassword }),
   });

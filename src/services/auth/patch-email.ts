@@ -6,7 +6,7 @@ export const patchEmail = async ({ email, accessToken }: PatchEmail): Promise<Re
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
     body: JSON.stringify({ email }),
   });
