@@ -4,8 +4,8 @@ import { useState, useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-editor';
 import { Input } from '@/components/input/input';
-import { Textarea } from '@/components/textarea/textarea';
 import { usePostAdminNotice } from '@/hooks/api/use-post-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 
@@ -19,14 +19,14 @@ export default function WriteNotice() {
   const router = useRouter();
   const [selectedTag, isSelectedTag] = useState(2);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<TipTapEditorRef>(null);
 
   const { mutate: postAdminNotice } = usePostAdminNotice();
 
   const handleSubmit = () => {
-    const title = inputRef.current?.value;
-    const content = textareaRef.current?.value;
+    const title = titleRef.current?.value;
+    const content = contentRef.current?.getHTML();
     if (!title || !content) {
       alert('제목, 내용을 입력해주세요');
       return;
@@ -58,10 +58,13 @@ export default function WriteNotice() {
           이벤트
         </button>
       </div>
-      <Input ref={inputRef} placeholder="제목" />
+      <Input ref={titleRef} placeholder="제목" />
 
-      {/* 에디터 라이브러리 붙이면 수정할 예정 */}
-      <Textarea ref={textareaRef} placeholder="내용을 입력해주세요." className="h-96" />
+      <TipTapEditor
+        ref={contentRef}
+        placeholder="내용을 입력해주세요."
+        className="w-full max-w-4xl"
+      />
       <button
         onClick={handleSubmit}
         className="rounded-md bg-slate-800 px-4 py-2 text-white hover:bg-slate-950"
