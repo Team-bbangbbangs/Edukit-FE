@@ -4,8 +4,8 @@ import { useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Input } from '@/components//input/input';
 import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-editor';
+import { Input } from '@/components/input/input';
 import { usePatchAdminNotice } from '@/hooks/api/use-patch-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 import type { DetailNoticeType } from '@/types/api/notice';

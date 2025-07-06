@@ -132,6 +132,10 @@ const TipTapEditor = forwardRef<TipTapEditorRef, TipTapEditorProps>(
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+          alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+          return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
           const src = e.target?.result as string;
