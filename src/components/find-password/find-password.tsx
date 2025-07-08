@@ -22,7 +22,7 @@ export default function FindPassword() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-slate-700 px-10 py-16">
-      <h2 className="mb-4 text-[30px] font-bold">비밀번호 변경</h2>
+      <h2 className="mb-4 text-[30px] font-bold">비밀번호 찾기</h2>
 
       {step === 'email' ? (
         <EmailVerificationForm onSuccess={handleEmailSuccess} />

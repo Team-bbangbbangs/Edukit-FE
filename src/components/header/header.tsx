@@ -38,11 +38,11 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="fixed top-0 z-50 flex h-16 w-full justify-between border-b bg-white px-10 py-3">
-      <Link href="/" className="pt-1 text-2xl font-bold text-black">
+    <header className="fixed top-0 z-40 flex h-16 w-full justify-between border-b bg-white px-2 py-3 md:px-10">
+      <Link href="/" className="ml-10 pt-1 text-2xl font-bold text-black md:ml-0">
         EduMate
       </Link>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1 md:gap-4">
         <a
           href="https://walla.my/survey/tBoiYaly9xugPKLhAyRx"
           target="_blank"
