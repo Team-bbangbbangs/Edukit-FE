@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import ExcelUploadModal from '@/components/modal/excel-upload-modal';
+import { useAuth } from '@/contexts/auth/use-auth';
 import { useGetRecords } from '@/hooks/api/use-get-records';
 import type { RecordType } from '@/types/api/student-record';
 import { downloadExcel } from '@/util/download-excel';
@@ -12,7 +13,13 @@ export default function StudentAddButton({ recordType }: { recordType: RecordTyp
 
   const { data } = useGetRecords(recordType);
 
+  const { accessToken } = useAuth();
+
   const hasStudents = data && data.students.length > 0;
+
+  if (accessToken === null) {
+    return null;
+  }
 
   const handleDownloadExcel = () => {
     if (hasStudents) {
