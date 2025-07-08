@@ -42,7 +42,7 @@ export default function BasicInfo({ email }: { email: string }) {
         <div className="flex w-full items-center justify-between gap-7 px-4 py-6">
           <div className="flex gap-7 pt-1">
             <span className="text-slate-500">비밀번호</span>
-            <span className="pt-1 text-lg">********</span>
+            <span className="text-lg text-slate-400">비밀번호를 설정해주세요.</span>
           </div>
           {editMode !== 'email' ? (
             <button
