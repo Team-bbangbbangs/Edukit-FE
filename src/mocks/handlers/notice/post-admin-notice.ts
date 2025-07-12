@@ -4,7 +4,31 @@ import type { AdminNoticeRequest } from '@/types/api/notice';
 
 export const postAdminNotice = [
   http.post('/api/v1/admin/notices', async ({ request }) => {
+    const authHeader = request.headers.get('authorization');
+
+    if (!authHeader || !authHeader.includes('admin-access-token')) {
+      return HttpResponse.json(
+        {
+          status: 403,
+          code: 'EDMT-403',
+          message: '관리자 권한이 필요합니다.',
+        },
+        { status: 403 },
+      );
+    }
+
     const body = (await request.json()) as AdminNoticeRequest;
+
+    if (!body.title?.trim() || !body.content?.trim()) {
+      return HttpResponse.json(
+        {
+          status: 400,
+          code: 'EDMT-400',
+          message: '제목과 내용을 모두 입력해주세요.',
+        },
+        { status: 400 },
+      );
+    }
 
     if (body.categoryId !== 2 && body.categoryId !== 3) {
       return HttpResponse.json(
@@ -21,6 +45,7 @@ export const postAdminNotice = [
       status: 200,
       code: 'EDMT-20000',
       message: '요청이 성공했습니다.',
+      data: null,
     });
   }),
 ];

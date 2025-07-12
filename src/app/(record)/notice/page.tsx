@@ -22,7 +22,7 @@ export default async function NoticePage({ searchParams }: PageProps) {
   });
 
   return (
-    <div className="h-full w-full px-10">
+    <div className="h-full w-full">
       <h2 className="text-[26px] font-bold">공지사항</h2>
 
       <NoticeCategorys categoryId={categoryId} />
