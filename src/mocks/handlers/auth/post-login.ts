@@ -6,14 +6,30 @@ export const postLogin = [
   http.post('/api/v1/auth/login', async ({ request }) => {
     const { email, password } = (await request.json()) as LoginProp;
 
-    if (email === 'test@naver.com' && password === 'ab1234') {
+    if (email === 'admin@edukit.co.kr' && password === 'password1234') {
       return HttpResponse.json(
         {
           status: 200,
           code: 'EDMT-20002',
           message: '요청에 성공했습니다.',
           data: {
-            accessToken: 'dfnjkadfndask',
+            accessToken: 'admin-access-token',
+            isAdmin: true,
+          },
+        },
+        { status: 200 },
+      );
+    }
+
+    if (email === 'test@edukit.co.kr' && password === 'password1234') {
+      return HttpResponse.json(
+        {
+          status: 200,
+          code: 'EDMT-20002',
+          message: '요청에 성공했습니다.',
+          data: {
+            accessToken: 'user-access-token',
+            isAdmin: false,
           },
         },
         { status: 200 },
