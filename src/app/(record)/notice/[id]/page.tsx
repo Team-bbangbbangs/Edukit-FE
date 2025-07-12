@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps) {
   const data = await getNoticeDetail(id);
 
   return (
-    <div className="w-full px-10">
+    <div className="w-full">
       <h2 className="mb-10 text-[26px] font-bold">{data.category}</h2>
       <h3 className="text-[20px] font-bold">{data.title}</h3>
       <span className="text-[14px] text-slate-600">{formatDate(data.createdAt)}</span>
