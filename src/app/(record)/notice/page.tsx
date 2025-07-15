@@ -20,6 +20,7 @@ export default async function NoticePage({ searchParams }: PageProps) {
     page,
     categoryId,
   });
+  const parsedPage = isNaN(Number(page)) ? 1 : Number(page);
 
   return (
     <div className="h-full w-full">
@@ -29,8 +30,12 @@ export default async function NoticePage({ searchParams }: PageProps) {
 
       {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <ErrorNotice />}
 
-      {page === undefined || data.totalPages >= Number(page) ? (
-        <Pagination categoryId={categoryId} nowPage={page} totalPages={data.totalPages} />
+      {parsedPage >= 1 && parsedPage <= data.totalPages ? (
+        <Pagination
+          categoryId={categoryId}
+          nowPage={parsedPage.toString()}
+          totalPages={data.totalPages}
+        />
       ) : null}
 
       <WriteNoticeButton />
