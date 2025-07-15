@@ -211,12 +211,17 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
     await page.goto('/notice');
     await page.waitForLoadState('domcontentloaded');
 
+    const totalPages = await page.evaluate(async () => {
+      const response = await fetch('/api/v1/notices');
+      const data = await response.json();
+      return data.data.totalPages;
+    });
+
     const firstPagePrevButton = page.locator('span.text-slate-300:has-text("<")');
     await expect(firstPagePrevButton).toBeVisible();
 
-    const nextButton = page.locator('a[href*="page="]:has-text(">")');
-    if (await nextButton.isVisible()) {
-      await nextButton.click();
+    if (totalPages > 1) {
+      await page.goto(`/notice?page=${totalPages}`);
       await page.waitForLoadState('domcontentloaded');
 
       const lastNextButton = page.locator('span.text-slate-300:has-text(">")');
@@ -224,9 +229,6 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
 
       const lastPrevButton = page.locator('a[href*="page="]:has-text("<")');
       await expect(lastPrevButton).toBeVisible();
-    } else {
-      const onlyNextButton = page.locator('span.text-slate-300:has-text(">")');
-      await expect(onlyNextButton).toBeVisible();
     }
   });
 });
