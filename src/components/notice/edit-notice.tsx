@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-editor';
 import { Input } from '@/components/input/input';
-import { usePatchAdminNotice } from '@/hooks/api/use-patch-admin-notice';
+import { usePatchAdminNotice } from '@/hooks/api/notice/use-patch-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 import type { DetailNoticeType } from '@/types/api/notice';
 

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 
 import { Input } from '@/components/input/input';
 import { subjects } from '@/constants/signup-data';
-import { useSignup } from '@/hooks/api/use-signup';
+import { useSignup } from '@/hooks/api/auth/use-signup';
 
 import { signupSchema } from './signup-scheme';
 import SuccessSignup from './success-signup';

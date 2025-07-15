@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { Input } from '@/components/input/input';
 import { passwordSchema } from '@/components/signup/signup-scheme';
-import { usePatchAfterLoginPassword } from '@/hooks/api/use-patch-after-login-password';
+import { usePatchAfterLoginPassword } from '@/hooks/api/profile/use-patch-after-login-password';
 
 const passwordEditSchema = z
   .object({

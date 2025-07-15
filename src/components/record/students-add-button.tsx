@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import ExcelUploadModal from '@/components/modal/excel-upload-modal';
 import { useAuth } from '@/contexts/auth/use-auth';
-import { useGetRecords } from '@/hooks/api/use-get-records';
+import { useGetRecords } from '@/hooks/api/student-manage/use-get-records';
 import type { RecordType } from '@/types/api/student-record';
 import { downloadExcel } from '@/util/download-excel';
 

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 import { Input } from '@/components/input/input';
-import { useCreateRecordDetail } from '@/hooks/api/use-create-record-detail';
+import { useCreateRecordDetail } from '@/hooks/api/student-manage/use-create-record-detail';
 import type { RecordType } from '@/types/api/student-record';
 import { calculateByte } from '@/util/calculate-byte';
 

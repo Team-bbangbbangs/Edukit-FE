@@ -8,9 +8,9 @@ import Link from 'next/link';
 import DefaultError from '@/components/error/default-error';
 import Loading from '@/components/loading/loading';
 import EmailSentModal from '@/components/modal/email-sent-modal';
-import { useGetProfile } from '@/hooks/api/use-get-profile';
-import { useLogout } from '@/hooks/api/use-logout';
-import { usePostSendEmail } from '@/hooks/api/use-post-send-email';
+import { useLogout } from '@/hooks/api/auth/use-logout';
+import { usePostSendEmail } from '@/hooks/api/auth/use-post-send-email';
+import { useGetProfile } from '@/hooks/api/profile/use-get-profile';
 
 import ProfileImage from '../../../public/images/profile-image.png';
 
