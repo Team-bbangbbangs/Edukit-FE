@@ -20,6 +20,17 @@ export const getNoticeList = [
     const page = Number(url.searchParams.get('page') ?? '1');
     const categoryParam = url.searchParams.get('categoryId') ?? '';
 
+    if (categoryParam && categoryParam !== '2' && categoryParam !== '3') {
+      return HttpResponse.json(
+        {
+          status: 400,
+          code: 'EDMT-4000301',
+          message: '유효하지 않은 공지사항 카테고리입니다.',
+        },
+        { status: 400 },
+      );
+    }
+
     const categoryFilter = CATEGORY_MAP[categoryParam] ?? '';
 
     const filteredNotices = categoryFilter
