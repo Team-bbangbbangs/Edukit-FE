@@ -9,7 +9,7 @@ export const usePostPrompt = () => {
   const { accessToken } = useAuth();
 
   return useMutation<AiResponseData, Error, PostPrompt>({
-    mutationFn: (params) => postPrompt({ ...params, accessToken }),
+    mutationFn: postPrompt,
     onSuccess: (data: AiResponseData, variables: PostPrompt) => {
       trackEvent('click_aiGenerate', accessToken, {
         ai_inputLength: variables.prompt?.length || 0,

@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { postVerifyEmail } from '@/services/auth/post-verify-email';
-import type { Response } from '@/types/api/response';
+import type { ApiResponseWithoutData } from '@/types/api/response';
 
 export const usePostVerifyEmail = () => {
-  return useMutation<Response<null>, Error, string>({
+  return useMutation<ApiResponseWithoutData, Error, string>({
     mutationFn: postVerifyEmail,
   });
 };

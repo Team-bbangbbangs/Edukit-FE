@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 
 import { patchResetPassword } from '@/services/auth/patch-reset-password';
 import type { LoginProp } from '@/types/api/auth';
-import type { Response } from '@/types/api/response';
+import type { ApiResponseWithoutData } from '@/types/api/response';
 
 export const usePatchResetPassword = () => {
-  return useMutation<Response<null>, Error, LoginProp>({
+  return useMutation<ApiResponseWithoutData, Error, LoginProp>({
     mutationFn: patchResetPassword,
   });
 };
