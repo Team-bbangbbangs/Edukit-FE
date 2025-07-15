@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/amplitude';
 import { setAuthContext } from '@/lib/api';
@@ -14,8 +14,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isReady, setIsReady] = useState(false);
-
-  const isInitializing = useRef(false);
 
   const setAuthData = (token: string | null, adminStatus?: boolean | null) => {
     setAccessToken(token);
@@ -41,9 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      if (isInitializing.current) return;
-      isInitializing.current = true;
-
       try {
         const isMSWEnabled = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
         const baseURL = isMSWEnabled
@@ -57,7 +52,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if (response.ok) {
           const json: ApiResponseWithData<AuthResponse> = await response.json();
-
           if (json.data?.accessToken) {
             setAuthData(json.data.accessToken, json.data.isAdmin);
             setAuthContext({
@@ -75,7 +69,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAuthData(null, null);
       } finally {
         setIsReady(true);
-        isInitializing.current = false;
       }
     };
 
