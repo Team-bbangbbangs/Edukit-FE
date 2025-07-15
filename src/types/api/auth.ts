@@ -25,17 +25,10 @@ export type UserInfoTypes = {
   nickname: string;
 };
 
-export type PatchProfileProps = {
-  subject: string;
-  school: string;
-  nickname: string;
-};
-
 export type PatchProfile = {
   subject: string;
   school: string;
   nickname: string;
-  accessToken: string | null;
 };
 
 export type GetCheckValidNicknameResponse = {
@@ -48,18 +41,7 @@ export type GetCheckValidNicknameRequest = {
   accessToken: string | null;
 };
 
-export type PatchEmail = {
-  email: string;
-  accessToken: string | null;
-};
-
-export type PatchAfterLoginPasswordProps = {
-  currentPassword: string;
-  newPassword: string;
-};
-
 export type PatchAfterLoginPassword = {
   currentPassword: string;
   newPassword: string;
-  accessToken: string | null;
 };

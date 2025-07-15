@@ -6,14 +6,13 @@ import { signup } from '@/services/auth/signup';
 import type { AuthResponse, SignupTypes } from '@/types/api/auth';
 
 export const useSignup = () => {
-  const { setAccessToken, setIsAdmin } = useAuth();
+  const { setAuthData } = useAuth();
 
   return useMutation<AuthResponse, Error, SignupTypes>({
     mutationFn: signup,
 
     onSuccess: (data, variables) => {
-      setAccessToken(data.accessToken);
-      setIsAdmin(data.isAdmin);
+      setAuthData(data.accessToken, data.isAdmin);
 
       setAmplitudeUserFromAccessToken({
         accessToken: data.accessToken,

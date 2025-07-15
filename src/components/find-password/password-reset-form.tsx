@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/input/input';
 import SuccessPasswordResetModal from '@/components/modal/success-password-reset-modal';
 import { passwordSchema } from '@/components/signup/signup-scheme';
-import { usePatchResetPassword } from '@/hooks/api/use-patch-reset-password';
+import { usePatchResetPassword } from '@/hooks/api/auth/use-patch-reset-password';
 
 const passwordResetSchema = z
   .object({

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import DeleteConfirmModal from '@/components/modal/delete-confirm-modal';
 import { useAuth } from '@/contexts/auth/use-auth';
-import { useDeleteAdminNotice } from '@/hooks/api/use-delete-admin-notice';
+import { useDeleteAdminNotice } from '@/hooks/api/notice/use-delete-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 
 export default function EditDeleteNoticeButton({ id }: { id: string }) {
@@ -18,19 +18,16 @@ export default function EditDeleteNoticeButton({ id }: { id: string }) {
   const { mutate: deleteAdminNotice } = useDeleteAdminNotice();
 
   const handleDelete = () => {
-    deleteAdminNotice(
-      { id },
-      {
-        onSuccess: async () => {
-          await revalidateNotice();
-          setOpen(false);
-          router.push('/notice');
-        },
-        onError: (error) => {
-          alert(error.message);
-        },
+    deleteAdminNotice(id, {
+      onSuccess: async () => {
+        await revalidateNotice();
+        setOpen(false);
+        router.push('/notice');
       },
-    );
+      onError: (error) => {
+        alert(error.message);
+      },
+    });
   };
 
   return isAdmin ? (

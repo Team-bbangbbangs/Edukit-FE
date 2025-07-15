@@ -24,14 +24,10 @@ export type CreateStudentRecord = {
   studentNumber: string;
 };
 
-export type CreateRecordsInput = {
+export type CreateRecords = {
   recordType: RecordType;
   studentRecords: CreateStudentRecord[];
   semester: string;
-};
-
-export type CreateRecords = CreateRecordsInput & {
-  accessToken: string | null;
 };
 
 export type PatchRecordDetail = {
@@ -45,10 +41,6 @@ export type CreateRecordDetail = {
   studentRecord: StudentRecordTypes;
 };
 
-export type CreateRecordDetailRequestTypes = CreateRecordDetail & {
-  accessToken: string | null;
-};
-
 export type StudentRecordTypes = {
   studentNumber: string;
   studentName: string;
@@ -59,6 +51,10 @@ export type StudentRecordTypes = {
 export type StudentNameTypes = {
   recordId: number;
   studentName: string;
+};
+
+export type studentDetails = {
+  studentDetails: StudentNameTypes[];
 };
 
 export type SummaryRecordTypes = {

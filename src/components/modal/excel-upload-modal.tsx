@@ -6,7 +6,7 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
 import { Input } from '@/components/input/input';
-import { useCreateRecords } from '@/hooks/api/use-create-records';
+import { useCreateRecords } from '@/hooks/api/student-manage/use-create-records';
 import type { RecordType } from '@/types/api/student-record';
 
 import {

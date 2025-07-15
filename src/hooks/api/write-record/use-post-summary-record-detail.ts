@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/auth/use-auth';
 import { trackEvent } from '@/lib/amplitude/amplitude';
 import { postSummaryRecordDetail } from '@/services/write-record/post-summary-record-detail';
-import type { Response } from '@/types/api/response';
+import type { ApiResponseWithoutData } from '@/types/api/response';
 
 interface PostSummaryParams {
   recordId: number;
@@ -15,8 +15,8 @@ export const usePostSummaryRecordDetail = () => {
   const { accessToken } = useAuth();
   const queryClient = useQueryClient();
 
-  return useMutation<Response<null>, Error, PostSummaryParams>({
-    mutationFn: (params) => postSummaryRecordDetail({ ...params, accessToken }),
+  return useMutation<ApiResponseWithoutData, Error, PostSummaryParams>({
+    mutationFn: postSummaryRecordDetail,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['summary-record-detail', variables.recordId],

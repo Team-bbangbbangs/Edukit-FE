@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { Input } from '@/components/input/input';
 import { emailSchema } from '@/components/signup/signup-scheme';
-import { usePatchEmail } from '@/hooks/api/use-patch-email';
+import { usePatchEmail } from '@/hooks/api/profile/use-patch-email';
 
 const emailEditSchema = z.object({
   email: emailSchema,

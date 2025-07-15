@@ -10,13 +10,12 @@ import type { LoginProp, AuthResponse } from '@/types/api/auth';
 export const useLogin = () => {
   const router = useRouter();
 
-  const { setAccessToken, setIsAdmin } = useAuth();
+  const { setAuthData } = useAuth();
 
   return useMutation<AuthResponse, Error, LoginProp>({
     mutationFn: login,
     onSuccess: (data) => {
-      setAccessToken(data.accessToken);
-      setIsAdmin(data.isAdmin);
+      setAuthData(data.accessToken, data.isAdmin);
 
       setAmplitudeUserFromAccessToken({
         accessToken: data.accessToken,

@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 import { Input } from '@/components/input/input';
 import { loginSchema, type LoginDataType } from '@/components/signup/signup-scheme';
-import { useLogin } from '@/hooks/api/use-login';
+import { useLogin } from '@/hooks/api/auth/use-login';
 
 export default function Login() {
   const {

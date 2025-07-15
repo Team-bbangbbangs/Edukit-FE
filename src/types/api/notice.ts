@@ -24,20 +24,9 @@ export type AdminNotice = {
   categoryId: number;
   title: string;
   content: string;
-  accessToken: string | null;
-};
-
-export type AdminNoticeRequest = {
-  categoryId: number;
-  title: string;
-  content: string;
 };
 
 export type PatchAdminNotice = AdminNotice & {
-  id: string;
-};
-
-export type PatchAdminNoticeRequest = AdminNoticeRequest & {
   id: string;
 };
 

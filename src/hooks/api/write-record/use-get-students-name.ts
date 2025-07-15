@@ -1,16 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useAuth } from '@/contexts/auth/use-auth';
 import { isUnauthorizedError, isNotFoundError, isNotPermissionError } from '@/lib/errors';
 import { getStudentsName } from '@/services/write-record/get-students-name';
-import type { RecordType, StudentNameTypes } from '@/types/api/student-record';
+import type { RecordType, studentDetails } from '@/types/api/student-record';
 
 export const useGetStudentsName = (recordType: RecordType, semester: string) => {
-  const { accessToken } = useAuth();
-
-  const query = useQuery<StudentNameTypes[]>({
+  const query = useQuery<studentDetails>({
     queryKey: ['studentsName', recordType],
-    queryFn: () => getStudentsName(recordType, semester, accessToken),
+    queryFn: () => getStudentsName(recordType, semester),
     retry: 0,
   });
 
