@@ -1,4 +1,4 @@
-import EmptyNotice from '@/components/notice/empty-notice';
+import ErrorNotice from '@/components/notice/error-notice';
 import NoticeCategorys from '@/components/notice/notice-categorys';
 import NoticeList from '@/components/notice/notice-list';
 import WriteNoticeButton from '@/components/notice/write-notice-button';
@@ -27,9 +27,9 @@ export default async function NoticePage({ searchParams }: PageProps) {
 
       <NoticeCategorys categoryId={categoryId} />
 
-      {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <EmptyNotice />}
+      {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <ErrorNotice />}
 
-      {data.totalPages ? (
+      {page === undefined || data.totalPages >= Number(page) ? (
         <Pagination categoryId={categoryId} nowPage={page} totalPages={data.totalPages} />
       ) : null}
 
