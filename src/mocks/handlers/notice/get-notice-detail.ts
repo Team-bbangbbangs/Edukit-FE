@@ -1,7 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
 import type { DetailNoticeType } from '@/types/api/notice';
-import type { Response } from '@/types/api/response';
 
 const tags = ['공지', '이벤트'] as const;
 
@@ -34,7 +33,7 @@ export const getNoticeDetail = [
       );
     }
 
-    const response: Response<DetailNoticeType> = {
+    const response = {
       status: 200,
       code: 'EDMT-200',
       message: '요청이 성공했습니다.',

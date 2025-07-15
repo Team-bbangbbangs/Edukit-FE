@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { AdminNoticeRequest } from '@/types/api/notice';
+import type { AdminNotice } from '@/types/api/notice';
 
 export const postAdminNotice = [
   http.post('/api/v1/admin/notices', async ({ request }) => {
@@ -17,7 +17,7 @@ export const postAdminNotice = [
       );
     }
 
-    const body = (await request.json()) as AdminNoticeRequest;
+    const body = (await request.json()) as AdminNotice;
 
     if (!body.title?.trim() || !body.content?.trim()) {
       return HttpResponse.json(
