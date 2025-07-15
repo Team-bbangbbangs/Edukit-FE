@@ -5,9 +5,10 @@ import type { RecordType } from '@/types/api/student-record';
 
 export const getRecords = [
   http.get<never, { recordType: RecordType }>(
-    '/api/v1/student-records/:recordType?semester=2025-1',
+    '/api/v1/student-records/:recordType',
     ({ params }) => {
       const { recordType } = params;
+
       const records = RECORD_DATA[recordType];
 
       return HttpResponse.json({
