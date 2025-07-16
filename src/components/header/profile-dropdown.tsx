@@ -9,8 +9,8 @@ import DefaultError from '@/components/error/default-error';
 import Loading from '@/components/loading/loading';
 import EmailSentModal from '@/components/modal/email-sent-modal';
 import { useLogout } from '@/hooks/api/auth/use-logout';
-import { usePostSendEmail } from '@/hooks/api/auth/use-post-send-email';
 import { useGetProfile } from '@/hooks/api/profile/use-get-profile';
+import { usePostSendEmail } from '@/hooks/api/profile/use-post-send-email';
 
 import ProfileImage from '../../../public/images/profile-image.png';
 
