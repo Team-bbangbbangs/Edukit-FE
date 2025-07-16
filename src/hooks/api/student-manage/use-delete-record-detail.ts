@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useAuth } from '@/contexts/auth/use-auth';
 import { increaseTotalStudent } from '@/lib/amplitude/amplitude';
 import { deleteRecordDetail } from '@/services/student-manage/delete-record-detail';
 import type { ApiResponseWithoutData } from '@/types/api/response';
@@ -12,7 +11,6 @@ type UseDeleteRecordDetailParams = {
 };
 
 export const useDeleteRecordDetail = () => {
-  const { accessToken } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation<ApiResponseWithoutData, Error, UseDeleteRecordDetailParams>({
@@ -24,7 +22,7 @@ export const useDeleteRecordDetail = () => {
       queryClient.invalidateQueries({
         queryKey: ['studentsName', variables.recordType],
       });
-      increaseTotalStudent(variables.recordType, -1, accessToken, 'click_deleteStudent');
+      increaseTotalStudent(variables.recordType, -1, 'click_deleteStudent');
     },
     onError: (error) => {
       alert(error.message);

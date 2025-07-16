@@ -16,7 +16,6 @@ import {
   SidebarHeader,
 } from '@/components/sidebar/base-sidebar';
 import { SIDEBAR_CONFIG } from '@/configs/sidebar-config';
-import { useAuth } from '@/contexts/auth/use-auth';
 import { trackEvent } from '@/lib/amplitude/amplitude';
 import { cn } from '@/lib/utils';
 
@@ -37,7 +36,6 @@ const eventMap: Record<string, string> = {
 
 export default function MainSidebar() {
   const pathname = usePathname();
-  const { accessToken } = useAuth();
 
   const isActive = (url: string) => {
     return pathname === url || pathname.startsWith(url + '/');
@@ -99,7 +97,7 @@ export default function MainSidebar() {
                               onClick={() => {
                                 const eventName = eventMap[child.url];
                                 if (eventName) {
-                                  trackEvent(eventName, accessToken);
+                                  trackEvent(eventName);
                                 }
                               }}
                             >

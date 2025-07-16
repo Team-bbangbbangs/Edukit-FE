@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useAuth } from '@/contexts/auth/use-auth';
 import { increaseTotalStudent } from '@/lib/amplitude/amplitude';
 import { createRecords } from '@/services/student-manage/create-records';
 import type { ApiResponseWithoutData } from '@/types/api/response';
 import type { CreateRecords } from '@/types/api/student-record';
 
 export const useCreateRecords = () => {
-  const { accessToken } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation<ApiResponseWithoutData, Error, CreateRecords>({
@@ -21,7 +19,7 @@ export const useCreateRecords = () => {
       });
 
       const addedCount = variables.studentRecords.length;
-      increaseTotalStudent(variables.recordType, addedCount, accessToken, 'click_generateStudent');
+      increaseTotalStudent(variables.recordType, addedCount, 'click_generateStudent');
     },
     onError: (error) => {
       alert(error.message);
