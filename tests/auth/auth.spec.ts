@@ -297,7 +297,9 @@ test.describe('인증 기능 E2E 테스트', () => {
     expect(await isLoggedIn(page)).toBe(true);
   });
 
-  test('12. accessToken 만료 시 새로고침 없이도 프로필 기능이 정상 동작한다.', async ({ page }) => {
+  test('12. accessToken 만료 후 api 요청이 발생할 때, reissue를 요청하고 새로운 accessToken을 받아와 다시 요청하는 interceptor 로직이 정상적으로 동작한다.', async ({
+    page,
+  }) => {
     await performLogin(page, 'test@edukit.co.kr', 'password1234!');
     await page.waitForTimeout(1000);
     expect(await isLoggedIn(page)).toBe(true);
