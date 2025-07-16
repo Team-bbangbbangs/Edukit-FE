@@ -4,8 +4,21 @@ import { expect, type Page } from '@playwright/test';
 export async function isLoggedIn(page: Page): Promise<boolean> {
   try {
     const profileImage = page.locator('header img[alt="profile image"]');
-    const isVisible = await profileImage.isVisible();
-    return isVisible;
+    const isProfileVisible = await profileImage.isVisible();
+
+    if (!isProfileVisible) {
+      return false;
+    }
+
+    await profileImage.click();
+    await page.waitForTimeout(500);
+
+    const logoutButton = page.locator('button:has-text("로그아웃")');
+    const hasLogoutButton = await logoutButton.isVisible();
+
+    await page.click('body');
+
+    return hasLogoutButton;
   } catch {
     return false;
   }
