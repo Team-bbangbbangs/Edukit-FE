@@ -211,24 +211,40 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
     await page.goto('/notice');
     await page.waitForLoadState('domcontentloaded');
 
-    const totalPages = await page.evaluate(async () => {
-      const response = await fetch('/api/v1/notices');
-      const data = await response.json();
-      return data.data.totalPages;
-    });
-
     const firstPagePrevButton = page.locator('span.text-slate-300:has-text("<")');
     await expect(firstPagePrevButton).toBeVisible();
 
-    if (totalPages > 1) {
-      await page.goto(`/notice?page=${totalPages}`);
-      await page.waitForLoadState('domcontentloaded');
+    const nextButton = page.locator('a[href*="page="]:has-text(">")');
+    const nextButtonDisabled = page.locator('span.text-slate-300:has-text(">")');
 
-      const lastNextButton = page.locator('span.text-slate-300:has-text(">")');
-      await expect(lastNextButton).toBeVisible();
+    const isNextButtonClickable = await nextButton.isVisible();
 
-      const lastPrevButton = page.locator('a[href*="page="]:has-text("<")');
-      await expect(lastPrevButton).toBeVisible();
+    if (!isNextButtonClickable) {
+      await expect(nextButtonDisabled).toBeVisible();
+    } else {
+      const maxIterations = 20;
+      let iterations = 0;
+
+      while (iterations < maxIterations) {
+        const isNextClickable = await nextButton.isVisible();
+
+        if (!isNextClickable) {
+          break;
+        }
+
+        await nextButton.click();
+        await page.waitForLoadState('domcontentloaded');
+
+        iterations++;
+
+        await page.waitForTimeout(500);
+      }
+
+      const finalNextButton = page.locator('span.text-slate-300:has-text(">")');
+      await expect(finalNextButton).toBeVisible();
+
+      const finalPrevButton = page.locator('a[href*="page="]:has-text("<")');
+      await expect(finalPrevButton).toBeVisible();
     }
   });
 });
