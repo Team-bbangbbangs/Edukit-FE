@@ -218,6 +218,8 @@ test.describe('인증 기능 E2E 테스트', () => {
   test('6. 회원가입할때 중복된 이메일이 있으면 alert메세지가 나온다', async ({ page }) => {
     await page.goto('/signup');
 
+    await expectAlertMessage(page, '이미 등록된 회원입니다.');
+
     await page.fill('input#email', 'test123@edukit.co.kr');
     await page.fill('input#password', 'ab12341234!');
     await page.fill('input#confirmPassword', 'ab12341234!');
@@ -229,7 +231,6 @@ test.describe('인증 기능 E2E 테스트', () => {
     await page.click('button[type="submit"]:has-text("가입하기")');
 
     await page.waitForTimeout(2000);
-    await expectAlertMessage(page, '중복된 이메일입니다.');
   });
 
   test('7. 회원가입 성공하면 SuccessSignup 컴포넌트가 나온다', async ({ page }) => {
@@ -282,5 +283,37 @@ test.describe('인증 기능 E2E 테스트', () => {
     const loginButton = page.locator('header a[href="/login"]');
     await expect(loginButton).toBeVisible();
     expect(await isLoggedIn(page)).toBe(false);
+  });
+
+  test('11. 페이지 새로고침 후에도 로그인 상태가 유지된다', async ({ page }) => {
+    await performLogin(page, 'test@edukit.co.kr', 'password1234!');
+    await page.waitForTimeout(1000);
+
+    expect(await isLoggedIn(page)).toBe(true);
+
+    await page.reload();
+    await page.waitForTimeout(3000);
+
+    expect(await isLoggedIn(page)).toBe(true);
+  });
+
+  test('12. accessToken 만료 시 새로고침 없이도 프로필 기능이 정상 동작한다.', async ({ page }) => {
+    await performLogin(page, 'test@edukit.co.kr', 'password1234!');
+    await page.waitForTimeout(1000);
+    expect(await isLoggedIn(page)).toBe(true);
+
+    await page.evaluate(() => {
+      const THIRTY_ONE_MINUTES = 31 * 60 * 1000;
+      const futureTime = Date.now() + THIRTY_ONE_MINUTES;
+      Date.now = () => futureTime;
+    });
+
+    const profileImage = page.locator('header img[alt="profile image"]');
+    await profileImage.click();
+
+    await page.waitForTimeout(1000);
+
+    const logoutButton = page.locator('button:has-text("로그아웃")');
+    await expect(logoutButton).toBeVisible();
   });
 });
