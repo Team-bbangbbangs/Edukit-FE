@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import EmailSentModal from '@/components/modal/email-sent-modal';
-import { usePostSendEmail } from '@/hooks/api/auth/use-post-send-email';
+import { usePostSendEmail } from '@/hooks/api/profile/use-post-send-email';
 
 export default function SuccessSignup() {
   const router = useRouter();
