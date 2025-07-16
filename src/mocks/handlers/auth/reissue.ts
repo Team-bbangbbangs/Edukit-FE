@@ -1,19 +1,21 @@
 import { http, HttpResponse } from 'msw';
 
 export const reissue = [
-  http.patch('/api/v1/auth/reissue', ({ request }) => {
-    const cookieHeader = request.headers.get('cookie');
+  http.patch('/api/v1/auth/reissue', ({ cookies }) => {
+    const refreshToken = cookies['refreshToken'];
 
     let isAdmin = false;
     let accessToken = 'user-access-token';
 
-    if (cookieHeader?.includes('refreshToken=admin-refresh-token')) {
+    const expiresAt = Date.now() + 30 * 60 * 1000;
+
+    if (refreshToken === 'admin-refresh-token') {
       isAdmin = true;
-      accessToken = 'admin-access-token';
-    } else if (cookieHeader?.includes('refreshToken=user-refresh-token')) {
+      accessToken = `admin-access-token.${expiresAt}`;
+    } else if (refreshToken === 'user-refresh-token') {
       isAdmin = false;
-      accessToken = 'user-access-token';
-    } else if (!cookieHeader?.includes('refreshToken=')) {
+      accessToken = `user-access-token.${expiresAt}`;
+    } else {
       return HttpResponse.json(
         {
           status: 401,
