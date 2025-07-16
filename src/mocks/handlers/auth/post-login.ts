@@ -21,7 +21,7 @@ export const postLogin = [
       );
     }
 
-    if (email === 'test@edukit.co.kr' && password === 'password1234') {
+    if (email === 'test@edukit.co.kr' && password === 'password1234!') {
       return HttpResponse.json(
         {
           status: 200,
@@ -36,11 +36,22 @@ export const postLogin = [
       );
     }
 
+    if (email === 'test@edukit.co.kr' && password !== 'password1234') {
+      return HttpResponse.json(
+        {
+          status: 401,
+          code: 'EDMT-4010107',
+          message: '비밀번호가 일치하지 않습니다.',
+        },
+        { status: 401 },
+      );
+    }
+
     return HttpResponse.json(
       {
         status: 401,
         code: 'EDMT-4010107',
-        message: '비밀번호가 일치하지 않습니다.',
+        message: '존재하지 않는 회원입니다. 회원가입을 진행해주세요.',
       },
       { status: 401 },
     );

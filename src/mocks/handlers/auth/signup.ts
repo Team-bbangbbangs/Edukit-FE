@@ -6,12 +6,12 @@ export const signup = [
   http.post('/api/v1/auth/signup', async ({ request }) => {
     const { email } = (await request.json()) as SignupTypes;
 
-    if (email === 'test@naver.com') {
+    if (email === 'test123@edukit.co.kr') {
       return HttpResponse.json(
         {
           status: 401,
           code: 'EDMT-40001',
-          message: '중복된 이메일입니다.',
+          message: '이미 등록된 회원입니다.',
         },
         { status: 401 },
       );
