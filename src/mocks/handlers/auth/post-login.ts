@@ -6,6 +6,8 @@ export const postLogin = [
   http.post('/api/v1/auth/login', async ({ request }) => {
     const { email, password } = (await request.json()) as LoginProp;
 
+    const expiresAt = Date.now() + 30 * 60 * 1000;
+
     if (email === 'admin@edukit.co.kr' && password === 'password1234') {
       return HttpResponse.json(
         {
@@ -13,11 +15,17 @@ export const postLogin = [
           code: 'EDMT-20002',
           message: '요청에 성공했습니다.',
           data: {
-            accessToken: 'admin-access-token',
+            accessToken: `admin-access-token.${expiresAt}`,
             isAdmin: true,
           },
         },
-        { status: 200 },
+        {
+          status: 200,
+          headers: {
+            'Content-type': 'application/json',
+            'Set-Cookie': 'refreshToken=admin-refresh-token; HttpOnly; Path=/; SameSite=Strict',
+          },
+        },
       );
     }
 
@@ -28,15 +36,21 @@ export const postLogin = [
           code: 'EDMT-20002',
           message: '요청에 성공했습니다.',
           data: {
-            accessToken: 'user-access-token',
+            accessToken: `user-access-token.${expiresAt}`,
             isAdmin: false,
           },
         },
-        { status: 200 },
+        {
+          status: 200,
+          headers: {
+            'Content-type': 'application/json',
+            'Set-Cookie': 'refreshToken=user-refresh-token; HttpOnly; Path=/; SameSite=Lax',
+          },
+        },
       );
     }
 
-    if (email === 'test@edukit.co.kr' && password !== 'password1234') {
+    if (email === 'test@edukit.co.kr' && password !== 'password1234!') {
       return HttpResponse.json(
         {
           status: 401,

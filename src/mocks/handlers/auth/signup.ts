@@ -17,10 +17,24 @@ export const signup = [
       );
     }
 
-    return HttpResponse.json({
-      status: 200,
-      code: 'EDMT-20002',
-      message: '요청에 성공했습니다.',
-    });
+    const expiresAt = Date.now() + 30 * 60 * 1000;
+
+    return HttpResponse.json(
+      {
+        status: 200,
+        code: 'EDMT-20002',
+        message: '요청에 성공했습니다.',
+        data: {
+          accessToken: `user-access-token.${expiresAt}`,
+          isAdmin: false,
+        },
+      },
+      {
+        status: 200,
+        headers: {
+          'Set-Cookie': 'refreshToken=user-refresh-token; HttpOnly; Path=/; SameSite=Lax',
+        },
+      },
+    );
   }),
 ];
