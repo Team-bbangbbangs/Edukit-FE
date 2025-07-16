@@ -43,7 +43,6 @@ test.describe('EduMate 랜딩 페이지', () => {
     const startTime = Date.now();
 
     await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
 
     const loadTime = Date.now() - startTime;
     expect(loadTime).toBeLessThan(5000);
