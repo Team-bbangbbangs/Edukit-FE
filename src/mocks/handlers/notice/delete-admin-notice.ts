@@ -1,10 +1,27 @@
 import { http, HttpResponse } from 'msw';
 
+import { checkAccessToken } from '@/mocks/utils/check-access-token';
+
 export const deleteAdminNotice = [
-  http.delete('/api/v1/admin/notices:id', async ({ params }) => {
+  http.delete('/api/v1/admin/notices/:noticeId', ({ request, params }) => {
     const { noticeId } = params;
 
-    if (noticeId === '10') {
+    const authHeader = request.headers.get('authorization');
+
+    const validation = checkAccessToken(authHeader);
+
+    if (!validation.tokenData?.isAdmin) {
+      return HttpResponse.json(
+        {
+          status: 403,
+          code: 'EDMT-403',
+          message: '관리자 권한이 필요합니다.',
+        },
+        { status: 403 },
+      );
+    }
+
+    if (noticeId === '999') {
       return HttpResponse.json(
         {
           status: 404,

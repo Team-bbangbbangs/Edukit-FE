@@ -27,5 +27,12 @@ export default defineConfig({
     command: 'pnpm dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    env: {
+      NEXT_PUBLIC_API_URL: 'https://dev-api.edukit.co.kr',
+      API_URL: 'https://dev-api.edukit.co.kr',
+      NEXT_PUBLIC_API_MOCKING: 'enabled',
+      NODE_ENV: 'development',
+      NEXT_PUBLIC_APP_ENV: 'development',
+    },
   },
 });

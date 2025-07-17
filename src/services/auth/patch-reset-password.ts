@@ -1,23 +1,14 @@
+import { api } from '@/lib/api';
 import type { LoginProp } from '@/types/api/auth';
-import type { Response } from '@/types/api/response';
+import type { ApiResponseWithoutData } from '@/types/api/response';
 
-export const patchResetPassword = async ({
-  email,
-  password,
-}: LoginProp): Promise<Response<null>> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/password`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
+export const patchResetPassword = async ({ email, password }: LoginProp) => {
+  return api.patch<ApiResponseWithoutData>(
+    '/api/v1/auth/password',
+    {
+      email,
+      password,
     },
-    body: JSON.stringify({ email, password }),
-  });
-
-  const json: Response<null> = await res.json();
-
-  if (!res.ok) {
-    throw new Error(json.message || '비밀번호 변경 실패');
-  }
-
-  return json;
+    { skipTokenRefresh: true },
+  );
 };

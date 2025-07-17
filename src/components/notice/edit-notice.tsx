@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-editor';
 import { Input } from '@/components/input/input';
-import { usePatchAdminNotice } from '@/hooks/api/use-patch-admin-notice';
+import { usePatchAdminNotice } from '@/hooks/api/notice/use-patch-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 import type { DetailNoticeType } from '@/types/api/notice';
 
@@ -33,7 +33,7 @@ export default function EditNotice({ notice }: EditNoticeProps) {
     const title = titleRef.current?.value;
     const content = editorRef.current?.getHTML();
 
-    if (!title?.trim() || !content?.trim()) {
+    if (!title?.trim() || !content?.replace(/<[^>]*>/g, '').trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
     }

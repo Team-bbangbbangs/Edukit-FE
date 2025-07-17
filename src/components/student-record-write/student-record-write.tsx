@@ -9,7 +9,7 @@ import NotAuthorizedError from '@/components/error/not-authorized-error';
 import NotFoundError from '@/components/error/not-found-error';
 import NotPermissionError from '@/components/error/not-permission-error';
 import Loading from '@/components/loading/loading';
-import { useGetStudentsName } from '@/hooks/api/use-get-students-name';
+import { useGetStudentsName } from '@/hooks/api/write-record/use-get-students-name';
 import type { RecordType, AiResponseData } from '@/types/api/student-record';
 
 import AiResponse from './ai-response';
@@ -31,8 +31,8 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    if (!recordId && data && data.length > 0) {
-      router.replace(`?recordId=${data[0].recordId}`);
+    if (!recordId && data && data.studentDetails.length > 0) {
+      router.replace(`?recordId=${data.studentDetails[0].recordId}`);
     }
   }, [data, recordId, router]);
 
@@ -65,14 +65,14 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
     return <DefaultError />;
   }
 
-  if (data && data.length === 0) {
+  if (data && data.studentDetails.length === 0) {
     return <NotFoundError recordType={recordType} />;
   }
 
   return (
     <div className="flex flex-col gap-10">
       <CharacteristicInput
-        students={data}
+        students={data.studentDetails}
         selectedId={parsedRecordId}
         onGenerationStart={handleGenerationStart}
         onResponseGenerated={handleAiResponseGenerated}

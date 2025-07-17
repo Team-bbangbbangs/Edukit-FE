@@ -1,10 +1,9 @@
 import { createContext } from 'react';
 
-interface AuthContextProps {
+export interface AuthContextProps {
   accessToken: string | null;
-  setAccessToken: (token: string | null) => void;
   isAdmin: boolean | null;
-  setIsAdmin: (isAdmin: boolean | null) => void;
+  setAuthData: (token: string | null, isAdmin?: boolean | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps | null>(null);

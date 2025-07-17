@@ -4,7 +4,9 @@ import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 
 import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/amplitude';
-import { reissue } from '@/services/auth/reissue';
+import { setAuthContext } from '@/lib/api';
+import type { AuthResponse } from '@/types/api/auth';
+import type { ApiResponseWithData } from '@/types/api/response';
 
 import { AuthContext } from './auth-context';
 
@@ -13,21 +15,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isReady, setIsReady] = useState(false);
 
+  const setAuthData = (token: string | null, adminStatus?: boolean | null) => {
+    setAccessToken(token);
+
+    if (adminStatus !== undefined) {
+      setIsAdmin(adminStatus);
+    }
+
+    if (token) {
+      setAmplitudeUserFromAccessToken({ accessToken: token });
+    }
+  };
+
+  const contextValue = {
+    accessToken,
+    isAdmin,
+    setAuthData,
+  };
+
+  useEffect(() => {
+    setAuthContext(contextValue);
+  }, [accessToken, isAdmin]);
+
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const res = await reissue();
+        const isMSWEnabled = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
+        const baseURL = isMSWEnabled
+          ? '/api/v1/auth/reissue'
+          : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reissue`;
 
-        if (res?.accessToken) {
-          setAccessToken(res.accessToken);
-          setIsAdmin(res.isAdmin);
+        const response = await fetch(baseURL, {
+          method: 'PATCH',
+          credentials: 'include',
+        });
 
-          setAmplitudeUserFromAccessToken({
-            accessToken: res.accessToken,
-          });
+        if (response.ok) {
+          const json: ApiResponseWithData<AuthResponse> = await response.json();
+          if (json.data?.accessToken) {
+            setAuthData(json.data.accessToken, json.data.isAdmin);
+            setAuthContext({
+              accessToken: json.data.accessToken,
+              isAdmin: json.data.isAdmin,
+              setAuthData,
+            });
+          } else {
+            setAuthData(null, null);
+          }
+        } else {
+          setAuthData(null, null);
         }
       } catch {
-        setAccessToken(null);
+        setAuthData(null, null);
       } finally {
         setIsReady(true);
       }
@@ -38,9 +77,5 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   if (!isReady) return null;
 
-  return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, isAdmin, setIsAdmin }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };

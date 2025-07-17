@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { Input } from '@/components/input/input';
 import { emailSchema } from '@/components/signup/signup-scheme';
-import { usePostVerifyEmail } from '@/hooks/api/use-post-verify-email';
+import { usePostVerifyEmail } from '@/hooks/api/auth/use-post-verify-email';
 
 const emailVerificationSchema = z.object({
   email: emailSchema,

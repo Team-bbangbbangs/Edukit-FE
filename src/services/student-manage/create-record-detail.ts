@@ -1,29 +1,14 @@
-import type { Response } from '@/types/api/response';
-import type { CreateRecordDetailRequestTypes } from '@/types/api/student-record';
+import { api } from '@/lib/api';
+import type { ApiResponseWithoutData } from '@/types/api/response';
+import type { CreateRecordDetail } from '@/types/api/student-record';
 
 export const createRecordDetail = async ({
-  accessToken,
   recordType,
   studentRecord,
   semester,
-}: CreateRecordDetailRequestTypes): Promise<Response<null>> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/student-records/${recordType}/students`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-      },
-      body: JSON.stringify({ semester, studentRecord }),
-    },
-  );
-
-  const json: Response<null> = await res.json();
-
-  if (!res.ok) {
-    throw new Error(json.message || '생기부 기록 생성 실패');
-  }
-
-  return json;
+}: CreateRecordDetail) => {
+  return api.post<ApiResponseWithoutData>(`/api/v1/student-records/${recordType}/students`, {
+    semester,
+    studentRecord,
+  });
 };

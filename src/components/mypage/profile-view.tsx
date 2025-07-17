@@ -5,7 +5,7 @@ import { CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 
 import EmailSentModal from '@/components/modal/email-sent-modal';
-import { usePostSendEmail } from '@/hooks/api/use-post-send-email';
+import { usePostSendEmail } from '@/hooks/api/profile/use-post-send-email';
 import type { UserInfoTypes } from '@/types/api/auth';
 
 import ProfileImage from '../../../public/images/profile-image.png';

@@ -1,4 +1,6 @@
-import EmptyNotice from '@/components/notice/empty-notice';
+import { redirect } from 'next/navigation';
+
+import ErrorNotice from '@/components/notice/error-notice';
 import NoticeCategorys from '@/components/notice/notice-categorys';
 import NoticeList from '@/components/notice/notice-list';
 import WriteNoticeButton from '@/components/notice/write-notice-button';
@@ -16,21 +18,30 @@ export default async function NoticePage({ searchParams }: PageProps) {
   const page = searchParams?.page;
   const categoryId = searchParams?.categoryId;
 
+  if (categoryId && !['2', '3'].includes(categoryId)) {
+    redirect('/notice');
+  }
+
   const data = await getNoticeList({
     page,
     categoryId,
   });
+  const parsedPage = isNaN(Number(page)) ? 1 : Number(page);
 
   return (
-    <div className="h-full w-full px-10">
+    <div className="h-full w-full">
       <h2 className="text-[26px] font-bold">공지사항</h2>
 
       <NoticeCategorys categoryId={categoryId} />
 
-      {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <EmptyNotice />}
+      {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <ErrorNotice />}
 
-      {data.totalPages ? (
-        <Pagination categoryId={categoryId} nowPage={page} totalPages={data.totalPages} />
+      {parsedPage >= 1 && parsedPage <= data.totalPages ? (
+        <Pagination
+          categoryId={categoryId}
+          nowPage={parsedPage.toString()}
+          totalPages={data.totalPages}
+        />
       ) : null}
 
       <WriteNoticeButton />

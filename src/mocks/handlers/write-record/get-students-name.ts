@@ -5,7 +5,7 @@ import type { RecordType } from '@/types/api/student-record';
 
 export const getStudentsName = [
   http.get<never, { recordType: RecordType }>(
-    '/api/v1/student-records/:recordType/students?semester=2025-1',
+    '/api/v1/student-records/:recordType/students',
     ({ params }) => {
       const { recordType } = params;
       const mockData = STUDENT_NAME_DATA[recordType];

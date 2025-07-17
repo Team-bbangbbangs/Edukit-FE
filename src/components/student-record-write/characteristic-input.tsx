@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Textarea } from '@/components/textarea/textarea';
-import { usePostPrompt } from '@/hooks/api/use-post-prompt';
+import { usePostPrompt } from '@/hooks/api/write-record/use-post-prompt';
 import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
 import type { StudentNameTypes, AiResponseData } from '@/types/api/student-record';
 

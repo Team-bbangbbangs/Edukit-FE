@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-editor';
 import { Input } from '@/components/input/input';
-import { usePostAdminNotice } from '@/hooks/api/use-post-admin-notice';
+import { usePostAdminNotice } from '@/hooks/api/notice/use-post-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
 
 const baseStyle = 'rounded-full px-5 py-1 pt-1.5 text-center font-bold text-[14px]';
@@ -27,10 +27,11 @@ export default function WriteNotice() {
   const handleSubmit = () => {
     const title = titleRef.current?.value;
     const content = contentRef.current?.getHTML();
-    if (!title || !content) {
-      alert('제목, 내용을 입력해주세요');
+    if (!title?.trim() || !content?.replace(/<[^>]*>/g, '').trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
+
     postAdminNotice(
       { title, content, categoryId: selectedTag },
       {

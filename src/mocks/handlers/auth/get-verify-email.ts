@@ -3,8 +3,8 @@ import { http, HttpResponse } from 'msw';
 export const getVerifyEmail = [
   http.get('/api/v1/auth/verify-email', ({ request }) => {
     const url = new URL(request.url);
-    const id = url.searchParams.get('id');
-    const code = url.searchParams.get('code');
+    const id = decodeURIComponent(url.searchParams.get('id') || '');
+    const code = decodeURIComponent(url.searchParams.get('code') || '');
 
     if (id === 'test@naver.com' && code === 'abc') {
       return HttpResponse.json({

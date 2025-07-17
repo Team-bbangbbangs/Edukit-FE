@@ -4,8 +4,8 @@ import { CheckCircle2, ChevronDown } from 'lucide-react';
 
 import { Input } from '@/components/input/input';
 import { subjects } from '@/constants/signup-data';
-import { useGetCheckValidNickname } from '@/hooks/api/use-get-check-valid-nickname';
-import { usePatchProfile } from '@/hooks/api/use-patch-profile';
+import { useGetCheckValidNickname } from '@/hooks/api/profile/use-get-check-valid-nickname';
+import { usePatchProfile } from '@/hooks/api/profile/use-patch-profile';
 import type { UserInfoTypes } from '@/types/api/auth';
 
 interface ProfileEditProps {

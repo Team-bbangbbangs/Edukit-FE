@@ -5,8 +5,8 @@ import { useRef, useState } from 'react';
 import { Input } from '@/components/input/input';
 import DeleteConfirmModal from '@/components/modal/delete-confirm-modal';
 import { Textarea } from '@/components/textarea/textarea';
-import { useDeleteRecordDetail } from '@/hooks/api/use-delete-record-detail';
-import { usePatchRecordDetail } from '@/hooks/api/use-patch-record-detail';
+import { useDeleteRecordDetail } from '@/hooks/api/student-manage/use-delete-record-detail';
+import { usePatchRecordDetail } from '@/hooks/api/student-manage/use-patch-record-detail';
 import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
 import type {
   RecordType,
