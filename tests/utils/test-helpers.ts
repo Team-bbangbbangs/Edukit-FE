@@ -26,6 +26,8 @@ export async function isLoggedIn(page: Page): Promise<boolean> {
 
 // 서버 에러 (alert) 메시지 확인 헬퍼 함수
 export async function expectAlertMessage(page: Page, expectedMessage: string) {
+  page.removeAllListeners('dialog');
+
   page.on('dialog', async (dialog) => {
     expect(dialog.message()).toBe(expectedMessage);
     await dialog.accept();
