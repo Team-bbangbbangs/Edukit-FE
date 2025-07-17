@@ -18,6 +18,7 @@ const allowedDomains: string[] = [
   'jje.go.kr',
   'jbedu.kr',
   'edukit.co.kr',
+  'korea.kr',
 ];
 
 const developmentAllowedDomains: string[] = [...allowedDomains, 'naver.com', 'gmail.com'];
