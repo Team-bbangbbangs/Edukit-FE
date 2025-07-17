@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation';
+
 import ErrorNotice from '@/components/notice/error-notice';
 import NoticeCategorys from '@/components/notice/notice-categorys';
 import NoticeList from '@/components/notice/notice-list';
@@ -15,6 +17,10 @@ interface PageProps {
 export default async function NoticePage({ searchParams }: PageProps) {
   const page = searchParams?.page;
   const categoryId = searchParams?.categoryId;
+
+  if (categoryId && !['2', '3'].includes(categoryId)) {
+    redirect('/notice');
+  }
 
   const data = await getNoticeList({
     page,
