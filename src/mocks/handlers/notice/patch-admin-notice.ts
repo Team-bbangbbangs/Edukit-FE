@@ -1,11 +1,17 @@
 import { http, HttpResponse } from 'msw';
 
+import { checkAccessToken } from '@/mocks/utils/check-access-token';
+import type { AdminNotice } from '@/types/api/notice';
+
 export const patchAdminNotice = [
   http.patch('/api/v1/admin/notices/:noticeId', async ({ request, params }) => {
-    const { noticeId } = params;
     const authHeader = request.headers.get('authorization');
 
-    if (!authHeader || !authHeader.includes('admin-access-token')) {
+    const { noticeId } = params;
+
+    const validation = checkAccessToken(authHeader);
+
+    if (!validation.tokenData?.isAdmin) {
       return HttpResponse.json(
         {
           status: 403,
@@ -16,13 +22,9 @@ export const patchAdminNotice = [
       );
     }
 
-    const body = (await request.json()) as {
-      categoryId: number;
-      title: string;
-      content: string;
-    };
+    const body = (await request.json()) as AdminNotice;
 
-    if (!body.title?.trim() || !body.content?.trim()) {
+    if (!body.title?.trim() || !body.content?.replace(/<[^>]*>/g, '').trim()) {
       return HttpResponse.json(
         {
           status: 400,
@@ -44,11 +46,21 @@ export const patchAdminNotice = [
       );
     }
 
+    if (body.categoryId !== 2 && body.categoryId !== 3) {
+      return HttpResponse.json(
+        {
+          status: 400,
+          code: 'EDMT-4000302',
+          message: '공지사항 작성이 허용되지 않는 카테고리입니다.',
+        },
+        { status: 400 },
+      );
+    }
+
     return HttpResponse.json({
       status: 200,
       code: 'EDMT-20000',
       message: '요청이 성공했습니다.',
-      data: null,
     });
   }),
 ];
