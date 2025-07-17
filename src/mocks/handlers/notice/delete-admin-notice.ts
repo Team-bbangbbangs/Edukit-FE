@@ -1,11 +1,16 @@
 import { http, HttpResponse } from 'msw';
 
+import { checkAccessToken } from '@/mocks/utils/check-access-token';
+
 export const deleteAdminNotice = [
   http.delete('/api/v1/admin/notices/:noticeId', ({ request, params }) => {
     const { noticeId } = params;
+
     const authHeader = request.headers.get('authorization');
 
-    if (!authHeader || !authHeader.includes('admin-access-token')) {
+    const validation = checkAccessToken(authHeader);
+
+    if (!validation.tokenData?.isAdmin) {
       return HttpResponse.json(
         {
           status: 403,
@@ -31,7 +36,6 @@ export const deleteAdminNotice = [
       status: 200,
       code: 'EDMT-20000',
       message: '요청이 성공했습니다.',
-      data: null,
     });
   }),
 ];

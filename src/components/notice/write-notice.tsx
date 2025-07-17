@@ -27,10 +27,11 @@ export default function WriteNotice() {
   const handleSubmit = () => {
     const title = titleRef.current?.value;
     const content = contentRef.current?.getHTML();
-    if (!title || !content) {
-      alert('제목, 내용을 입력해주세요');
+    if (!title?.trim() || !content?.replace(/<[^>]*>/g, '').trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
+
     postAdminNotice(
       { title, content, categoryId: selectedTag },
       {

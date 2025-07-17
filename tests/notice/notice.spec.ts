@@ -234,4 +234,10 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
       await expect(finalPrevButton).toBeVisible();
     }
   });
+
+  test('11. 잘못된 categortId로 접근할 때 /notice 페이지로 리다이렉트된다.', async ({ page }) => {
+    await page.goto('/notice?categoryId=22');
+
+    await expect(page).toHaveURL('/notice');
+  });
 });
