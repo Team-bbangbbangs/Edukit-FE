@@ -301,7 +301,7 @@ test.describe('인증 기능 E2E 테스트', () => {
     page,
   }) => {
     await performLogin(page, 'test@edukit.co.kr', 'password1234!');
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(500);
     expect(await isLoggedIn(page)).toBe(true);
 
     await page.evaluate(() => {
@@ -313,7 +313,7 @@ test.describe('인증 기능 E2E 테스트', () => {
     const profileImage = page.locator('header img[alt="profile image"]');
     await profileImage.click();
 
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(500);
 
     const logoutButton = page.locator('button:has-text("로그아웃")');
     await expect(logoutButton).toBeVisible();
