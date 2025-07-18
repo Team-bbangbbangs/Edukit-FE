@@ -1,5 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 
+type ApiMethod = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
+
 // 로그인 여부를 확인하는 헬퍼 함수
 export async function isLoggedIn(page: Page): Promise<boolean> {
   try {
@@ -49,4 +51,19 @@ export async function performLogout(page: Page) {
   await page.click('header img[alt="profile image"]');
 
   await page.click('button:has-text("로그아웃")');
+}
+
+// API 응답 상태를 확인하는 헬퍼 함수
+export async function waitForApiResponse(
+  page: Page,
+  url: string,
+  method: ApiMethod,
+  expectedStatus: number = 200,
+): Promise<void> {
+  const responsePromise = page.waitForResponse(
+    (response) => response.url().includes(url) && response.request().method() === method,
+  );
+
+  const response = await responsePromise;
+  expect(response.status()).toBe(expectedStatus);
 }
