@@ -25,6 +25,7 @@ export default function BasicInfo({ email }: { email: string }) {
           </div>
           {editMode !== 'password' ? (
             <button
+              data-testid="email-edit-button"
               onClick={() => setEditMode('email')}
               className="rounded-lg bg-slate-800 px-4 py-1 text-white hover:bg-slate-950"
             >
@@ -46,6 +47,7 @@ export default function BasicInfo({ email }: { email: string }) {
           </div>
           {editMode !== 'email' ? (
             <button
+              data-testid="password-edit-button"
               onClick={() => setEditMode('password')}
               className="rounded-lg bg-slate-800 px-4 py-1 text-white hover:bg-slate-950"
             >
