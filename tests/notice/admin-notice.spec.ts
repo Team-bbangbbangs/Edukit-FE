@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-import { performLogin, performLogout, expectAlertMessage } from '../utils/test-helpers';
+import {
+  performLogin,
+  performLogout,
+  expectAlertMessage,
+  waitForApiResponse,
+} from '../utils/test-helpers';
 
 test.describe('공지사항 어드민 기능 E2E 테스트', () => {
   test('1. 어드민 계정일 때 글쓰기 버튼이 잘 보이고, 일반 계정일때 글쓰기 버튼이 안보인다', async ({
@@ -33,20 +38,9 @@ test.describe('공지사항 어드민 기능 E2E 테스트', () => {
     await page.click('button:has-text("이벤트")');
     await page.fill('input[placeholder="제목"]', '테스트 공지사항 제목');
     await page.locator('.ProseMirror').fill('테스트 공지사항 내용입니다.');
-
-    let responseStatus = 0;
-    page.on('response', (response) => {
-      if (
-        response.url().includes('/api/v1/admin/notices') &&
-        response.request().method() === 'POST'
-      ) {
-        responseStatus = response.status();
-      }
-    });
-
+    const apiResponsePromise = waitForApiResponse(page, '/api/v1/admin/notices', 'POST');
     await page.click('button:has-text("작성하기")');
-    await page.waitForTimeout(1000);
-    expect(responseStatus).toBe(200);
+    await apiResponsePromise;
     await expect(page).toHaveURL('/notice');
   });
 
@@ -87,20 +81,9 @@ test.describe('공지사항 어드민 기능 E2E 테스트', () => {
     await page.click('button:has-text("공지")');
     await page.fill('input[placeholder="제목"]', '수정');
     await page.locator('.ProseMirror').fill('수정');
-
-    let responseStatus = 0;
-    page.on('response', (response) => {
-      if (
-        response.url().includes('/api/v1/admin/notices') &&
-        response.request().method() === 'PATCH'
-      ) {
-        responseStatus = response.status();
-      }
-    });
-
+    const apiResponsePromise = waitForApiResponse(page, '/api/v1/admin/notices', 'PATCH');
     await page.click('button:has-text("수정하기")');
-    await page.waitForTimeout(1000);
-    expect(responseStatus).toBe(200);
+    await apiResponsePromise;
 
     await expect(page).toHaveURL('/notice/1');
   });
@@ -117,20 +100,9 @@ test.describe('공지사항 어드민 기능 E2E 테스트', () => {
 
     await expect(page.locator('[role="dialog"]')).toBeVisible();
     await expect(page.locator('text=정말 삭제하시겠습니까?')).toBeVisible();
-
-    let responseStatus = 0;
-    page.on('response', (response) => {
-      if (
-        response.url().includes('/api/v1/admin/notices') &&
-        response.request().method() === 'DELETE'
-      ) {
-        responseStatus = response.status();
-      }
-    });
-
+    const apiResponsePromise = waitForApiResponse(page, '/api/v1/admin/notices', 'DELETE');
     await page.locator('[role="dialog"] button:has-text("삭제")').click();
-    await page.waitForTimeout(1000);
-    expect(responseStatus).toBe(200);
+    await apiResponsePromise;
 
     await expect(page).toHaveURL('/notice');
   });
