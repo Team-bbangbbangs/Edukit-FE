@@ -82,7 +82,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
   test('4. 교사 인증 필요가 마이페이지에 나와있을 때 클릭하면 이메일이 발송되었다는 모달창이 정상적으로 나온다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'password1234!');
+    await performLogin(page, 'test@edukit.co.kr', 'ab12345678');
     await page.goto('/mypage');
 
     const certificationStatus = page.locator('span.text-red-500:has-text("교사 인증 필요")');
