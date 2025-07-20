@@ -50,6 +50,28 @@ export const postLogin = [
       );
     }
 
+    if (email === 'test@edukit.co.kr' && password === 'ab12345678') {
+      return HttpResponse.json(
+        {
+          status: 200,
+          code: 'EDMT-20002',
+          message: '요청에 성공했습니다.',
+          data: {
+            accessToken: `email-not-verified-user-access-token.${expiresAt}`,
+            isAdmin: false,
+          },
+        },
+        {
+          status: 200,
+          headers: {
+            'Content-type': 'application/json',
+            'Set-Cookie':
+              'refreshToken=email-not-verified-user-refresh-token; HttpOnly; Path=/; SameSite=Lax',
+          },
+        },
+      );
+    }
+
     if (email === 'test@edukit.co.kr' && password !== 'password1234!') {
       return HttpResponse.json(
         {
