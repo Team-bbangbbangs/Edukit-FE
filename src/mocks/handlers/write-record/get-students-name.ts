@@ -1,14 +1,52 @@
 import { http, HttpResponse } from 'msw';
 
-import { STUDENT_NAME_DATA } from '@/constants/student-name-data';
+import { STUDENT_DATA } from '@/constants/student-data';
+import { checkAccessToken } from '@/mocks/utils/check-access-token';
 import type { RecordType } from '@/types/api/student-record';
 
 export const getStudentsName = [
   http.get<never, { recordType: RecordType }>(
     '/api/v1/student-records/:recordType/students',
-    ({ params }) => {
+    ({ params, request }) => {
+      const authHeader = request.headers.get('Authorization');
+
+      const validation = checkAccessToken(authHeader);
+
+      if (!validation.isValid) {
+        return HttpResponse.json(
+          {
+            status: 401,
+            code: 'EDMT-4010101',
+            message: '유효하지 않은 토큰입니다.',
+          },
+          { status: 401 },
+        );
+      }
+
+      if (validation.isExpired) {
+        return HttpResponse.json(
+          {
+            status: 401,
+            code: 'EDMT-4010102',
+            message: '만료된 토큰입니다.',
+          },
+          { status: 401 },
+        );
+      }
+
+      if (validation.isNotVerified) {
+        return HttpResponse.json(
+          {
+            status: 403,
+            code: 'EDMT-4030101',
+            message: '권한이 부족한 사용자입니다.',
+          },
+          { status: 403 },
+        );
+      }
+
       const { recordType } = params;
-      const mockData = STUDENT_NAME_DATA[recordType];
+      const mockData = STUDENT_DATA[recordType];
 
       return HttpResponse.json(
         {
