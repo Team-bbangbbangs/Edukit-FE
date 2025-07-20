@@ -142,7 +142,9 @@ test.describe('생활기록부 작성 E2E 테스트', () => {
     await page.click('button:has-text("확인")');
   });
 
-  test('8. 엑셀 업로드 시 잘못된 파일 형식 에러 처리', async ({ page }) => {
+  test('8. 엑셀 업로드 시 잘못된 파일 형식을 업로드하면, 엑셀 파일을 처리하는 중 오류가 발생했습니다. 라는 alert 창이 나온다.', async ({
+    page,
+  }) => {
     await performLogin(page, 'test@edukit.co.kr', 'password1234!');
     await page.goto('/write-behavior');
     await page.click('button:has-text("생활기록부 관리하기")');
@@ -159,7 +161,9 @@ test.describe('생활기록부 작성 E2E 테스트', () => {
     });
   });
 
-  test('9. 빈 학생 특성으로 AI 생성 시도', async ({ page }) => {
+  test('9. 학생 특성을 비워둔 채로 AI 생성 버튼을 누르면 내용을 입력해주세요. 라는 alert 창이 나온다.', async ({
+    page,
+  }) => {
     await performLogin(page, 'test@edukit.co.kr', 'password1234!');
     await page.goto('/write-career');
 
@@ -168,7 +172,9 @@ test.describe('생활기록부 작성 E2E 테스트', () => {
     await page.locator('button:has-text("생성")').click();
   });
 
-  test('10. 바이트 제한 초과 텍스트 입력', async ({ page }) => {
+  test('10. 생활기록부 종합 작성 창에서 기존 bytes 수보다 크게 입력하면 빨간 글씨로 bytes가 나온다.', async ({
+    page,
+  }) => {
     await performLogin(page, 'test@edukit.co.kr', 'password1234!');
     await page.goto('/write-career');
 
