@@ -11,7 +11,10 @@ export class ApiError extends Error {
 
 export const isUnauthorizedError = (error: unknown): boolean => {
   return (
-    error instanceof ApiError && (error.code === 'EDMT-4010104' || error.code === 'EDMT-4010107')
+    error instanceof ApiError &&
+    (error.code === 'EDMT-4010104' ||
+      error.code === 'EDMT-4010107' ||
+      error.code === 'EDMT-4010101')
   );
 };
 

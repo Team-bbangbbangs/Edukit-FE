@@ -14,7 +14,7 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
   const getContentForVersion = (version: number) => {
     if (isGenerating) {
       return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2" data-testid="ai-loading">
           <Loading />
           <p className="text-[14px] text-slate-500">20초정도 소요됩니다.</p>
         </div>

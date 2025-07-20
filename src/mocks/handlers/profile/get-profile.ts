@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import { USER_INFO_DATA } from '@/constants/user-info-data';
+import { USER_INFO_DATA, NOT_VERIFUED_USER_INFO_DATA } from '@/constants/user-info-data';
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
 import type { UserInfoTypes } from '@/types/api/auth';
 
@@ -29,6 +29,18 @@ export const getProfile = [
           message: '만료된 토큰입니다.',
         },
         { status: 401 },
+      );
+    }
+
+    if (validation.isNotVerified) {
+      return HttpResponse.json(
+        {
+          status: 200,
+          code: 'EDMT-200',
+          message: '요청에 성공했습니다.',
+          data: NOT_VERIFUED_USER_INFO_DATA,
+        },
+        { status: 200 },
       );
     }
 
