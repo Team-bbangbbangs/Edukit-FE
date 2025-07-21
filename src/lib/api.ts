@@ -1,7 +1,6 @@
 import type { AuthContextProps } from '@/contexts/auth/auth-context';
 import { ApiError } from '@/lib/errors';
-import type { AuthResponse } from '@/types/api/auth';
-import type { ApiResponseWithData } from '@/types/api/response';
+import { reissue } from '@/services/auth/reissue';
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
   body?: unknown;
@@ -22,13 +21,24 @@ function getCurrentToken(): string | null {
   return authContextRef?.accessToken || null;
 }
 
-// URL 파라미터를 추가하는 헬퍼 함수
-function addParamsToUrl(url: URL, params?: Record<string, string | number | boolean>) {
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.append(key, String(value));
-    });
+// accessToken 값을 없애주는 함수
+function clearAuthContext(): void {
+  if (authContextRef) {
+    authContextRef.setAuthData(null, null);
   }
+}
+
+// 쿼리 파라미터를 URL에 추가하는 헬퍼 함수
+function addQueryParams(url: string, params?: Record<string, string | number | boolean>): string {
+  if (!params || Object.keys(params).length === 0) {
+    return url;
+  }
+
+  const queryString = Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+    .join('&');
+
+  return `${url}?${queryString}`;
 }
 
 /**
@@ -44,20 +54,19 @@ function buildURL(endpoint: string, params?: Record<string, string | number | bo
 
   if (isMSWEnabled) {
     if (isServer) {
-      const url = new URL(endpoint, 'http://localhost:9090');
-      addParamsToUrl(url, params);
-      return url.toString();
+      // MSW 서버: Mock 서버로 직접 요청
+      const fullUrl = `http://localhost:9090${endpoint}`;
+      return addQueryParams(fullUrl, params);
     } else {
-      const url = new URL(endpoint, 'http://localhost');
-      addParamsToUrl(url, params);
-      return url.pathname + url.search;
+      // MSW 클라이언트: 상대 경로만 필요 (MSW가 인터셉트)
+      return addQueryParams(endpoint, params);
     }
   }
 
+  // 실제 API 환경 (서버 컴포넌트인지, 클라이언트 컴포넌트인지에 따라 분기 처리)
   const baseURL = isServer ? process.env.API_URL! : process.env.NEXT_PUBLIC_API_URL!;
-  const url = new URL(endpoint, baseURL);
-  addParamsToUrl(url, params);
-  return url.toString();
+  const fullUrl = `${baseURL}${endpoint}`;
+  return addQueryParams(fullUrl, params);
 }
 
 /**
@@ -87,6 +96,7 @@ function buildHeaders(options: FetchOptions): HeadersInit {
 
 /**
  * 토큰 갱신을 처리하는 함수
+ * tokenRefreshPromise를 통해 여러 요청이 동시에 토큰 갱신을 시도할 때, 하나의 요청만 실행하고, 나머지는 같은 Promise를 반환
  * 순환 참조 방지하기 위해 직접 fetch를 사용하고, 갱실 실패 시 context값을 비워주면서 로그아웃 상태로 변경
  */
 async function refreshAccessToken(): Promise<string | null> {
@@ -95,39 +105,18 @@ async function refreshAccessToken(): Promise<string | null> {
   }
 
   tokenRefreshPromise = (async () => {
-    try {
-      const url = buildURL('/api/v1/auth/reissue');
+    const authData = await reissue();
 
-      const res = await fetch(url, {
-        method: 'PATCH',
-        credentials: 'include',
-      });
-
-      const json: ApiResponseWithData<AuthResponse> = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.message || '유효하지 않은 리프레시 토큰입니다.');
-      }
-
-      if (!json.data) {
-        throw new Error(json.message || '데이터 fetch 실패');
-      }
-
-      const newToken = json.data.accessToken;
-      const isAdmin = json.data.isAdmin;
-
+    if (authData) {
       if (authContextRef) {
-        authContextRef.setAuthData(newToken, isAdmin);
+        authContextRef.setAuthData(authData.accessToken, authData.isAdmin);
       }
-
-      return newToken;
-    } catch (error) {
+      return authData.accessToken;
+    } else {
       if (authContextRef) {
-        authContextRef.setAuthData(null, null);
+        clearAuthContext();
       }
-      throw error;
-    } finally {
-      tokenRefreshPromise = null;
+      return null;
     }
   })();
 
@@ -185,51 +174,28 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
 
   if (body !== undefined) {
     config.body =
-      body instanceof FormData ||
-      body instanceof Blob ||
-      body instanceof ArrayBuffer ||
-      body instanceof URLSearchParams ||
-      typeof body === 'string'
-        ? (body as BodyInit)
-        : JSON.stringify(body);
+      body instanceof FormData || typeof body === 'string' ? body : JSON.stringify(body);
   }
 
   if (typeof window === 'undefined' && !config.cache) {
     config.cache = 'no-store';
   }
 
-  try {
-    const response = await fetch(url, config);
+  const response = await fetch(url, config);
 
-    if (response.status === 401 && !skipTokenRefresh) {
-      try {
-        const newToken = await refreshAccessToken();
+  if (response.status === 401 && !skipTokenRefresh) {
+    const newToken = await refreshAccessToken();
 
-        if (newToken) {
-          const newHeaders = {
-            ...config.headers,
-            Authorization: `Bearer ${newToken}`,
-          } as HeadersInit;
-
-          const retryResponse = await fetch(url, {
-            ...config,
-            headers: newHeaders,
-          });
-
-          return await handleResponse<T>(retryResponse);
-        }
-      } catch {
-        return await handleResponse<T>(response);
-      }
+    if (newToken) {
+      const retryResponse = await fetch(url, {
+        ...config,
+        headers: { ...config.headers, Authorization: `Bearer ${newToken}` },
+      });
+      return await handleResponse<T>(retryResponse);
     }
-
-    return await handleResponse<T>(response);
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('네트워크 요청 중 오류가 발생했습니다.');
   }
+
+  return await handleResponse<T>(response);
 }
 
 // HTTP 메서드 함수 (get, post, patch, put, delete)

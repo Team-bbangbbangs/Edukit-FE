@@ -66,6 +66,7 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
     <div className="flex flex-col gap-2">
       <h4 className="font-bold">종합</h4>
       <Textarea
+        data-testid="summary-input"
         ref={textareaRef}
         value={description}
         onChange={handleDescriptionChange}

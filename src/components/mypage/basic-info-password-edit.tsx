@@ -97,13 +97,19 @@ export default function BasicInfoPasswordEdit({ onView }: PasswordEditProps) {
           {errors.currentPassword || errors.newPassword || errors.confirmPassword ? (
             <div className="space-y-1">
               {errors.currentPassword ? (
-                <p className="text-xs text-red-500">{errors.currentPassword.message}</p>
+                <p data-testid="current-password-error" className="text-xs text-red-500">
+                  {errors.currentPassword.message}
+                </p>
               ) : null}
               {errors.newPassword ? (
-                <p className="text-xs text-red-500">{errors.newPassword.message}</p>
+                <p data-testid="new-password-error" className="text-xs text-red-500">
+                  {errors.newPassword.message}
+                </p>
               ) : null}
               {errors.confirmPassword ? (
-                <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+                <p data-testid="confirm-password-error" className="text-xs text-red-500">
+                  {errors.confirmPassword.message}
+                </p>
               ) : null}
             </div>
           ) : null}

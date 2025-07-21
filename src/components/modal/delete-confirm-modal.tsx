@@ -48,6 +48,7 @@ export default function DeleteConfirmModal({
               취소
             </button>
             <button
+              data-testid="modal-remove-button"
               onClick={onDelete}
               className="rounded-md bg-red-700 px-6 py-2 font-bold text-white hover:bg-red-600"
             >

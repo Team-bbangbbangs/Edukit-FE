@@ -15,6 +15,9 @@ export const reissue = [
     } else if (refreshToken === 'user-refresh-token') {
       isAdmin = false;
       accessToken = `user-access-token.${expiresAt}`;
+    } else if (refreshToken === 'email-not-verified-user-refresh-token') {
+      isAdmin = false;
+      accessToken = `email-not-verified-user-access-token.${expiresAt}`;
     } else {
       return HttpResponse.json(
         {

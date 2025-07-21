@@ -229,6 +229,7 @@ export default function ExcelUploadModal({
               />
 
               <div
+                data-testid="excel-upload"
                 onClick={() => fileInputRef.current?.click()}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}

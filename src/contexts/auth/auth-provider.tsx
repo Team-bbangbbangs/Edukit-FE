@@ -5,8 +5,7 @@ import { useState, useEffect } from 'react';
 
 import { setAmplitudeUserFromAccessToken } from '@/lib/amplitude/amplitude';
 import { setAuthContext } from '@/lib/api';
-import type { AuthResponse } from '@/types/api/auth';
-import type { ApiResponseWithData } from '@/types/api/response';
+import { reissue } from '@/services/auth/reissue';
 
 import { AuthContext } from './auth-context';
 
@@ -39,37 +38,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      try {
-        const isMSWEnabled = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
-        const baseURL = isMSWEnabled
-          ? '/api/v1/auth/reissue'
-          : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reissue`;
-
-        const response = await fetch(baseURL, {
-          method: 'PATCH',
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          const json: ApiResponseWithData<AuthResponse> = await response.json();
-          if (json.data?.accessToken) {
-            setAuthData(json.data.accessToken, json.data.isAdmin);
-            setAuthContext({
-              accessToken: json.data.accessToken,
-              isAdmin: json.data.isAdmin,
-              setAuthData,
-            });
-          } else {
-            setAuthData(null, null);
-          }
-        } else {
-          setAuthData(null, null);
-        }
-      } catch {
-        setAuthData(null, null);
-      } finally {
-        setIsReady(true);
+      const authData = await reissue();
+      if (authData) {
+        setAuthData(authData.accessToken, authData.isAdmin);
       }
+      setIsReady(true);
     };
 
     initializeAuth();
