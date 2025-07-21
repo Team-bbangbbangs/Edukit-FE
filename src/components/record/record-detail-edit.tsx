@@ -61,17 +61,24 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
       <tr>
         <td className="py-2 pl-5 align-middle">
           <Input
+            data-testid="student-number-input"
             defaultValue={record.studentNumber}
             ref={studentNumberRef}
             className="w-full p-1"
           />
         </td>
         <td className="py-2 pl-5 align-middle">
-          <Input defaultValue={record.studentName} ref={studentNameRef} className="w-full p-1" />
+          <Input
+            data-testid="student-name-input"
+            defaultValue={record.studentName}
+            ref={studentNameRef}
+            className="w-full p-1"
+          />
         </td>
         <td className="py-2 pl-5 align-middle">
           <div className="space-y-3">
             <Textarea
+              data-testid="description-textarea"
               ref={textareaRef}
               defaultValue={record.description}
               className="min-h-0 w-full resize-none p-1 text-sm"

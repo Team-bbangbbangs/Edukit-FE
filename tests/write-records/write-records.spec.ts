@@ -55,8 +55,6 @@ test.describe('생활기록부 작성 E2E 테스트', () => {
 
     const downloadPath = await download.path();
 
-    await page.locator('[data-testid="excel-upload"]').click();
-
     const fileInput = page.locator('input[type="file"]');
     await fileInput.setInputFiles(downloadPath);
 
@@ -148,8 +146,6 @@ test.describe('생활기록부 작성 E2E 테스트', () => {
     await performLogin(page, 'test@edukit.co.kr', 'password1234!');
     await page.goto('/write-behavior');
     await page.click('button:has-text("생활기록부 관리하기")');
-
-    await page.locator('[data-testid="excel-upload"]').click();
 
     await expectAlertMessage(page, '엑셀 파일을 처리하는 중 오류가 발생했습니다.');
 

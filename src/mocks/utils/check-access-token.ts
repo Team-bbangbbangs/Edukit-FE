@@ -11,22 +11,14 @@ export function checkAccessToken(authHeader: string | null): {
   tokenData?: MswTokenDataType;
 } {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { isValid: false, isNotVerified: true, isExpired: false };
+    return { isValid: false, isNotVerified: false, isExpired: false };
   }
 
-  const token = authHeader.replace('Bearer ', '');
-
-  const tokenParts = token.split('.');
-
-  if (tokenParts.length !== 2) {
-    return { isValid: false, isNotVerified: true, isExpired: false };
-  }
-
-  const [tokenType, expiresAtStr] = tokenParts;
+  const [tokenType, expiresAtStr] = authHeader.replace('Bearer ', '').split('.');
   const expiresAt = parseInt(expiresAtStr);
 
   if (isNaN(expiresAt)) {
-    return { isValid: false, isNotVerified: true, isExpired: false };
+    return { isValid: false, isNotVerified: false, isExpired: false };
   }
 
   const now = Date.now();
