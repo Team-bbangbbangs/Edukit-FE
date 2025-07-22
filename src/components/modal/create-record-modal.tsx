@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 
 import { Input } from '@/components/input/input';
 import { useCreateRecords } from '@/hooks/api/student-manage/use-create-records';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 
 import {
   Modal,

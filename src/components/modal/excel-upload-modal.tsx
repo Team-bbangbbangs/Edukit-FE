@@ -7,7 +7,7 @@ import { saveAs } from 'file-saver';
 
 import { Input } from '@/components/input/input';
 import { useCreateRecords } from '@/hooks/api/student-manage/use-create-records';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType, CreateStudentRecords } from '@/types/record/record';
 
 import {
   Modal,
@@ -23,12 +23,6 @@ interface ExcelUploadModalProps {
   onOpenChange: (open: boolean) => void;
   recordType: RecordType;
 }
-
-interface StudentData {
-  studentNumber: string;
-  studentName: string;
-}
-
 export default function ExcelUploadModal({
   open,
   onOpenChange,
@@ -37,7 +31,7 @@ export default function ExcelUploadModal({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const semesterRef = useRef<HTMLInputElement>(null);
 
-  const [uploadedStudents, setUploadedStudents] = useState<StudentData[]>([]);
+  const [uploadedStudents, setUploadedStudents] = useState<CreateStudentRecords[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -83,7 +77,7 @@ export default function ExcelUploadModal({
         return;
       }
 
-      const students: StudentData[] = [];
+      const students: CreateStudentRecords[] = [];
 
       worksheet.eachRow((row, rowNumber) => {
         if (rowNumber === 1) return;

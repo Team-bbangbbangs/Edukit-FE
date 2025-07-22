@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
-import type { RecordType, StudentRecord } from '@/types/api/student-record';
+import type { RecordType, StudentRecord } from '@/types/record/record';
 
 import { getYearAndMonthAndDay } from './get-korea-formatted-time-stamp';
 

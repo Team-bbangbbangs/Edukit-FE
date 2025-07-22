@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import ExcelUploadModal from '@/components/modal/excel-upload-modal';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 
 export default function NotFoundError({ recordType }: { recordType: RecordType }) {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
