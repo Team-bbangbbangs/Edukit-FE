@@ -1,10 +1,8 @@
 import VerifyEmail from '@/components/verify-email/verify-email';
+import type { VerifyEmailRequest } from '@/types/auth/auth';
 
 interface PageProps {
-  searchParams: {
-    id?: string;
-    code?: string;
-  };
+  searchParams: VerifyEmailRequest;
 }
 
 export default function Page({ searchParams }: PageProps) {

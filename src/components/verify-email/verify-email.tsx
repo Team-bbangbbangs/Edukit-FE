@@ -17,7 +17,7 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
 
   if (id && code) {
     try {
-      await getVerifyEmail(id, code);
+      await getVerifyEmail({ id, code });
       isSuccess = true;
     } catch {
       isSuccess = false;

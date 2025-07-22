@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { LoginProp } from '@/types/api/auth';
+import type { LoginBody } from '@/types/auth/auth';
 
 export const patchResetPassword = [
   http.patch('/api/v1/auth/password', async ({ request }) => {
-    const { email, password } = (await request.json()) as LoginProp;
+    const { email, password } = (await request.json()) as LoginBody;
 
     if (email === 'lcs3623@naver.com' && password === 'ab13696802!') {
       return HttpResponse.json(

@@ -1,7 +1,7 @@
 import { api } from '@/lib/api';
-import type { LoginProp, AuthResponse } from '@/types/api/auth';
+import type { LoginBody, AuthResponse } from '@/types/auth/auth';
 
-export const login = async ({ email, password }: LoginProp) => {
+export const login = async ({ email, password }: LoginBody) => {
   return api.post<AuthResponse>(
     '/api/v1/auth/login',
     { email, password },

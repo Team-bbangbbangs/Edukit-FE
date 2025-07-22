@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { LoginProp } from '@/types/api/auth';
+import type { LoginBody } from '@/types/auth/auth';
 
 export const postLogin = [
   http.post('/api/v1/auth/login', async ({ request }) => {
-    const { email, password } = (await request.json()) as LoginProp;
+    const { email, password } = (await request.json()) as LoginBody;
 
     const expiresAt = Date.now() + 30 * 60 * 1000;
 

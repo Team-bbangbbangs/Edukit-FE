@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { SignupTypes } from '@/types/api/auth';
+import type { SignupBody } from '@/types/auth/auth';
 
 export const signup = [
   http.post('/api/v1/auth/signup', async ({ request }) => {
-    const { email } = (await request.json()) as SignupTypes;
+    const { email } = (await request.json()) as SignupBody;
 
     if (email === 'test123@edukit.co.kr') {
       return HttpResponse.json(
