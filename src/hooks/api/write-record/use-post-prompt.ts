@@ -2,12 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 
 import { trackEvent } from '@/lib/amplitude/amplitude';
 import { postPrompt } from '@/services/write-record/post-prompt';
-import type { PostPrompt, AiResponseData } from '@/types/api/student-record';
+import type { PromptRequest, PromptResponse } from '@/types/record/record';
 
 export const usePostPrompt = () => {
-  return useMutation<AiResponseData, Error, PostPrompt>({
+  return useMutation<PromptResponse, Error, PromptRequest>({
     mutationFn: postPrompt,
-    onSuccess: (data: AiResponseData, variables: PostPrompt) => {
+    onSuccess: (data: PromptResponse, variables: PromptRequest) => {
       trackEvent('click_aiGenerate', {
         ai_inputLength: variables.prompt?.length || 0,
       });

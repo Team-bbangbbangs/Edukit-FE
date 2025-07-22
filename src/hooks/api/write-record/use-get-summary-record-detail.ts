@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getSummaryRecordDetail } from '@/services/write-record/get-summary-record-detail';
-import type { SummaryRecordTypes } from '@/types/api/student-record';
+import type { SummaryRecordResponse } from '@/types/record/record';
 
 export const useGetSummaryRecordDetail = (recordId: number) => {
-  return useQuery<SummaryRecordTypes>({
+  return useQuery<SummaryRecordResponse>({
     queryKey: ['summary-record-detail', recordId],
     queryFn: () => getSummaryRecordDetail(recordId),
     enabled: !!recordId && recordId > 0 && !isNaN(recordId),

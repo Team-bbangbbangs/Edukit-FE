@@ -1,9 +1,9 @@
 import Loading from '@/components/loading/loading';
-import type { AiResponseData, RecordType } from '@/types/api/student-record';
+import type { PromptResponse, RecordType } from '@/types/record/record';
 import { calculateByte } from '@/util/calculate-byte';
 
 interface AiResponseProps {
-  responses: AiResponseData | null;
+  responses: PromptResponse | null;
   isGenerating: boolean;
   recordType: RecordType;
 }

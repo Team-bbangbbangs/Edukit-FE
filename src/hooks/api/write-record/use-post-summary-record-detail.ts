@@ -2,18 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { trackEvent } from '@/lib/amplitude/amplitude';
 import { postSummaryRecordDetail } from '@/services/write-record/post-summary-record-detail';
-import type { ApiResponseWithoutData } from '@/types/api/response';
-
-interface PostSummaryParams {
-  recordId: number;
-  description: string;
-  byteCount: number;
-}
+import type { SummaryRecordRequest } from '@/types/record/record';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
 export const usePostSummaryRecordDetail = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ApiResponseWithoutData, Error, PostSummaryParams>({
+  return useMutation<ApiResponseWithoutData, Error, SummaryRecordRequest>({
     mutationFn: postSummaryRecordDetail,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({

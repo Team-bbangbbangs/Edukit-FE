@@ -1,4 +1,4 @@
-import type { StudentRecord } from '@/types/api/student-record';
+import type { StudentRecord } from '@/types/record/record';
 
 interface RecordDetailViewProps {
   record: StudentRecord;

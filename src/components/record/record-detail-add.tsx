@@ -4,7 +4,7 @@ import { Input } from '@/components/input/input';
 import { Textarea } from '@/components/textarea/textarea';
 import { useCreateRecordDetail } from '@/hooks/api/student-manage/use-create-record-detail';
 import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 import { calculateByte } from '@/util/calculate-byte';
 
 interface RecordDetailAddProps {

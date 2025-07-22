@@ -6,7 +6,7 @@ import NotAuthorizedError from '@/components/error/not-authorized-error';
 import NotPermissionError from '@/components/error/not-permission-error';
 import Loading from '@/components/loading/loading';
 import { useGetRecords } from '@/hooks/api/student-manage/use-get-records';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 
 import RecordDetailAdd from './record-detail-add';
 import RecordDetailEdit from './record-detail-edit';

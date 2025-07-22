@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { CreateRecords } from '@/types/api/student-record';
+import type { CreateStudentRecordsRequest } from '@/types/record/record';
 
 export const createRecords = [
   http.post('/api/v1/student-records/:recordType/students/batch', async ({ request }) => {
-    const body = (await request.json()) as CreateRecords;
+    const body = (await request.json()) as CreateStudentRecordsRequest;
 
     if (!body || !Array.isArray(body.studentRecords) || body.studentRecords.length === 0) {
       return HttpResponse.json(
