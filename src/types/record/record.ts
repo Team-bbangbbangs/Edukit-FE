@@ -8,10 +8,6 @@ export interface StudentRecord {
 }
 
 export interface StudentRecordRequest extends StudentRecord {
-  recordDetailId: string;
-  studentNumber: string;
-  studentName: string;
-  description: string;
   byteCount: number;
 }
 

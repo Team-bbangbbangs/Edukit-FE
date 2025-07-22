@@ -1,8 +1,8 @@
 export type NoticeTagType = '공지' | '이벤트';
 
 export interface NoticeListRequest {
-  categoryId: undefined | '2' | '3';
-  page: undefined | string;
+  categoryId?: '2' | '3';
+  page?: string;
 }
 
 export interface Notice {
