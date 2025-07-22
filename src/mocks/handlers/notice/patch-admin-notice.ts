@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
-import type { AdminNotice } from '@/types/api/notice';
+import type { AdminNoticeBody } from '@/types/notice/notice';
 
 export const patchAdminNotice = [
   http.patch('/api/v1/admin/notices/:noticeId', async ({ request, params }) => {
@@ -22,7 +22,7 @@ export const patchAdminNotice = [
       );
     }
 
-    const body = (await request.json()) as AdminNotice;
+    const body = (await request.json()) as AdminNoticeBody;
 
     if (!body.title?.trim() || !body.content?.replace(/<[^>]*>/g, '').trim()) {
       return HttpResponse.json(

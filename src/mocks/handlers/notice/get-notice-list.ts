@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { NoticeType } from '@/types/api/notice';
+import type { Notice } from '@/types/notice/notice';
 
 const tags = ['공지', '이벤트'] as const;
 
-const notices: NoticeType[] = Array.from({ length: 80 }, (_, i) => ({
+const notices: Notice[] = Array.from({ length: 80 }, (_, i) => ({
   noticeId: `${i + 1}`,
   category: tags[i % tags.length],
   title: `공지사항 제목 ${i + 1}`,
