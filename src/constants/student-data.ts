@@ -1,4 +1,4 @@
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 import { calculateByte } from '@/util/calculate-byte';
 
 type MockStudentData = {

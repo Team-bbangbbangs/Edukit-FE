@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import type { NoticeType } from '@/types/api/notice';
+import type { Notice } from '@/types/notice/notice';
 import { formatDate } from '@/util/formatDate';
 
-export default function NoticeList({ notice }: { notice: NoticeType[] }) {
+export default function NoticeList({ notice }: { notice: Notice[] }) {
   return (
     <div className="mb-4 w-full border-b border-t border-b-slate-400 border-t-slate-400">
       {notice.map((item) => (

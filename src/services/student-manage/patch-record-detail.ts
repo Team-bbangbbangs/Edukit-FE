@@ -1,8 +1,8 @@
 import { api } from '@/lib/api';
-import type { ApiResponseWithoutData } from '@/types/api/response';
-import type { UpdateStudentRecordTypes } from '@/types/api/student-record';
+import type { StudentRecordRequest } from '@/types/record/record';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
-export const patchRecordDetail = async (updateStudentRecord: UpdateStudentRecordTypes) => {
+export const patchRecordDetail = async (updateStudentRecord: StudentRecordRequest) => {
   return api.patch<ApiResponseWithoutData>(
     `/api/v1/student-records/${updateStudentRecord.recordDetailId}`,
     {

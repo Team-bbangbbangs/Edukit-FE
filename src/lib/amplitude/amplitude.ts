@@ -1,7 +1,7 @@
 import { init, track, setUserId, identify, Identify } from '@amplitude/analytics-browser';
 import { jwtDecode } from 'jwt-decode';
 
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 import { getKoreaFormattedTimeStamp } from '@/util/get-korea-formatted-time-stamp';
 
 interface UserInfo {

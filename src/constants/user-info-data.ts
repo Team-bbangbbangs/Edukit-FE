@@ -1,6 +1,6 @@
-import type { UserInfoTypes } from '@/types/api/auth';
+import type { ProfileResponse } from '@/types/profile/profile';
 
-export const NOT_VERIFUED_USER_INFO_DATA: UserInfoTypes = {
+export const NOT_VERIFUED_USER_INFO_DATA: ProfileResponse = {
   subject: '수학',
   email: 'youngryu10@gmail.com',
   isTeacherVerified: false,
@@ -8,7 +8,7 @@ export const NOT_VERIFUED_USER_INFO_DATA: UserInfoTypes = {
   nickname: '이승섭',
 };
 
-export const USER_INFO_DATA: UserInfoTypes = {
+export const USER_INFO_DATA: ProfileResponse = {
   subject: '수학',
   email: 'youngryu10@gmail.com',
   isTeacherVerified: true,

@@ -1,6 +1,6 @@
-import type { RecordType, StudentsResponse } from '@/types/api/student-record';
+import type { RecordType, StudentRecordsResponse } from '@/types/record/record';
 
-export const RECORD_DATA: Record<RecordType, StudentsResponse> = {
+export const RECORD_DATA: Record<RecordType, StudentRecordsResponse> = {
   career: {
     students: Array.from({ length: 100 }, (_, i) => ({
       recordDetailId: `career-${i + 1}`,

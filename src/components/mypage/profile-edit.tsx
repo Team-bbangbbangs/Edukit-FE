@@ -6,10 +6,10 @@ import { Input } from '@/components/input/input';
 import { subjects } from '@/constants/signup-data';
 import { useGetCheckValidNickname } from '@/hooks/api/profile/use-get-check-valid-nickname';
 import { usePatchProfile } from '@/hooks/api/profile/use-patch-profile';
-import type { UserInfoTypes } from '@/types/api/auth';
+import type { ProfileResponse } from '@/types/profile/profile';
 
 interface ProfileEditProps {
-  profile: UserInfoTypes;
+  profile: ProfileResponse;
   onChangeView: () => void;
 }
 

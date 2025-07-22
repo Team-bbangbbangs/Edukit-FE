@@ -8,11 +8,7 @@ import { Textarea } from '@/components/textarea/textarea';
 import { useDeleteRecordDetail } from '@/hooks/api/student-manage/use-delete-record-detail';
 import { usePatchRecordDetail } from '@/hooks/api/student-manage/use-patch-record-detail';
 import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
-import type {
-  RecordType,
-  StudentRecord,
-  UpdateStudentRecordTypes,
-} from '@/types/api/student-record';
+import type { RecordType, StudentRecord, StudentRecordRequest } from '@/types/record/record';
 import { calculateByte } from '@/util/calculate-byte';
 
 interface RecordDetailEditProps {
@@ -37,7 +33,7 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
     const updatedDescription = textareaRef.current?.value || '';
     const updatedByteCount = calculateByte(updatedDescription);
 
-    const updateStudentRecord: UpdateStudentRecordTypes = {
+    const updateStudentRecord: StudentRecordRequest = {
       ...record,
       studentNumber: updatedStudentNumber,
       studentName: updatedName,

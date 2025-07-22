@@ -8,7 +8,7 @@ import { Textarea } from '@/components/textarea/textarea';
 import { useGetSummaryRecordDetail } from '@/hooks/api/write-record/use-get-summary-record-detail';
 import { usePostSummaryRecordDetail } from '@/hooks/api/write-record/use-post-summary-record-detail';
 import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 import { calculateByte } from '@/util/calculate-byte';
 
 interface RecordSummaryProps {

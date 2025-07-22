@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { PatchAfterLoginPassword } from '@/types/api/auth';
+import type { EditPasswordBody } from '@/types/profile/profile';
 
 export const patchAfterLoginPassword = [
   http.patch('/api/v1/users/password', async ({ request }) => {
-    const { currentPassword, newPassword } = (await request.json()) as PatchAfterLoginPassword;
+    const { currentPassword, newPassword } = (await request.json()) as EditPasswordBody;
 
     if (currentPassword === 'password1234') {
       return HttpResponse.json(

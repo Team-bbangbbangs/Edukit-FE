@@ -8,14 +8,14 @@ import TipTapEditor, { type TipTapEditorRef } from '@/components/editor/tiptap-e
 import { Input } from '@/components/input/input';
 import { usePatchAdminNotice } from '@/hooks/api/notice/use-patch-admin-notice';
 import { revalidateNotice } from '@/lib/actions/revalidateNotice';
-import type { DetailNoticeType } from '@/types/api/notice';
+import type { DetailNoticeResponse } from '@/types/notice/notice';
 
 const baseStyle = 'rounded-full px-5 py-1 pt-1.5 text-center font-bold text-[14px]';
 const activeStyle = 'bg-slate-800 text-white border border-white';
 const nonActiveStyle = 'bg-white text-black border border-slate-400';
 
 interface EditNoticeProps {
-  notice: DetailNoticeType;
+  notice: DetailNoticeResponse;
 }
 
 const CATEGORY_MAP: Record<string, number> = { 공지: 2, 이벤트: 3 };

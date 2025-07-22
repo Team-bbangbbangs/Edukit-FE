@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { patchProfile } from '@/services/profile/patch-profile';
-import type { PatchProfile } from '@/types/api/auth';
-import type { ApiResponseWithoutData } from '@/types/api/response';
+import type { EditProfileBody } from '@/types/profile/profile';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
 export const usePatchProfile = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ApiResponseWithoutData, Error, PatchProfile>({
+  return useMutation<ApiResponseWithoutData, Error, EditProfileBody>({
     mutationFn: patchProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({

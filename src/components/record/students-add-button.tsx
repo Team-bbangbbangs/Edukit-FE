@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import ExcelUploadModal from '@/components/modal/excel-upload-modal';
 import { useGetRecords } from '@/hooks/api/student-manage/use-get-records';
-import type { RecordType } from '@/types/api/student-record';
+import type { RecordType } from '@/types/record/record';
 import { downloadExcel } from '@/util/download-excel';
 
 export default function StudentAddButton({ recordType }: { recordType: RecordType }) {

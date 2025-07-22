@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { patchEmail } from '@/services/profile/patch-email';
-import type { ApiResponseWithoutData } from '@/types/api/response';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
 export const usePatchEmail = () => {
   const queryClient = useQueryClient();

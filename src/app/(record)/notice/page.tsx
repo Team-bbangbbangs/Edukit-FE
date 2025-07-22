@@ -6,12 +6,10 @@ import NoticeList from '@/components/notice/notice-list';
 import WriteNoticeButton from '@/components/notice/write-notice-button';
 import Pagination from '@/components/pagination/pagination';
 import { getNoticeList } from '@/services/notice/get-notice-list';
+import type { NoticeListRequest } from '@/types/notice/notice';
 
 interface PageProps {
-  searchParams?: {
-    page?: string;
-    categoryId?: string;
-  };
+  searchParams?: NoticeListRequest;
 }
 
 export default async function NoticePage({ searchParams }: PageProps) {

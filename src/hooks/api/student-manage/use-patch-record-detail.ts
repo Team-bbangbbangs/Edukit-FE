@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { patchRecordDetail } from '@/services/student-manage/patch-record-detail';
-import type { ApiResponseWithoutData } from '@/types/api/response';
-import type { RecordType, UpdateStudentRecordTypes } from '@/types/api/student-record';
+import type { RecordType, StudentRecordRequest } from '@/types/record/record';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
-type UsePatchRecordDetailParams = {
+interface UsePatchRecordDetailParams {
   recordType: RecordType;
-  updateStudentRecord: UpdateStudentRecordTypes;
-};
+  updateStudentRecord: StudentRecordRequest;
+}
 
 export const usePatchRecordDetail = () => {
   const queryClient = useQueryClient();

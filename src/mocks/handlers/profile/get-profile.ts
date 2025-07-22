@@ -2,10 +2,9 @@ import { http, HttpResponse } from 'msw';
 
 import { USER_INFO_DATA, NOT_VERIFUED_USER_INFO_DATA } from '@/constants/user-info-data';
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
-import type { UserInfoTypes } from '@/types/api/auth';
 
 export const getProfile = [
-  http.get<never, { recordType: UserInfoTypes }>('/api/v1/users/profile', ({ request }) => {
+  http.get('/api/v1/users/profile', ({ request }) => {
     const authHeader = request.headers.get('Authorization');
 
     const validation = checkAccessToken(authHeader);

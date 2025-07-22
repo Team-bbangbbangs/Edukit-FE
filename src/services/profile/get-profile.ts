@@ -1,6 +1,6 @@
 import { api } from '@/lib/api';
-import type { UserInfoTypes } from '@/types/api/auth';
+import type { ProfileResponse } from '@/types/profile/profile';
 
 export const getProfile = async () => {
-  return api.get<UserInfoTypes>('/api/v1/users/profile');
+  return api.get<ProfileResponse>('/api/v1/users/profile');
 };

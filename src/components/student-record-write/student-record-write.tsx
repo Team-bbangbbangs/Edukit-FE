@@ -10,7 +10,7 @@ import NotFoundError from '@/components/error/not-found-error';
 import NotPermissionError from '@/components/error/not-permission-error';
 import Loading from '@/components/loading/loading';
 import { useGetStudentsName } from '@/hooks/api/write-record/use-get-students-name';
-import type { RecordType, AiResponseData } from '@/types/api/student-record';
+import type { RecordType, PromptResponse } from '@/types/record/record';
 
 import AiResponse from './ai-response';
 import CharacteristicInput from './characteristic-input';
@@ -27,7 +27,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
   const router = useRouter();
   const parsedRecordId = Number(recordId);
 
-  const [aiResponses, setAiResponses] = useState<AiResponseData | null>(null);
+  const [aiResponses, setAiResponses] = useState<PromptResponse | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
     }
   }, [data, recordId, router]);
 
-  const handleAiResponseGenerated = (responseData: AiResponseData) => {
+  const handleAiResponseGenerated = (responseData: PromptResponse) => {
     setAiResponses(responseData);
     setIsGenerating(false);
   };

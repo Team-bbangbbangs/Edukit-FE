@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { DetailNoticeType } from '@/types/api/notice';
+import type { DetailNoticeResponse } from '@/types/notice/notice';
 
 const tags = ['공지', '이벤트'] as const;
 
-const notices: DetailNoticeType[] = Array.from({ length: 80 }, (_, i) => {
+const notices: DetailNoticeResponse[] = Array.from({ length: 80 }, (_, i) => {
   const contentLength = 100 + (i % 5) * 50;
   const content = `공지사항 내용 ${i + 1} `.repeat(contentLength / 20);
 

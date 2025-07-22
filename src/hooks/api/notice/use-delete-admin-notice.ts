@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { deleteAdminNotice } from '@/services/notice/delete-admin-notice';
-import type { ApiResponseWithoutData } from '@/types/api/response';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
 export const useDeleteAdminNotice = () => {
   return useMutation<ApiResponseWithoutData, Error, string>({

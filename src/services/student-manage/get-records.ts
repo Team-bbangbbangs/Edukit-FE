@@ -1,5 +1,5 @@
 import { api } from '@/lib/api';
-import type { StudentsResponse, RecordType } from '@/types/api/student-record';
+import type { StudentRecordsResponse, RecordType } from '@/types/record/record';
 
 interface GetRecordsProps {
   recordType: RecordType;
@@ -7,7 +7,7 @@ interface GetRecordsProps {
 }
 
 export const getRecords = async ({ recordType, semester }: GetRecordsProps) => {
-  return api.get<StudentsResponse>(`/api/v1/student-records/${recordType}`, {
+  return api.get<StudentRecordsResponse>(`/api/v1/student-records/${recordType}`, {
     params: {
       semester,
     },

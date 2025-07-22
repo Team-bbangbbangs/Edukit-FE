@@ -6,12 +6,12 @@ import Image from 'next/image';
 
 import EmailSentModal from '@/components/modal/email-sent-modal';
 import { usePostSendEmail } from '@/hooks/api/profile/use-post-send-email';
-import type { UserInfoTypes } from '@/types/api/auth';
+import type { ProfileResponse } from '@/types/profile/profile';
 
 import ProfileImage from '../../../public/images/profile-image.png';
 
 interface ProfileViewProps {
-  profile: UserInfoTypes;
+  profile: ProfileResponse;
   onChangeEdit: () => void;
 }
 

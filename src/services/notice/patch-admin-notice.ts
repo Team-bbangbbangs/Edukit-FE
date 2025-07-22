@@ -1,14 +1,13 @@
 import { api } from '@/lib/api';
-import type { ApiResponseWithoutData } from '@/types/api/response';
+import type { EditAdminNoticeRequest } from '@/types/notice/notice';
+import type { ApiResponseWithoutData } from '@/types/shared/response';
 
-interface PatchAdminNotice {
-  id: string;
-  categoryId: number;
-  title: string;
-  content: string;
-}
-
-export const patchAdminNotice = async ({ id, categoryId, title, content }: PatchAdminNotice) => {
+export const patchAdminNotice = async ({
+  id,
+  categoryId,
+  title,
+  content,
+}: EditAdminNoticeRequest) => {
   return api.patch<ApiResponseWithoutData>(`/api/v1/admin/notices/${id}`, {
     categoryId,
     title,
