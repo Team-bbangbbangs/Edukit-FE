@@ -1,4 +1,4 @@
-import { getVerifyEmail } from '@/services/auth/get-verify-email';
+import { getVerifyEmail } from '@/domains/auth/apis/get-verify-email';
 
 import VerifyEmailHandler from './verify-email-handler';
 

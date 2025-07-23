@@ -6,9 +6,9 @@ import { z } from 'zod';
 
 import { useRouter } from 'next/navigation';
 
+import { usePatchResetPassword } from '@/domains/auth/apis/mutations/use-patch-reset-password';
 import SuccessPasswordResetModal from '@/domains/auth/components/find-password/success-password-reset-modal';
 import { passwordSchema } from '@/domains/auth/components/signup/signup-scheme';
-import { usePatchResetPassword } from '@/domains/auth/hooks/use-patch-reset-password';
 import { Input } from '@/shared/components/ui/input/input';
 
 const passwordResetSchema = z

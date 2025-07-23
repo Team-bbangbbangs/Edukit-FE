@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { api } from '@/shared/lib/api';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
 
@@ -7,4 +9,10 @@ export const postVerifyEmail = async (email: string) => {
     { email },
     { skipTokenRefresh: true },
   );
+};
+
+export const usePostVerifyEmail = () => {
+  return useMutation<ApiResponseWithoutData, Error, string>({
+    mutationFn: postVerifyEmail,
+  });
 };

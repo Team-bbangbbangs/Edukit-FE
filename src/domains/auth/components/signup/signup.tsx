@@ -5,8 +5,8 @@ import { useState, useRef, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { useSignup } from '@/domains/auth/apis/mutations/use-signup';
 import { subjects } from '@/domains/auth/constants/signup-data';
-import { useSignup } from '@/domains/auth/hooks/use-signup';
 import { Input } from '@/shared/components/ui/input/input';
 
 import { signupSchema } from './signup-scheme';

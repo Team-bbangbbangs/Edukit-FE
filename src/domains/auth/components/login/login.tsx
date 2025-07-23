@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 
 import Link from 'next/link';
 
+import { useLogin } from '@/domains/auth/apis/mutations/use-login';
 import { loginSchema, type LoginDataType } from '@/domains/auth/components/signup/signup-scheme';
-import { useLogin } from '@/domains/auth/hooks/use-login';
 import { Input } from '@/shared/components/ui/input/input';
 
 export default function Login() {

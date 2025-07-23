@@ -3,10 +3,17 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useRouter } from 'next/navigation';
 
-import { logout } from '@/services/auth/logout';
 import { clearAmplitudeAccessToken } from '@/shared/lib/amplitude';
+import { api } from '@/shared/lib/api';
 import { useAuth } from '@/shared/providers/auth-provider';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
+
+export const logout = async () => {
+  return api.post<ApiResponseWithoutData>('/api/v1/auth/logout', {
+    credentials: 'include',
+    skipTokenRefresh: true,
+  });
+};
 
 export const useLogout = () => {
   const { setAuthData } = useAuth();

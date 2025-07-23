@@ -1,9 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 
 import type { AuthResponse, SignupBody } from '@/domains/auth/types/auth';
-import { signup } from '@/services/auth/signup';
 import { setAmplitudeUserFromAccessToken } from '@/shared/lib/amplitude';
+import { api } from '@/shared/lib/api';
 import { useAuth } from '@/shared/providers/auth-provider';
+
+export const signup = async (signupData: SignupBody) => {
+  return api.post<AuthResponse>('/api/v1/auth/signup', signupData, {
+    credentials: 'include',
+    skipTokenRefresh: true,
+  });
+};
 
 export const useSignup = () => {
   const { setAuthData } = useAuth();
