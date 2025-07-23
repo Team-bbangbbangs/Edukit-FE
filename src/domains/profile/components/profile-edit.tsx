@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, ChevronDown } from 'lucide-react';
 
 import { subjects } from '@/domains/auth/constants/signup-data';
-import { useGetCheckValidNickname } from '@/domains/profile/hooks/use-get-check-valid-nickname';
-import { usePatchProfile } from '@/domains/profile/hooks/use-patch-profile';
+import { useGetCheckValidNickname } from '@/domains/profile/apis/mutations/use-get-check-valid-nickname';
+import { usePatchProfile } from '@/domains/profile/apis/mutations/use-patch-profile';
 import type { ProfileResponse } from '@/domains/profile/types/profile';
 import { Input } from '@/shared/components/ui/input/input';
 

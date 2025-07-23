@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { emailSchema } from '@/domains/auth/components/signup/signup-scheme';
-import { usePatchEmail } from '@/domains/profile/hooks/use-patch-email';
+import { usePatchEmail } from '@/domains/profile/apis/mutations/use-patch-email';
 import { Input } from '@/shared/components/ui/input/input';
 
 const emailEditSchema = z.object({

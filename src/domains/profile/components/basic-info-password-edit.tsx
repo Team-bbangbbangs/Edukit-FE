@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { passwordSchema } from '@/domains/auth/components/signup/signup-scheme';
-import { usePatchAfterLoginPassword } from '@/domains/profile/hooks/use-patch-after-login-password';
+import { usePatchAfterLoginPassword } from '@/domains/profile/apis/mutations/use-patch-after-login-password';
 import { Input } from '@/shared/components/ui/input/input';
 
 const passwordEditSchema = z

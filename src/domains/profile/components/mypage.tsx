@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { useGetProfile } from '@/domains/profile/hooks/use-get-profile';
+import { useGetProfile } from '@/domains/profile/apis/queries/use-get-profile';
 import Loading from '@/shared/components/ui/loading/loading';
 
 import BasicInfo from './basic-info';

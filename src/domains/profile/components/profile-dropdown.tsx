@@ -5,10 +5,10 @@ import { Home } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useLogout } from '@/domains/auth/hooks/use-logout';
+import { useLogout } from '@/domains/auth/apis/mutations/use-logout';
+import { usePostSendEmail } from '@/domains/auth/apis/mutations/use-post-send-email';
+import { useGetProfile } from '@/domains/profile/apis/queries/use-get-profile';
 import EmailSentModal from '@/domains/profile/components/email-sent-modal';
-import { useGetProfile } from '@/domains/profile/hooks/use-get-profile';
-import { usePostSendEmail } from '@/domains/profile/hooks/use-post-send-email';
 import DefaultError from '@/shared/components/ui/error/default-error';
 import Loading from '@/shared/components/ui/loading/loading';
 
