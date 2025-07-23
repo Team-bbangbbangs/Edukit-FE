@@ -2,8 +2,8 @@
 
 import { useRef, useState } from 'react';
 
-import { useDeleteRecordDetail } from '@/domains/record/hooks/student-manage/use-delete-record-detail';
-import { usePatchRecordDetail } from '@/domains/record/hooks/student-manage/use-patch-record-detail';
+import { useDeleteRecordDetail } from '@/domains/record/apis/mutations/use-delete-record-detail';
+import { usePatchRecordDetail } from '@/domains/record/apis/mutations/use-patch-record-detail';
 import type {
   RecordType,
   StudentRecord,

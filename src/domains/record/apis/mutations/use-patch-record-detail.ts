@@ -1,13 +1,25 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { RecordType, StudentRecordRequest } from '@/domains/record/types/record';
-import { patchRecordDetail } from '@/services/student-manage/patch-record-detail';
+import { api } from '@/shared/lib/api';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 interface UsePatchRecordDetailParams {
   recordType: RecordType;
   updateStudentRecord: StudentRecordRequest;
 }
+
+export const patchRecordDetail = async (updateStudentRecord: StudentRecordRequest) => {
+  return api.patch<ApiResponseWithoutData>(
+    `/api/v1/student-records/${updateStudentRecord.recordDetailId}`,
+    {
+      studentNumber: updateStudentRecord.studentNumber,
+      studentName: updateStudentRecord.studentName,
+      description: updateStudentRecord.description,
+      byteCount: updateStudentRecord.byteCount,
+    },
+  );
+};
 
 export const usePatchRecordDetail = () => {
   const queryClient = useQueryClient();

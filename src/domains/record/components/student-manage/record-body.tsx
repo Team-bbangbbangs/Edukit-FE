@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { useGetRecords } from '@/domains/record/hooks/student-manage/use-get-records';
+import { useGetRecords } from '@/domains/record/apis/queries/use-get-records';
 import type { RecordType } from '@/domains/record/types/record';
 import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
 import NotPermissionError from '@/shared/components/ui/error/not-permission-error';

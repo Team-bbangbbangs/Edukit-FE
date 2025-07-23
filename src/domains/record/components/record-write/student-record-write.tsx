@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { useGetStudentsName } from '@/domains/record/hooks/write-record/use-get-students-name';
+import { useGetStudentsName } from '@/domains/record/apis/queries/use-get-students-name';
 import type { RecordType, PromptResponse } from '@/domains/record/types/record';
 import DefaultError from '@/shared/components/ui/error/default-error';
 import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';

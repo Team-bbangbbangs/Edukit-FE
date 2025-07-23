@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { usePostPrompt } from '@/domains/record/hooks/write-record/use-post-prompt';
+import { usePostPrompt } from '@/domains/record/apis/mutations/use-post-prompt';
 import type { StudentNames, PromptResponse } from '@/domains/record/types/record';
 import { Textarea } from '@/shared/components/ui/textarea/textarea';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';

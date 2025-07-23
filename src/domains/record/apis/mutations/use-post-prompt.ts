@@ -1,8 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 
 import type { PromptRequest, PromptResponse } from '@/domains/record/types/record';
-import { postPrompt } from '@/services/write-record/post-prompt';
 import { trackEvent } from '@/shared/lib/amplitude';
+import { api } from '@/shared/lib/api';
+
+export const postPrompt = async ({ recordId, prompt }: PromptRequest) => {
+  return api.post<PromptResponse>(`/api/v1/student-records/ai-generate/${recordId}`, { prompt });
+};
 
 export const usePostPrompt = () => {
   return useMutation<PromptResponse, Error, PromptRequest>({

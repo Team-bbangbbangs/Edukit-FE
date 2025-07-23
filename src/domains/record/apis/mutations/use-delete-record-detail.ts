@@ -1,9 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { RecordType } from '@/domains/record/types/record';
-import { deleteRecordDetail } from '@/services/student-manage/delete-record-detail';
 import { increaseTotalStudent } from '@/shared/lib/amplitude';
+import { api } from '@/shared/lib/api';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
+
+export const deleteRecordDetail = async (recordId: string) => {
+  return api.delete<ApiResponseWithoutData>(`/api/v1/student-records/${recordId}`);
+};
 
 interface UseDeleteRecordDetailParams {
   recordType: RecordType;

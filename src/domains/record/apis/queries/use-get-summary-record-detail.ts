@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
 import type { SummaryRecordResponse } from '@/domains/record/types/record';
-import { getSummaryRecordDetail } from '@/services/write-record/get-summary-record-detail';
+import { api } from '@/shared/lib/api';
+
+export const getSummaryRecordDetail = async (recordId: number) => {
+  return api.get<SummaryRecordResponse>(`/api/v1/student-records/detail/${recordId}`);
+};
 
 export const useGetSummaryRecordDetail = (recordId: number) => {
   return useQuery<SummaryRecordResponse>({

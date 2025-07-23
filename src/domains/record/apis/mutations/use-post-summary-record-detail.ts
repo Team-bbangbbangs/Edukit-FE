@@ -1,9 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { SummaryRecordRequest } from '@/domains/record/types/record';
-import { postSummaryRecordDetail } from '@/services/write-record/post-summary-record-detail';
 import { trackEvent } from '@/shared/lib/amplitude';
+import { api } from '@/shared/lib/api';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
+
+export const postSummaryRecordDetail = async ({
+  recordId,
+  description,
+  byteCount,
+}: SummaryRecordRequest) => {
+  return api.post<ApiResponseWithoutData>(`/api/v1/student-records/detail/${recordId}`, {
+    description,
+    byteCount,
+  });
+};
 
 export const usePostSummaryRecordDetail = () => {
   const queryClient = useQueryClient();

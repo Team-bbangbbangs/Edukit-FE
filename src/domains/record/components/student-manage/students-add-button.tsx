@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
+import { useGetRecords } from '@/domains/record/apis/queries/use-get-records';
 import ExcelUploadModal from '@/domains/record/components/student-manage/excel-upload-modal';
-import { useGetRecords } from '@/domains/record/hooks/student-manage/use-get-records';
 import type { RecordType } from '@/domains/record/types/record';
 import { downloadExcel } from '@/domains/record/utils/download-excel';
 

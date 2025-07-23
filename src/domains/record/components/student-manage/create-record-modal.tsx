@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 
-import { useCreateRecords } from '@/domains/record/hooks/student-manage/use-create-records';
+import { useCreateRecords } from '@/domains/record/apis/mutations/use-create-records';
 import type { RecordType } from '@/domains/record/types/record';
 import { Input } from '@/shared/components/ui/input/input';
 import {

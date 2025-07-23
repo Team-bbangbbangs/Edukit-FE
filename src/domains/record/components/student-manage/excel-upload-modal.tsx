@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
-import { useCreateRecords } from '@/domains/record/hooks/student-manage/use-create-records';
+import { useCreateRecords } from '@/domains/record/apis/mutations/use-create-records';
 import type { RecordType, CreateStudentRecords } from '@/domains/record/types/record';
 import { Input } from '@/shared/components/ui/input/input';
 import {

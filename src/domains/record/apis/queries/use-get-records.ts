@@ -1,8 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 
 import type { RecordType, StudentRecordsResponse } from '@/domains/record/types/record';
-import { getRecords } from '@/services/student-manage/get-records';
+import { api } from '@/shared/lib/api';
 import { isUnauthorizedError, isNotFoundError, isNotPermissionError } from '@/shared/lib/errors';
+
+interface GetRecordsProps {
+  recordType: RecordType;
+  semester: string;
+}
+
+export const getRecords = async ({ recordType, semester }: GetRecordsProps) => {
+  return api.get<StudentRecordsResponse>(`/api/v1/student-records/${recordType}`, {
+    params: {
+      semester,
+    },
+  });
+};
 
 export const useGetRecords = (recordType: RecordType) => {
   const query = useQuery<StudentRecordsResponse>({

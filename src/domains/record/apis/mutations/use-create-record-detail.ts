@@ -1,9 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { CreateStudentRecordRequest } from '@/domains/record/types/record';
-import { createRecordDetail } from '@/services/student-manage/create-record-detail';
 import { increaseTotalStudent } from '@/shared/lib/amplitude';
+import { api } from '@/shared/lib/api';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
+
+export const createRecordDetail = async ({
+  recordType,
+  studentRecord,
+  semester,
+}: CreateStudentRecordRequest) => {
+  return api.post<ApiResponseWithoutData>(`/api/v1/student-records/${recordType}/students`, {
+    semester,
+    studentRecord,
+  });
+};
 
 export const useCreateRecordDetail = () => {
   const queryClient = useQueryClient();

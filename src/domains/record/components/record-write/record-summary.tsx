@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { usePostSummaryRecordDetail } from '@/domains/record/apis/mutations/use-post-summary-record-detail';
+import { useGetSummaryRecordDetail } from '@/domains/record/apis/queries/use-get-summary-record-detail';
 import SaveSummaryRecordModal from '@/domains/record/components/record-write/save-summary-record-modal';
-import { useGetSummaryRecordDetail } from '@/domains/record/hooks/write-record/use-get-summary-record-detail';
-import { usePostSummaryRecordDetail } from '@/domains/record/hooks/write-record/use-post-summary-record-detail';
 import type { RecordType } from '@/domains/record/types/record';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
 import Loading from '@/shared/components/ui/loading/loading';
