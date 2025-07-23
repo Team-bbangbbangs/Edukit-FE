@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import EditDeleteNoticeButton from '@/components/notice/edit-delete-notice-button';
+import EditDeleteNoticeButton from '@/domains/notice/components/edit-delete-notice-button';
 import { getNoticeDetail } from '@/services/notice/get-notice-detail';
-import { formatDate } from '@/util/formatDate';
+import { formatDate } from '@/shared/utils/formatDate';
 
 interface PageProps {
   params: {

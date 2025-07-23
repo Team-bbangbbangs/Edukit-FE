@@ -1,4 +1,4 @@
-import ClubRecordTable from '@/components/record/club-record-table';
+import ClubRecordTable from '@/domains/record/components/student-manage/club-record-table';
 
 export default function Page() {
   return <ClubRecordTable />;

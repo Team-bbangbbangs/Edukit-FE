@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { VerifyEmailRequest } from '@/types/auth/auth';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { VerifyEmailRequest } from '@/domains/auth/types/auth';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const getVerifyEmail = async ({ id, code }: VerifyEmailRequest) => {
   return api.get<ApiResponseWithoutData>('/api/v1/auth/verify-email', {

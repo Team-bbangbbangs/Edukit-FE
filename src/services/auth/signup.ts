@@ -1,5 +1,5 @@
-import { api } from '@/lib/api';
-import type { AuthResponse, SignupBody } from '@/types/auth/auth';
+import type { AuthResponse, SignupBody } from '@/domains/auth/types/auth';
+import { api } from '@/shared/lib/api';
 
 export const signup = async (signupData: SignupBody) => {
   return api.post<AuthResponse>('/api/v1/auth/signup', signupData, {

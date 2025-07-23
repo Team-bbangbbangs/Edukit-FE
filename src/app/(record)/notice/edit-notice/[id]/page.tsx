@@ -1,4 +1,4 @@
-import EditNotice from '@/components/notice/edit-notice';
+import EditNotice from '@/domains/notice/components/edit-notice';
 import { getNoticeDetail } from '@/services/notice/get-notice-detail';
 
 interface PageProps {

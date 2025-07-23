@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { LoginBody } from '@/types/auth/auth';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { LoginBody } from '@/domains/auth/types/auth';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const patchResetPassword = async ({ email, password }: LoginBody) => {
   return api.patch<ApiResponseWithoutData>(

@@ -1,5 +1,5 @@
-import type { AuthResponse } from '@/types/auth/auth';
-import type { ApiResponseWithData } from '@/types/shared/response';
+import type { AuthResponse } from '@/domains/auth/types/auth';
+import type { ApiResponseWithData } from '@/shared/types/response';
 
 export const reissue = async (): Promise<AuthResponse | null> => {
   try {

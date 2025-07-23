@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { EditAdminNoticeRequest } from '@/types/notice/notice';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { EditAdminNoticeRequest } from '@/domains/notice/types/notice';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const patchAdminNotice = async ({
   id,

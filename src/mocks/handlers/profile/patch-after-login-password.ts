@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { EditPasswordBody } from '@/types/profile/profile';
+import type { EditPasswordBody } from '@/domains/profile/types/profile';
 
 export const patchAfterLoginPassword = [
   http.patch('/api/v1/users/password', async ({ request }) => {

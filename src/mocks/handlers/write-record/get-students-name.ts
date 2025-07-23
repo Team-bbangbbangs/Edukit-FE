@@ -1,8 +1,8 @@
 import { http, HttpResponse } from 'msw';
 
-import { STUDENT_DATA } from '@/constants/student-data';
+import { STUDENT_DATA } from '@/domains/record/constants/student-data';
+import type { RecordType } from '@/domains/record/types/record';
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
-import type { RecordType } from '@/types/record/record';
 
 export const getStudentsName = [
   http.get<never, { recordType: RecordType }>(

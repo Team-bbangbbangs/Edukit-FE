@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { CreateStudentRecordsRequest } from '@/types/record/record';
+import type { CreateStudentRecordsRequest } from '@/domains/record/types/record';
 
 export const createRecords = [
   http.post('/api/v1/student-records/:recordType/students/batch', async ({ request }) => {

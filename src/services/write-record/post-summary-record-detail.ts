@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { SummaryRecordRequest } from '@/types/record/record';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { SummaryRecordRequest } from '@/domains/record/types/record';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const postSummaryRecordDetail = async ({
   recordId,

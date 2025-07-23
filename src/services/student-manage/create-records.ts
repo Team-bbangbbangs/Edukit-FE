@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { CreateStudentRecordsRequest } from '@/types/record/record';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { CreateStudentRecordsRequest } from '@/domains/record/types/record';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const createRecords = async ({
   recordType,

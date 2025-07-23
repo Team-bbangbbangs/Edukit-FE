@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { EditPasswordBody } from '@/types/profile/profile';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { EditPasswordBody } from '@/domains/profile/types/profile';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const patchAfterLoginPassword = async ({
   currentPassword,

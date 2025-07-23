@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
+import type { AdminNoticeBody } from '@/domains/notice/types/notice';
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
-import type { AdminNoticeBody } from '@/types/notice/notice';
 
 export const postAdminNotice = [
   http.post('/api/v1/admin/notices', async ({ request }) => {

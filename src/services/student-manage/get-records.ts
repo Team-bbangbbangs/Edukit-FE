@@ -1,5 +1,5 @@
-import { api } from '@/lib/api';
-import type { StudentRecordsResponse, RecordType } from '@/types/record/record';
+import type { StudentRecordsResponse, RecordType } from '@/domains/record/types/record';
+import { api } from '@/shared/lib/api';
 
 interface GetRecordsProps {
   recordType: RecordType;

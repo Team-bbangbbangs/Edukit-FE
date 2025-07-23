@@ -1,6 +1,6 @@
-import { api } from '@/lib/api';
-import type { AdminNoticeBody } from '@/types/notice/notice';
-import type { ApiResponseWithoutData } from '@/types/shared/response';
+import type { AdminNoticeBody } from '@/domains/notice/types/notice';
+import { api } from '@/shared/lib/api';
+import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const postAdminNotice = async ({ categoryId, title, content }: AdminNoticeBody) => {
   return api.post<ApiResponseWithoutData>('/api/v1/admin/notices', {

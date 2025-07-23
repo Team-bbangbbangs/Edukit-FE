@@ -1,7 +1,7 @@
-import AnalyticsProvider from '@/components/analytics/analytics-provider';
-import { AuthProvider } from '@/contexts/auth/auth-provider';
-import { MSWProvider } from '@/lib/msw-provider';
-import QueryProvider from '@/lib/tanstack-query-provider';
+import AnalyticsProvider from '@/shared/providers/amplitude-provider';
+import { AuthProvider } from '@/shared/providers/auth-provider';
+import { MSWProvider } from '@/shared/providers/msw-provider';
+import QueryProvider from '@/shared/providers/tanstack-query-provider';
 
 import { metadata } from './metadata';
 

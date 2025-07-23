@@ -1,4 +1,4 @@
-import WriteNotice from '@/components/notice/write-notice';
+import WriteNotice from '@/domains/notice/components/write-notice';
 
 export default function Page() {
   return <WriteNotice />;
