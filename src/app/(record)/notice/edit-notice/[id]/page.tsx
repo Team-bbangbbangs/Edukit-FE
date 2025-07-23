@@ -1,5 +1,5 @@
+import { getNoticeDetail } from '@/domains/notice/apis/get-notice-detail';
 import EditNotice from '@/domains/notice/components/edit-notice';
-import { getNoticeDetail } from '@/services/notice/get-notice-detail';
 
 interface PageProps {
   params: {

@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { usePatchAdminNotice } from '@/domains/notice/hooks/use-patch-admin-notice';
+import { usePatchAdminNotice } from '@/domains/notice/apis/mutations/use-patch-admin-notice';
 import type { DetailNoticeResponse } from '@/domains/notice/types/notice';
 import TipTapEditor, { type TipTapEditorRef } from '@/shared/components/ui/editor/tiptap-editor';
 import { Input } from '@/shared/components/ui/input/input';

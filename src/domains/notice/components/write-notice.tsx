@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { usePostAdminNotice } from '@/domains/notice/hooks/use-post-admin-notice';
+import { usePostAdminNotice } from '@/domains/notice/apis/mutations/use-post-admin-notice';
 import TipTapEditor, { type TipTapEditorRef } from '@/shared/components/ui/editor/tiptap-editor';
 import { Input } from '@/shared/components/ui/input/input';
 import { revalidateNotice } from '@/shared/lib/actions/revalidateNotice';

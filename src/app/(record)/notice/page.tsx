@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation';
 
+import { getNoticeList } from '@/domains/notice/apis/get-notice-list';
 import ErrorNotice from '@/domains/notice/components/error-notice';
 import NoticeCategorys from '@/domains/notice/components/notice-categorys';
 import NoticeList from '@/domains/notice/components/notice-list';
 import WriteNoticeButton from '@/domains/notice/components/write-notice-button';
 import type { NoticeListRequest } from '@/domains/notice/types/notice';
-import { getNoticeList } from '@/services/notice/get-notice-list';
 import Pagination from '@/shared/components/ui/pagination/pagination';
 
 interface PageProps {

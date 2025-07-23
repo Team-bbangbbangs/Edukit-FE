@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { useDeleteAdminNotice } from '@/domains/notice/hooks/use-delete-admin-notice';
+import { useDeleteAdminNotice } from '@/domains/notice/apis/mutations/use-delete-admin-notice';
 import DeleteConfirmModal from '@/shared/components/ui/modal/delete-confirm-modal';
 import { revalidateNotice } from '@/shared/lib/actions/revalidateNotice';
 import { useAuth } from '@/shared/providers/auth-provider';

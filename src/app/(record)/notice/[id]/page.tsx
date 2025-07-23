@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
+import { getNoticeDetail } from '@/domains/notice/apis/get-notice-detail';
 import EditDeleteNoticeButton from '@/domains/notice/components/edit-delete-notice-button';
-import { getNoticeDetail } from '@/services/notice/get-notice-detail';
 import { formatDate } from '@/shared/utils/formatDate';
 
 interface PageProps {
