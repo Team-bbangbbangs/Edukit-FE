@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
+import { usePostSendEmail } from '@/domains/auth/apis/mutations/use-post-send-email';
 import EmailSentModal from '@/domains/profile/components/email-sent-modal';
-import { usePostSendEmail } from '@/domains/profile/hooks/use-post-send-email';
 
 export default function NotPermissionError() {
   const [open, setOpen] = useState(false);

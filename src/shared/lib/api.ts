@@ -1,4 +1,4 @@
-import { reissue } from '@/services/auth/reissue';
+import { reissue } from '@/domains/auth/apis/reissue';
 import { ApiError } from '@/shared/lib/errors';
 import type { AuthContextProps } from '@/shared/providers/auth-provider';
 

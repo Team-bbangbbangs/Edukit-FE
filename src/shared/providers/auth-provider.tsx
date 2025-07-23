@@ -3,7 +3,7 @@
 import { type ReactNode, createContext, useContext } from 'react';
 import { useState, useEffect } from 'react';
 
-import { reissue } from '@/services/auth/reissue';
+import { reissue } from '@/domains/auth/apis/reissue';
 import { setAmplitudeUserFromAccessToken } from '@/shared/lib/amplitude';
 import { setAuthContext } from '@/shared/lib/api';
 
