@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ProfileDropDown } from '@/domains/profile/components/profile-dropdown';
 import { useAuth } from '@/shared/providers/auth-provider';
 
 import ProfileImage from '../../../../../public/images/profile-image.png';
-import { ProfileDropDown } from '../../../../domains/profile/components/profile-dropdown';
 
 export default function Header() {
   const [open, setOpen] = useState(false);

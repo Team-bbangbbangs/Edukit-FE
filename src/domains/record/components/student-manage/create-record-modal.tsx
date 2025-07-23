@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import { useCreateRecords } from '@/domains/record/hooks/student-manage/use-create-records';
 import type { RecordType } from '@/domains/record/types/record';
 import { Input } from '@/shared/components/ui/input/input';
-
 import {
   Modal,
   ModalContent,
@@ -13,7 +12,7 @@ import {
   ModalTitle,
   ModalOverlay,
   ModalPortal,
-} from '../../../../shared/components/ui/modal/base-modal';
+} from '@/shared/components/ui/modal/base-modal';
 
 interface CreateRecordModalProps {
   open: boolean;

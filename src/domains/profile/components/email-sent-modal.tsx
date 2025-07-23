@@ -9,7 +9,7 @@ import {
   ModalTitle,
   ModalOverlay,
   ModalPortal,
-} from '../../../shared/components/ui/modal/base-modal';
+} from '@/shared/components/ui/modal/base-modal';
 
 interface EmailSentModalProps {
   open: boolean;
