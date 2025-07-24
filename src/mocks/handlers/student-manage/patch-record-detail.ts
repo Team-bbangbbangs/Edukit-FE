@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { StudentRecordRequest } from '@/types/record/record';
+import type { StudentRecordRequest } from '@/domains/record/types/record';
 
 export const patchRecordDetail = [
   http.patch('/api/v1/student-records/:recordId', async ({ request }) => {

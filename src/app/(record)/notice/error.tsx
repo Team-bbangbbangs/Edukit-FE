@@ -1,6 +1,6 @@
 'use client';
 
-import ErrorNotice from '@/components/notice/error-notice';
+import ErrorNotice from '@/domains/notice/components/error-notice';
 
 export default function NoticeError({ error }: { error: Error }) {
   return (

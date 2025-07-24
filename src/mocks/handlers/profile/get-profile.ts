@@ -1,6 +1,9 @@
 import { http, HttpResponse } from 'msw';
 
-import { USER_INFO_DATA, NOT_VERIFUED_USER_INFO_DATA } from '@/constants/user-info-data';
+import {
+  USER_INFO_DATA,
+  NOT_VERIFUED_USER_INFO_DATA,
+} from '@/domains/profile/constants/user-info-data';
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
 
 export const getProfile = [

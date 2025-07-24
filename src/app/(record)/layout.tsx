@@ -1,6 +1,6 @@
-import Header from '@/components/header/header';
-import { SidebarProvider, SidebarTrigger } from '@/components/sidebar/base-sidebar';
-import MainSidebar from '@/components/sidebar/main-sidebar';
+import Header from '@/shared/components/layout/header/header';
+import { SidebarProvider, SidebarTrigger } from '@/shared/components/layout/sidebar/base-sidebar';
+import MainSidebar from '@/shared/components/layout/sidebar/main-sidebar';
 
 export default function RecordLayoutClient({ children }: { children: React.ReactNode }) {
   return (

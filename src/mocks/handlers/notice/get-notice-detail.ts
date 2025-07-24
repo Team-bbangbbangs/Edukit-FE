@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { DetailNoticeResponse } from '@/types/notice/notice';
+import type { DetailNoticeResponse } from '@/domains/notice/types/notice';
 
 const tags = ['공지', '이벤트'] as const;
 

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { SignupBody } from '@/types/auth/auth';
+import type { SignupBody } from '@/domains/auth/types/auth';
 
 export const signup = [
   http.post('/api/v1/auth/signup', async ({ request }) => {

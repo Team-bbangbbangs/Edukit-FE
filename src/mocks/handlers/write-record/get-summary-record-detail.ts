@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import { STUDENT_DATA } from '@/constants/student-data';
+import { STUDENT_DATA } from '@/domains/record/constants/student-data';
 import { checkAccessToken } from '@/mocks/utils/check-access-token';
 
 export const getSummaryRecordDetail = [
