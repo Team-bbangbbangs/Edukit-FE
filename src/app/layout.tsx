@@ -1,4 +1,4 @@
-import AnalyticsProvider from '@/shared/providers/amplitude-provider';
+import AmplitudeProvider from '@/shared/providers/amplitude-provider';
 import { AuthProvider } from '@/shared/providers/auth-provider';
 import { MSWProvider } from '@/shared/providers/msw-provider';
 import QueryProvider from '@/shared/providers/tanstack-query-provider';
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MSWProvider>
           <QueryProvider>
             <AuthProvider>
-              <AnalyticsProvider>{children}</AnalyticsProvider>
+              <AmplitudeProvider>{children}</AmplitudeProvider>
             </AuthProvider>
           </QueryProvider>
         </MSWProvider>
