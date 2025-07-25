@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 
 import { RECORD_DATA } from '@/domains/record/constants/record-data';
 import type { RecordType } from '@/domains/record/types/record';
-import { checkAccessToken } from '@/mocks/utils/check-access-token';
+import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
 export const getRecords = [
   http.get<never, { recordType: RecordType }>(

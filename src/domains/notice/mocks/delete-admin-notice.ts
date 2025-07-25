@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import { checkAccessToken } from '@/mocks/utils/check-access-token';
+import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
 export const deleteAdminNotice = [
   http.delete('/api/v1/admin/notices/:noticeId', ({ request, params }) => {

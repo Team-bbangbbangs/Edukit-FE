@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 import { STUDENT_DATA } from '@/domains/record/constants/student-data';
-import { checkAccessToken } from '@/mocks/utils/check-access-token';
+import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
 export const getSummaryRecordDetail = [
   http.get('/api/v1/student-records/detail/:recordId', async ({ params, request }) => {

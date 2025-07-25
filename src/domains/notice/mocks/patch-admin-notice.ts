@@ -1,11 +1,13 @@
 import { http, HttpResponse } from 'msw';
 
 import type { AdminNoticeBody } from '@/domains/notice/types/notice';
-import { checkAccessToken } from '@/mocks/utils/check-access-token';
+import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
-export const postAdminNotice = [
-  http.post('/api/v1/admin/notices', async ({ request }) => {
+export const patchAdminNotice = [
+  http.patch('/api/v1/admin/notices/:noticeId', async ({ request, params }) => {
     const authHeader = request.headers.get('authorization');
+
+    const { noticeId } = params;
 
     const validation = checkAccessToken(authHeader);
 
@@ -30,6 +32,17 @@ export const postAdminNotice = [
           message: '제목과 내용을 모두 입력해주세요.',
         },
         { status: 400 },
+      );
+    }
+
+    if (noticeId === '999') {
+      return HttpResponse.json(
+        {
+          status: 404,
+          code: 'EDMT-4040301',
+          message: '해당 공지사항이 존재하지 않습니다.',
+        },
+        { status: 404 },
       );
     }
 
