@@ -14,7 +14,7 @@ export const MSWProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const init = async () => {
-      const { initMsw } = await import('@/mocks');
+      const { initMsw } = await import('@/shared/mocks');
       await initMsw();
 
       setIsReady(true);
