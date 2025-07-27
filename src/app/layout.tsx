@@ -1,3 +1,4 @@
+import { suit } from '@/shared/lib/fonts/suit';
 import AmplitudeProvider from '@/shared/providers/amplitude-provider';
 import { AuthProvider } from '@/shared/providers/auth-provider';
 import { MSWProvider } from '@/shared/providers/msw-provider';
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <head />
-      <body className="overflow-hidden">
+      <body className={`overflow-hidden ${suit.variable}`}>
         <MSWProvider>
           <QueryProvider>
             <AuthProvider>
