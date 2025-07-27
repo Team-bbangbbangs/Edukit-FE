@@ -1,7 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { createPageMetadata } from '@/shared/constants/metadata';
+
 import landingPageImage from '../../../public/images/landing-page-image.png';
+
+export const metadata = createPageMetadata('home');
 
 export default function Page() {
   return (

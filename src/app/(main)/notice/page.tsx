@@ -7,6 +7,9 @@ import NoticeList from '@/domains/notice/components/notice-list';
 import WriteNoticeButton from '@/domains/notice/components/write-notice-button';
 import type { NoticeListRequest } from '@/domains/notice/types/notice';
 import Pagination from '@/shared/components/ui/pagination/pagination';
+import { createPageMetadata } from '@/shared/constants/metadata';
+
+export const metadata = createPageMetadata('notice');
 
 interface PageProps {
   searchParams?: NoticeListRequest;
