@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('EduMate 랜딩 페이지', () => {
+test.describe('Edukit 랜딩 페이지', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
   test('페이지 메타데이터가 올바르게 설정되어 있다', async ({ page }) => {
-    await expect(page).toHaveTitle('EduMate');
+    await expect(page).toHaveTitle('Edukit');
 
     const description = page.locator('meta[name="description"]');
     await expect(description).toHaveAttribute(

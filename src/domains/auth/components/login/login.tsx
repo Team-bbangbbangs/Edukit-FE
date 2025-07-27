@@ -39,7 +39,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-slate-700 px-10 py-16">
-      <h2 className="mb-4 text-[40px] font-bold">EduMate</h2>
+      <h2 className="mb-4 text-[40px] font-bold">Edukit</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1">

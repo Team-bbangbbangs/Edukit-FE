@@ -16,7 +16,7 @@ test.describe('인증 기능 E2E 테스트', () => {
     await loginButton.click();
 
     await expect(page).toHaveURL('/login');
-    await expect(page.locator('h2:has-text("EduMate")')).toBeVisible();
+    await expect(page.locator('h2:has-text("Edukit")')).toBeVisible();
   });
 
   test('2. 로그인할 때 이메일 형식이 안맞거나, 교직용 이메일이 아닐때, 비밀번호 형식이 맞지 않을때 로그인 버튼을 누르면 error.message가 빨갛게 나오고 api요청이 안간다', async ({
