@@ -75,12 +75,12 @@ const config: Config = {
         ],
 
         'title-32': ['32px', { lineHeight: '48px', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'title-28': ['40px', { lineHeight: '42px', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'title-24': ['32px', { lineHeight: '36px', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'title-20': ['28px', { lineHeight: '30px', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'title-18': ['24px', { lineHeight: '28px', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'title-16': ['20px', { lineHeight: '24px', letterSpacing: '-0.015em', fontWeight: '600' }],
-        'title-14': ['18px', { lineHeight: '20px', letterSpacing: '-0.015em', fontWeight: '600' }],
+        'title-28': ['28px', { lineHeight: '42px', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'title-24': ['24px', { lineHeight: '36px', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'title-20': ['20px', { lineHeight: '30px', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'title-18': ['18px', { lineHeight: '28px', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'title-16': ['16px', { lineHeight: '24px', letterSpacing: '-0.015em', fontWeight: '600' }],
+        'title-14': ['14px', { lineHeight: '20px', letterSpacing: '-0.015em', fontWeight: '600' }],
 
         'body-18-m': ['18px', { lineHeight: '30px', letterSpacing: '-0.015em', fontWeight: '500' }],
         'body-16-m': ['16px', { lineHeight: '26px', letterSpacing: '-0.015em', fontWeight: '500' }],
