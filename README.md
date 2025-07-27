@@ -1,1 +1,1 @@
-EduMate-FE
+Edukit-FE
