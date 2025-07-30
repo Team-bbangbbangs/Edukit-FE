@@ -10,9 +10,9 @@ import { downloadExcel } from '@/domains/record/utils/download-excel';
 export default function StudentAddButton({ recordType }: { recordType: RecordType }) {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
 
-  const { data, isPending, isError } = useGetRecords(recordType);
+  const { data, isPending, isError, isNotFound } = useGetRecords(recordType);
 
-  if (isPending || isError) {
+  if (isPending || (isError && !isNotFound)) {
     return null;
   }
 
