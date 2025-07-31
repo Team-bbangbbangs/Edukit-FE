@@ -53,6 +53,7 @@ export default function RecordDetailEdit({ record, recordType, onView }: RecordD
   };
 
   const handleDelete = () => {
+    setOpen(false);
     deleteRecordDetail({ recordType, recordId: record.recordDetailId });
   };
 
