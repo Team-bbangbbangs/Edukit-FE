@@ -1,9 +1,8 @@
-import { useState } from 'react';
-
 import { useRouter } from 'next/navigation';
 
 import { usePostPrompt } from '@/domains/record/apis/mutations/use-post-prompt';
 import type { StudentNames, PromptResponse } from '@/domains/record/types/record';
+import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import { Textarea } from '@/shared/components/ui/textarea/textarea';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 
@@ -31,8 +30,6 @@ export default function CharacteristicInput({
     (student) => student.recordId === selectedId,
   )?.studentName;
 
-  const [open, setOpen] = useState(false);
-
   const handleButtonClick = () => {
     const value = characteristicInputTextRef.current?.value;
     if (!value) {
@@ -54,40 +51,39 @@ export default function CharacteristicInput({
     );
   };
 
+  const handleStudentSelect = (recordId: number) => {
+    router.push(`?recordId=${recordId}`);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between">
         <h2 className="text-[24px] font-bold">학생 특성 기입란</h2>
-        <div className="relative">
-          <button
-            onClick={() => setOpen((prev) => !prev)}
-            className="relative z-10 flex gap-1 rounded-md bg-slate-800 px-3 pb-1.5 pt-2 text-white hover:bg-slate-950"
+        <Dropdown>
+          <Dropdown.Trigger
+            iconPosition="right"
+            className="w-full gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <span className="w-14 overflow-hidden text-ellipsis whitespace-nowrap">
-              {selectedStudentName}
-            </span>
-            <span>▼</span>
-          </button>
-          {open ? (
-            <div className="absolute top-8 flex max-h-[168px] w-full flex-col overflow-y-scroll rounded-b-md">
-              {students.map((student, index) => (
-                <button
+            {selectedStudentName}
+          </Dropdown.Trigger>
+
+          <Dropdown.Content>
+            {students.map((student, index) => {
+              const isSelected = selectedId === student.recordId;
+              return (
+                <Dropdown.Item
                   key={student.recordId}
-                  onClick={() => {
-                    router.push(`?recordId=${student.recordId}`);
-                    setOpen(false);
-                  }}
-                  disabled={selectedId === student.recordId}
-                  className={`flex w-full items-center px-2 py-1 text-white ${selectedId === student.recordId ? 'bg-slate-950' : 'bg-slate-600 hover:bg-slate-800'} ${index === 0 ? 'min-h-10 pt-2' : 'min-h-8'} ${index === students.length - 1 ? 'rounded-b-md' : null}`}
+                  index={index}
+                  onClick={() => handleStudentSelect(student.recordId)}
+                  selected={isSelected}
+                  className="flex justify-center"
                 >
-                  <span className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                    {student.studentName}
-                  </span>
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
+                  {student.studentName}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Content>
+        </Dropdown>
       </div>
 
       <Textarea

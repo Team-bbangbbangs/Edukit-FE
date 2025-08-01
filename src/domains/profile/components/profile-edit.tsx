@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
-import { CheckCircle2, ChevronDown } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 import { subjects } from '@/domains/auth/constants/signup-data';
 import { useGetCheckValidNickname } from '@/domains/profile/apis/mutations/use-get-check-valid-nickname';
 import { usePatchProfile } from '@/domains/profile/apis/mutations/use-patch-profile';
 import type { ProfileResponse } from '@/domains/profile/types/profile';
+import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import { Input } from '@/shared/components/ui/input/input';
 
 interface ProfileEditProps {
@@ -17,26 +18,12 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
   const [nickname, setNickname] = useState(profile.nickname);
   const [subject, setSubject] = useState(profile.subject);
   const [school, setSchool] = useState(profile.school);
-  const [isSubjectDropdownOpen, setIsSubjectDropdownOpen] = useState(false);
   const [isNicknameValidated, setIsNicknameValidated] = useState(true);
 
   const { mutate: getCheckValidNickname, isPending: isCheckingValidNickname } =
     useGetCheckValidNickname();
 
   const { mutate: patchProfile, isPending } = usePatchProfile();
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsSubjectDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleSchoolChange = (school: 'middle' | 'high') => {
     setSchool(school);
@@ -86,11 +73,6 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
     );
   };
 
-  const handleSubjectSelect = (selectedSubject: string) => {
-    setSubject(selectedSubject);
-    setIsSubjectDropdownOpen(false);
-  };
-
   return (
     <div className="mb-[30px] mt-5 space-y-3">
       <div className="space-y-2">
@@ -114,33 +96,27 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
 
       <div className="flex items-center gap-4">
         <span className="w-16 text-sm text-slate-600">과목</span>
-        <div className="relative max-w-xs flex-1" ref={dropdownRef}>
-          <button
-            onClick={() => setIsSubjectDropdownOpen(!isSubjectDropdownOpen)}
+        <Dropdown className="w-80">
+          <Dropdown.Trigger
             className="w-full rounded-md border border-gray-300 bg-white p-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            iconPosition="right"
           >
             {subject || '과목을 선택하세요'}
-            <div className="float-right">
-              <ChevronDown />
-            </div>
-          </button>
-
-          {isSubjectDropdownOpen ? (
-            <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg">
-              {subjects.map((subjectOption) => (
-                <button
-                  key={subjectOption.value}
-                  onClick={() => handleSubjectSelect(subjectOption.value)}
-                  className={`w-full px-3 py-2 text-left hover:bg-gray-100 ${
-                    subject === subjectOption.value ? 'bg-blue-50 text-blue-600' : ''
-                  }`}
-                >
-                  {subjectOption.label}
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
+          </Dropdown.Trigger>
+          <Dropdown.Content>
+            {subjects.map((subjectOption, index) => (
+              <Dropdown.Item
+                key={subjectOption.value}
+                index={index}
+                onClick={() => setSubject(subjectOption.value)}
+                selected={subject === subjectOption.value}
+                className="text-left"
+              >
+                {subjectOption.label}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Content>
+        </Dropdown>
       </div>
 
       <div className="flex items-start gap-4">
