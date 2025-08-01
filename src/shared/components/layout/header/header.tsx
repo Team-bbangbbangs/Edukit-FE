@@ -38,7 +38,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="fixed top-0 z-40 flex h-16 w-full justify-between border-b bg-white px-2 py-3 md:px-10">
+    <header className="fixed top-0 z-30 flex h-16 w-full justify-between border-b bg-white px-2 py-3 md:px-10">
       <Link href="/" className="ml-10 pt-1 text-2xl font-bold text-black md:ml-0">
         Edukit
       </Link>
