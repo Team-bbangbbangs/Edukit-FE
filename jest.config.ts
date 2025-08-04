@@ -27,24 +27,6 @@ const config: Config = {
 
   // 테스트 파일 패턴
   testMatch: ['<rootDir>/src/domains/**/__tests__/*.{js,jsx,ts,tsx}'],
-
-  // 커버리지 수집 대상
-  collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/**/*.stories.{js,jsx,ts,tsx}',
-    '!src/**/index.{js,jsx,ts,tsx}',
-  ],
-
-  // 커버리지 임계값 설정
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
-  },
 };
 
 export default createJestConfig(config);

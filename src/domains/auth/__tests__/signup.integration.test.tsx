@@ -193,7 +193,7 @@ describe('회원가입 통합 테스트', () => {
 
   it('이미 가입되어 있는 이메일을 입력하면 이미 등록된 회원입니다. 라는 alert 메세지가 출력된다.', async () => {
     const user = userEvent.setup();
-    window.alert = jest.fn();
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<Signup />);
 
@@ -211,8 +211,9 @@ describe('회원가입 통합 테스트', () => {
     await user.click(screen.getByRole('button', { name: '가입하기' }));
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith('이미 등록된 회원입니다.');
+      expect(alertSpy).toHaveBeenCalledWith('이미 등록된 회원입니다.');
     });
+    alertSpy.mockRestore();
   });
 
   it('유효한 데이터를 입력하고 회원가입을 완료하면 인증 메일 안내 화면이 나타난다', async () => {

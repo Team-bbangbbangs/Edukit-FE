@@ -21,7 +21,6 @@ declare global {
   const mockBack: jest.MockedFunction<any>;
   const mockRefresh: jest.MockedFunction<any>;
   const mockSetAuthData: jest.MockedFunction<any>;
-  const mockSetAmplitudeUserFromAccessToken: jest.MockedFunction<any>;
   const clearAllTestMocks: () => void;
 }
 
