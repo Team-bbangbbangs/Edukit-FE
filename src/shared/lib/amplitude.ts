@@ -11,6 +11,10 @@ interface UserInfo {
   };
 }
 
+const isAmplitudeEnabled = (): boolean => {
+  return process.env.NODE_ENV === 'production';
+};
+
 export const getKoreaFormattedTimeStamp = (): string => {
   const now = new Date();
 
@@ -54,16 +58,25 @@ const amplitudeManager = new AmplitudeManager();
 
 export const initAmplitude = () => {
   const apiKey = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
-  if (!apiKey) return;
+  if (!isAmplitudeEnabled() || !apiKey) {
+    return;
+  }
 
   init(apiKey);
 };
 
 export const setAmplitudeAccessToken = (token: string | null) => {
+  if (!isAmplitudeEnabled()) {
+    return;
+  }
   amplitudeManager.setAccessToken(token);
 };
 
 export const trackEvent = (eventName: string, properties?: object) => {
+  if (!isAmplitudeEnabled()) {
+    return;
+  }
+
   let eventProperties = { ...properties };
 
   const userId = amplitudeManager.getUserIdFromToken();
@@ -78,6 +91,9 @@ export const trackEvent = (eventName: string, properties?: object) => {
 };
 
 export const setAmplitudeUserFromAccessToken = (user: UserInfo) => {
+  if (!isAmplitudeEnabled()) {
+    return;
+  }
   try {
     amplitudeManager.setAccessToken(user.accessToken);
 
@@ -110,6 +126,9 @@ export const increaseTotalStudent = (
   incrementBy: number,
   eventName: string,
 ) => {
+  if (!isAmplitudeEnabled()) {
+    return;
+  }
   try {
     if (!recordType) return;
 

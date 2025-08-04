@@ -12,30 +12,6 @@ export default [
   pluginReact.configs.flat.recommended,
   pluginReact.configs.flat['jsx-runtime'],
 
-  // Jest 테스트 파일 설정
-  {
-    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'src/__tests__/**/*.{ts,tsx}'],
-    languageOptions: {
-      globals: {
-        describe: 'readonly',
-        it: 'readonly',
-        test: 'readonly',
-        expect: 'readonly',
-        beforeAll: 'readonly',
-        afterAll: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly',
-        jest: 'readonly',
-      },
-    },
-    rules: {
-      // 테스트 파일에서는 any 타입 허용 (목킹 등에 필요)
-      '@typescript-eslint/no-explicit-any': 'off',
-      // 테스트에서는 빈 함수 허용
-      '@typescript-eslint/no-empty-function': 'off',
-    },
-  },
-
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -120,6 +96,34 @@ export default [
       ],
       'import/no-unresolved': 'error', // 잘못된 import 경로 방지
       'import/no-duplicates': 'error', // 같은 파일 중복 import 방지
+    },
+  },
+  // Jest 테스트 파일 설정
+  {
+    files: [
+      'src/__tests__/**/*.{test,spec}.{js,jsx,ts,tsx}',
+      'src/domains/**/__tests__/*.{test,spec}.{js,jsx,ts,tsx}',
+      'jest.setup.ts',
+      'src/__tests__/jest-global.d.ts',
+    ],
+    languageOptions: {
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        jest: 'readonly',
+      },
+    },
+    rules: {
+      // 테스트 파일에서는 any 타입 허용 (목킹 등에 필요)
+      '@typescript-eslint/no-explicit-any': 'off',
+      // 테스트에서는 빈 함수 허용
+      '@typescript-eslint/no-empty-function': 'off',
     },
   },
 ];

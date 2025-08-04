@@ -1,4 +1,8 @@
-import { server } from '@/shared/mocks/server';
+import { setupServer } from 'msw/node';
+
+import { handlers } from '@/shared/mocks/handlers';
+
+const server = setupServer(...handlers);
 
 export const setupMSW = () => {
   beforeAll(() => {
@@ -19,3 +23,5 @@ export const setupMSW = () => {
 export const resetMSWHandlers = () => {
   server.resetHandlers();
 };
+
+export { server };

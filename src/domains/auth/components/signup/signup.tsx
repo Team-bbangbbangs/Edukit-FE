@@ -197,6 +197,7 @@ export default function Signup() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 onBlur={() => setOpen(false)}
+                placeholder="과목을 입력하세요"
                 className="h-12 w-full rounded-t-lg pl-2"
               />
               <div className="max-h-52 overflow-y-scroll border-t px-1 py-2">

@@ -14,6 +14,14 @@ declare global {
       toHaveFocus(): R;
     }
   }
+
+  // 전역 Mock 함수들 타입 정의
+  const mockPush: jest.MockedFunction<any>;
+  const mockReplace: jest.MockedFunction<any>;
+  const mockBack: jest.MockedFunction<any>;
+  const mockRefresh: jest.MockedFunction<any>;
+  const mockSetAuthData: jest.MockedFunction<any>;
+  const clearAllTestMocks: () => void;
 }
 
 export {};
