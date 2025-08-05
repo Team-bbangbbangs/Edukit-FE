@@ -5,7 +5,7 @@ import { render } from '@/__tests__/utils/test-utils';
 
 import Login from '../components/login/login';
 
-describe('로그인 통합 테스트', () => {
+describe('login 컴포넌트 단위 테스트', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
