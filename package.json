@@ -13,6 +13,7 @@
     "generate:msw": "tsx scripts/generate-msw.ts",
     "mock-server": "tsx src/shared/mocks/server.ts",
     "test": "jest",
+    "test:ci": "jest --config jest.config.ts --coverage --watchAll=false --passWithNoTests --verbose --ci",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
