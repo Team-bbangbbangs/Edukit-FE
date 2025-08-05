@@ -11,5 +11,6 @@ export const useGetProfile = () => {
   return useQuery<ProfileResponse>({
     queryKey: ['profile'],
     queryFn: () => getProfile(),
+    retry: 1,
   });
 };
