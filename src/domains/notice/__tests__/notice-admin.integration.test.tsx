@@ -134,21 +134,24 @@ describe('공지사항 어드민 기능 통합 테스트', () => {
       '"%s" 상태에서 작성하기 클릭 시 제목과 내용을 모두 입력해달라는 alert 메세지가 표시된다',
       async (_, title, content) => {
         const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
-        render(<WriteNotice />);
+        try {
+          render(<WriteNotice />);
 
-        if (title) {
-          const titleInput = screen.getByPlaceholderText('제목');
-          await user.type(titleInput, title);
+          if (title) {
+            const titleInput = screen.getByPlaceholderText('제목');
+            await user.type(titleInput, title);
+          }
+          if (content) {
+            mockGetHTML.mockReturnValue(content);
+          }
+
+          const submitButton = screen.getByRole('button', { name: '작성하기' });
+          await user.click(submitButton);
+
+          expect(alertSpy).toHaveBeenCalledWith('제목과 내용을 모두 입력해주세요.');
+        } finally {
+          alertSpy.mockRestore();
         }
-        if (content) {
-          mockGetHTML.mockReturnValue(content);
-        }
-
-        const submitButton = screen.getByRole('button', { name: '작성하기' });
-        await user.click(submitButton);
-
-        expect(alertSpy).toHaveBeenCalledWith('제목과 내용을 모두 입력해주세요.');
-        alertSpy.mockRestore();
       },
     );
 
