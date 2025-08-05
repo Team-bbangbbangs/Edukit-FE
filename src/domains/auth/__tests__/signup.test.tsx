@@ -1,14 +1,11 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { setupMSW } from '@/__tests__/utils/msw-setup';
 import { render } from '@/__tests__/utils/test-utils';
 
 import Signup from '../components/signup/signup';
 
-setupMSW();
-
-describe('회원가입 통합 테스트', () => {
+describe('signup 컴포넌트 단위 테스트', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
