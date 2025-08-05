@@ -1,17 +1,17 @@
 import { type ReactElement } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, type RenderOptions, screen, waitFor, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, type RenderOptions } from '@testing-library/react';
 
-import Login from '@/domains/auth/components/login/login';
+import { setAuthContext } from '@/shared/lib/api';
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
-        staleTime: Infinity,
+        staleTime: 0,
+        gcTime: 0,
       },
       mutations: {
         retry: false,
@@ -32,32 +32,35 @@ const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>
  * - DOM을 정리하여 다른 컴포넌트 렌더링에 영향을 주지 않음
  */
 export const loginAsAdmin = async () => {
-  const user = userEvent.setup();
-  customRender(<Login />);
-
-  const emailInput = screen.getByPlaceholderText('이메일');
-  const passwordInput = screen.getByPlaceholderText('비밀번호');
-  const submitButton = screen.getByRole('button', { name: '로그인' });
-
-  await user.type(emailInput, 'admin@edukit.co.kr');
-  await user.type(passwordInput, 'password1234');
-  await user.click(submitButton);
-
-  await waitFor(() => {
-    expect(mockSetAuthData).toHaveBeenCalledWith(
-      expect.stringContaining('admin-access-token'),
-      true,
-    );
-    expect(mockPush).toHaveBeenCalledWith('/');
+  const response = await fetch('/api/v1/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: 'admin@edukit.co.kr',
+      password: 'password1234',
+    }),
   });
 
+  if (!response.ok) {
+    throw new Error(`어드민 로그인 실패: ${response.status}`);
+  }
+
+  const { data } = await response.json();
+  const { accessToken, isAdmin } = data;
+
   mockUseAuth.mockReturnValue({
-    accessToken: expect.stringContaining('admin-access-token'),
-    isAdmin: true,
+    accessToken,
+    isAdmin,
     setAuthData: mockSetAuthData,
   });
 
-  cleanup();
+  setAuthContext({
+    accessToken,
+    isAdmin,
+    setAuthData: mockSetAuthData,
+  });
 };
 
 /**
@@ -67,32 +70,67 @@ export const loginAsAdmin = async () => {
  * - DOM을 정리하여 다른 컴포넌트 렌더링에 영향을 주지 않음
  */
 export const loginAsUser = async () => {
-  const user = userEvent.setup();
-  customRender(<Login />);
-
-  const emailInput = screen.getByPlaceholderText('이메일');
-  const passwordInput = screen.getByPlaceholderText('비밀번호');
-  const submitButton = screen.getByRole('button', { name: '로그인' });
-
-  await user.type(emailInput, 'test@edukit.co.kr');
-  await user.type(passwordInput, 'password1234!');
-  await user.click(submitButton);
-
-  await waitFor(() => {
-    expect(mockSetAuthData).toHaveBeenCalledWith(
-      expect.stringContaining('user-access-token'),
-      false,
-    );
-    expect(mockPush).toHaveBeenCalledWith('/');
+  const response = await fetch('/api/v1/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: 'test@edukit.co.kr',
+      password: 'password1234!',
+    }),
   });
 
+  if (!response.ok) {
+    throw new Error(`사용자 로그인 실패: ${response.status}`);
+  }
+
+  const { data } = await response.json();
+  const { accessToken, isAdmin } = data;
+
   mockUseAuth.mockReturnValue({
-    accessToken: expect.stringContaining('user-access-token'),
-    isAdmin: false,
+    accessToken,
+    isAdmin,
     setAuthData: mockSetAuthData,
   });
 
-  cleanup();
+  setAuthContext({
+    accessToken,
+    isAdmin,
+    setAuthData: mockSetAuthData,
+  });
+};
+
+export const loginAsUnverifiedUser = async () => {
+  const response = await fetch('/api/v1/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: 'test@edukit.co.kr',
+      password: 'ab12345678',
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`미인증 사용자 로그인 실패: ${response.status}`);
+  }
+
+  const { data } = await response.json();
+  const { accessToken, isAdmin } = data;
+
+  mockUseAuth.mockReturnValue({
+    accessToken,
+    isAdmin,
+    setAuthData: mockSetAuthData,
+  });
+
+  setAuthContext({
+    accessToken,
+    isAdmin,
+    setAuthData: mockSetAuthData,
+  });
 };
 
 export { customRender as render };
