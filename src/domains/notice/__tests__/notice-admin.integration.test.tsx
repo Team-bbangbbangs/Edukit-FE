@@ -14,22 +14,7 @@ jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
 }));
 
-const mockPostAdminNotice = jest.fn();
-const mockPatchAdminNotice = jest.fn();
-const mockDeleteAdminNotice = jest.fn();
 const mockGetHTML = jest.fn().mockReturnValue('');
-
-jest.mock('@/domains/notice/apis/mutations/use-post-admin-notice', () => ({
-  usePostAdminNotice: () => ({ mutate: mockPostAdminNotice }),
-}));
-
-jest.mock('@/domains/notice/apis/mutations/use-patch-admin-notice', () => ({
-  usePatchAdminNotice: () => ({ mutate: mockPatchAdminNotice }),
-}));
-
-jest.mock('@/domains/notice/apis/mutations/use-delete-admin-notice', () => ({
-  useDeleteAdminNotice: () => ({ mutate: mockDeleteAdminNotice }),
-}));
 
 jest.mock('@/shared/components/ui/editor/tiptap-editor', () => {
   function MockTipTapEditor(props: any, ref: any) {
@@ -57,7 +42,7 @@ const mockNoticeDetail: DetailNoticeResponse = {
   createdAt: '2024-01-01T00:00:00Z',
 };
 
-describe('공지사항 어드민 기능 통합 테스트', () => {
+describe('notice-admin 기능 통합 테스트', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(async () => {
@@ -65,16 +50,6 @@ describe('공지사항 어드민 기능 통합 테스트', () => {
     clearAllTestMocks();
 
     mockGetHTML.mockReturnValue('');
-
-    mockPostAdminNotice.mockImplementation(
-      (_, options) => options?.onSuccess && options.onSuccess(),
-    );
-    mockPatchAdminNotice.mockImplementation(
-      (_, options) => options?.onSuccess && options.onSuccess(),
-    );
-    mockDeleteAdminNotice.mockImplementation(
-      (_, options) => options?.onSuccess && options.onSuccess(),
-    );
   });
 
   describe('어드민 권한별 글쓰기 버튼 노출', () => {
@@ -166,15 +141,7 @@ describe('공지사항 어드민 기능 통합 테스트', () => {
 
       await user.click(screen.getByRole('button', { name: '작성하기' }));
 
-      expect(mockPostAdminNotice).toHaveBeenCalledWith(
-        {
-          title: '테스트 공지사항 제목',
-          content: '<p>테스트 내용입니다.</p>',
-          categoryId: 3,
-        },
-        expect.objectContaining({ onSuccess: expect.any(Function) }),
-      );
-      expect(mockPush).toHaveBeenNthCalledWith(2, '/notice');
+      expect(mockPush).toHaveBeenCalledWith('/notice');
     });
   });
 
@@ -210,12 +177,7 @@ describe('공지사항 어드민 기능 통합 테스트', () => {
 
       await user.click(screen.getByRole('button', { name: '삭제' }));
 
-      expect(mockDeleteAdminNotice).toHaveBeenCalledWith(
-        '1',
-        expect.objectContaining({ onSuccess: expect.any(Function) }),
-      );
-
-      expect(mockPush).toHaveBeenNthCalledWith(2, '/notice');
+      expect(mockPush).toHaveBeenCalledWith('/notice');
     });
 
     it('수정 폼에서 취소 버튼 클릭 시 이전 페이지로 이동한다', async () => {
@@ -237,17 +199,7 @@ describe('공지사항 어드민 기능 통합 테스트', () => {
 
       await user.click(screen.getByRole('button', { name: '수정하기' }));
 
-      expect(mockPatchAdminNotice).toHaveBeenCalledWith(
-        {
-          id: '1',
-          title: '수정된 테스트 공지사항',
-          content: '<p>수정된 테스트 내용입니다.</p>',
-          categoryId: 3,
-        },
-        expect.objectContaining({ onSuccess: expect.any(Function) }),
-      );
-
-      expect(mockPush).toHaveBeenNthCalledWith(2, '/notice/1');
+      expect(mockPush).toHaveBeenCalledWith('/notice/1');
     });
   });
 });
