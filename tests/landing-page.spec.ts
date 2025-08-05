@@ -6,7 +6,7 @@ test.describe('Edukit 랜딩 페이지', () => {
   });
 
   test('페이지 메타데이터가 올바르게 설정되어 있다', async ({ page }) => {
-    await expect(page).toHaveTitle('Edukit');
+    await expect(page).toHaveTitle('EduMate');
 
     const description = page.locator('meta[name="description"]');
     await expect(description).toHaveAttribute(
