@@ -16,7 +16,8 @@
     "test:ci": "jest --config jest.config.ts --coverage --watchAll=false --passWithNoTests --verbose --ci",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:ci": "playwright test --config=playwright.config.ci.ts"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [
