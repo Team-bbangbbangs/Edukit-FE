@@ -1,10 +1,4 @@
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
-
 import { defineConfig, devices } from '@playwright/test';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export default defineConfig({
   testDir: './tests',
@@ -49,6 +43,4 @@ export default defineConfig({
   expect: {
     timeout: 30000,
   },
-
-  globalSetup: resolve(__dirname, './tests/global-setup.ts'),
 });
