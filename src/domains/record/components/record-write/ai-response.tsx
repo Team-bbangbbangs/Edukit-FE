@@ -54,6 +54,7 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
           className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
             isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
           } ${getTextColor()}`}
+          data-testid="ai-response-version-1"
         >
           {getContentForVersion(1)}
         </div>
@@ -71,6 +72,7 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
           className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
             isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
           } ${getTextColor()}`}
+          data-testid="ai-response-version-2"
         >
           {getContentForVersion(2)}
         </div>
@@ -88,6 +90,7 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
           className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
             isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
           } ${getTextColor()}`}
+          data-testid="ai-response-version-3"
         >
           {getContentForVersion(3)}
         </div>

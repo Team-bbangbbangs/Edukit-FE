@@ -16,7 +16,8 @@
     "test:ci": "jest --config jest.config.ts --coverage --watchAll=false --passWithNoTests --verbose --ci",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:ci": "playwright test --config=playwright.config.ci.ts"
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [
@@ -78,6 +79,7 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/parser": "^8.32.0",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^17.2.1",
     "eslint": "^9.26.0",
     "eslint-config-next": "15.3.1",
     "eslint-import-resolver-typescript": "^4.3.4",
