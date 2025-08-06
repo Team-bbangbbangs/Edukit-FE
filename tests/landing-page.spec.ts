@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('EduMate 랜딩 페이지', () => {
+test.describe('Edukit 랜딩 페이지', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });

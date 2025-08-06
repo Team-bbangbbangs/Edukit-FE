@@ -1,18 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
+import { config } from 'dotenv';
+
+config({ path: '.env.test' });
 
 export default defineConfig({
   testDir: './tests',
-
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-
   reporter: 'html',
 
   use: {
-    baseURL: 'http://localhost:3000',
-    headless: true,
+    baseURL: 'https://edukit.co.kr',
+    headless: false,
     trace: 'on-first-retry',
   },
 
@@ -22,17 +23,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
-  webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    env: {
-      NEXT_PUBLIC_API_URL: 'https://dev-api.edukit.co.kr',
-      API_URL: 'https://dev-api.edukit.co.kr',
-      NEXT_PUBLIC_API_MOCKING: 'enabled',
-      NODE_ENV: 'development',
-      NEXT_PUBLIC_APP_ENV: 'development',
-    },
-  },
 });

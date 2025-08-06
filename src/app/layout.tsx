@@ -1,23 +1,29 @@
-import AnalyticsProvider from '@/components/analytics/analytics-provider';
-import { AuthProvider } from '@/contexts/auth/auth-provider';
-import { MSWProvider } from '@/lib/msw-provider';
-import QueryProvider from '@/lib/tanstack-query-provider';
-
-import { metadata } from './metadata';
+import { suit } from '@/shared/lib/fonts/suit';
+import AmplitudeProvider from '@/shared/providers/amplitude-provider';
+import { AuthProvider } from '@/shared/providers/auth-provider';
+import { MSWProvider } from '@/shared/providers/msw-provider';
+import QueryProvider from '@/shared/providers/tanstack-query-provider';
 
 import './globals.css';
 
-export { metadata };
+export const metadata = {
+  metadataBase: new URL('https://edukit.co.kr'),
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <head />
-      <body className="overflow-hidden">
+      <body className={`overflow-hidden ${suit.variable}`}>
         <MSWProvider>
           <QueryProvider>
             <AuthProvider>
-              <AnalyticsProvider>{children}</AnalyticsProvider>
+              <AmplitudeProvider>{children}</AmplitudeProvider>
             </AuthProvider>
           </QueryProvider>
         </MSWProvider>
