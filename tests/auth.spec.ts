@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-import { isLoggedIn, expectAlertMessage, performLogin, performLogout } from './utils/test-helpers';
+import {
+  isLoggedIn,
+  expectAlertMessage,
+  performLogout,
+  loginAsUser,
+  getUserEmail,
+} from './utils/test-helpers';
 
 test.describe('인증 기능 E2E 테스트', () => {
   test('1. 로그인 안되어있는 상태에는 헤더에 로그인 버튼이 떠있고, 로그인 버튼을 누르면 로그인 페이지로 이동한다', async ({
@@ -55,7 +61,9 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await page.reload();
 
-    await page.fill('input[placeholder="이메일"]', 'test@edukit.co.kr');
+    const email = getUserEmail();
+
+    await page.fill('input[placeholder="이메일"]', email);
     await page.fill('input[placeholder="비밀번호"]', '123');
     await page.click('button[type="submit"]:has-text("로그인")');
 
@@ -67,7 +75,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await page.reload();
 
-    await page.fill('input[placeholder="이메일"]', 'test@edukit.co.kr');
+    await page.fill('input[placeholder="이메일"]', email);
     await page.fill('input[placeholder="비밀번호"]', 'aaaaaaaa');
     await page.click('button[type="submit"]:has-text("로그인")');
 
@@ -79,7 +87,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await page.reload();
 
-    await page.fill('input[placeholder="이메일"]', 'test@edukit.co.kr');
+    await page.fill('input[placeholder="이메일"]', email);
     await page.fill('input[placeholder="비밀번호"]', 'ab12312312333');
     await page.click('button[type="submit"]:has-text("로그인")');
 
@@ -95,7 +103,9 @@ test.describe('인증 기능 E2E 테스트', () => {
   }) => {
     await page.goto('/login');
 
-    await page.fill('input[placeholder="이메일"]', 'test@edukit.co.kr');
+    const email = getUserEmail();
+
+    await page.fill('input[placeholder="이메일"]', email);
     await page.fill('input[placeholder="비밀번호"]', 'abcd1234');
     await page.click('button[type="submit"]:has-text("로그인")');
 
@@ -119,7 +129,7 @@ test.describe('인증 기능 E2E 테스트', () => {
   test('4. 로그인 성공하면 랜딩페이지로 이동하고, 헤더에 프로필 이미지가 나온다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
 
     await expect(page).toHaveURL('/');
 
@@ -167,7 +177,9 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await page.reload();
 
-    await page.fill('input#email', 'test@edukit.co.kr');
+    const email = getUserEmail();
+
+    await page.fill('input#email', email);
     await page.fill('input#password', '123');
     await page.fill('input#confirmPassword', '123');
     await page.click('button[type="submit"]:has-text("가입하기")');
@@ -180,7 +192,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await page.reload();
 
-    await page.fill('input#email', 'test@edukit.co.kr');
+    await page.fill('input#email', email);
     await page.fill('input#password', 'ab12341234');
     await page.fill('input#confirmPassword', 'ab12341234!');
     await page.click('button[type="submit"]:has-text("가입하기")');
@@ -193,7 +205,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await page.reload();
 
-    await page.fill('input#email', 'test@edukit.co.kr');
+    await page.fill('input#email', email);
     await page.fill('input#password', 'ab12341234!');
     await page.fill('input#confirmPassword', 'ab12341234!');
     await page.click('button[type="submit"]:has-text("가입하기")');
@@ -220,7 +232,9 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     await expectAlertMessage(page, '이미 등록된 회원입니다.');
 
-    await page.fill('input#email', 'test@edukit.co.kr');
+    const email = getUserEmail();
+
+    await page.fill('input#email', email);
     await page.fill('input#password', 'ab12341234!');
     await page.fill('input#confirmPassword', 'ab12341234!');
     await page.click('button:has-text("담당 교과목 선택")');
@@ -248,8 +262,7 @@ test.describe('인증 기능 E2E 테스트', () => {
   test('8. 로그인상태에서 로그아웃 버튼을 누르면 헤더의 프로필 이미지에서 로그인 버튼으로 바뀐다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
-
+    await loginAsUser(page);
     await expect(page.locator('header img[alt="profile image"]')).toBeVisible();
     expect(await isLoggedIn(page)).toBe(true);
 

@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-import { performLogin, performLogout, expectAlertMessage } from './utils/test-helpers';
+import {
+  performLogout,
+  expectAlertMessage,
+  loginAsUser,
+  loginAsUnverified,
+} from './utils/test-helpers';
 
 test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('1. 로그인이 안되어 있는 상태에서 사이드바의 나의 학생 관리 하위 항목인 세부능력 및 특기사항을 클릭해서 들어가면 로그인이 필요합니다 라는 텍스트가 나오고, 학생 추가/엑셀로 내보내기 버튼이 보이지 않고, 로그인 버튼을 누르면 로그인 페이지로 이동한다.', async ({
@@ -24,7 +29,7 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('2. 이메일 인증하지 않은 유저가 로그인 하고 사이드바의 나의 학생 관리 하위 항목인 행동 특성 및 종합의견을 클릭해서 들어가면 이메일을 인증해주세요 라는 텍스트가 나오고, 학생 추가/엑셀로 내보내기 버튼이 보이지 않고, 로그아웃을 하고 다시 들어가면 로그인이 필요합니다 라는 텍스트가 나온다.', async ({
     page,
   }) => {
-    await performLogin(page, 'test123@edukit.co.kr', 'ab12345678');
+    await loginAsUnverified(page);
     await page.click('a[href="/manage-behavior"]');
 
     await page.waitForTimeout(3000);
@@ -46,7 +51,7 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('3. 로그인 하고 사이드바의 나의 학생 관리 하위 항목인 창체 - 자율을 클릭해서 들어가면 엑셀로 내보내기 버튼이 disabled 상태이고, 학생 데이터가 0개이며 추가하기 버튼만 나온다.', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
     await page.click('a[href="/manage-free"]');
 
     await page.waitForTimeout(3000);
@@ -59,7 +64,8 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('4. 로그인하고 manage-free 링크로 들어와서 학생 등록하고 생활기록부 관리하기 버튼을 클릭해서 템플릿을 다운로드 하고, 파일 업로드를 클릭해서 해당 템플릿 excel 파일을 올리면 이름 목록이 잘 나오고, 생성하기 버튼을 누르면 추가된 데이터가 잘 보인다.', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
+
     await page.click('a[href="/manage-free"]');
 
     await page.waitForTimeout(3000);
@@ -107,7 +113,7 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('5. 엑셀 업로드 시 잘못된 파일 형식을 업로드하면, 엑셀 파일을 처리하는 중 오류가 발생했습니다. 라는 alert 창이 나온다.', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
 
     await page.click('a[href="/manage-free"]');
 
@@ -128,7 +134,7 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('6. 추가하기 버튼을 눌러서 학번, 이름, 내용을 채워넣고 추가하고, 수정하고, 삭제하는 로직이 정상적으로 수행되고 UI가 상황에 맞게 바뀐다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
 
     await page.click('a[href="/manage-career"]');
 
@@ -174,7 +180,8 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('7. 로그인하고, 세부 능력 및 특기사항에서 table 맨 위의 row를 클릭해서 취소하기 버튼을 누르면 아무 일도 일어나지 않는다.', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
+
     await page.click('a[href="/manage-subject"]');
 
     await page.waitForTimeout(3000);
@@ -192,7 +199,8 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
   test('8. 엑셀로 내보내기 버튼을 누르면 현재 있는 data가 엑셀로 추출되어서 다운로드 받아진다.', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
+
     await page.click('a[href="/manage-subject"]');
 
     await page.waitForTimeout(3000);

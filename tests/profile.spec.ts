@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-import { performLogin, expectAlertMessage } from './utils/test-helpers';
+import {
+  expectAlertMessage,
+  loginAsUser,
+  getUserEmail,
+  getUserPassword,
+  loginAsUnverified,
+} from './utils/test-helpers';
 
 test.describe('프로필 관리 E2E 테스트', () => {
   test('1. 로그인 안한 상태에서 /mypage로 접근하면 로그인 후 접근 가능합니다 라는 글씨가 뜨고, 로그인을 하면 profile이 정상적으로 나온다', async ({
@@ -15,8 +21,11 @@ test.describe('프로필 관리 E2E 테스트', () => {
     await page.click('a[href="/login"]:has-text("로그인하기")');
     await expect(page).toHaveURL('/login');
 
-    await page.fill('input[placeholder="이메일"]', 'test@edukit.co.kr');
-    await page.fill('input[placeholder="비밀번호"]', 'bbangs$00');
+    const email = getUserEmail();
+    const password = getUserPassword();
+
+    await page.fill('input[placeholder="이메일"]', email);
+    await page.fill('input[placeholder="비밀번호"]', password);
 
     await page.click('button[type="submit"]:has-text("로그인")');
 
@@ -31,7 +40,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
   test('2. 교사 인증 필요가 마이페이지에 나와있을 때 클릭하면 이메일이 발송되었다는 모달창이 정상적으로 나온다', async ({
     page,
   }) => {
-    await performLogin(page, 'test123@edukit.co.kr', 'ab12345678');
+    await loginAsUnverified(page);
 
     await page.click('header img[alt="profile image"]');
     await page.click('a[href="/mypage"]');
@@ -48,7 +57,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
   test('3. 프로필 수정 - 닉네임 유효성 검사 및 금칙어, 중복 확인 검사를 통해 각 상황에 맞는 UI가 나오고, 정상적인 닉네임을 입력하고 저장하기 버튼을 누르면 해당 기능이 UI로 잘 반영된다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
 
     await page.click('header img[alt="profile image"]');
     await page.click('a[href="/mypage"]');
@@ -67,7 +76,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
     // 금칙어 닉네임 입력
     await nicknameInput.fill('ㅇㅇ');
     await expect(page.locator('button:has-text("중복 확인")')).toBeEnabled();
-    expectAlertMessage(page, '금칙어가 들어갔습니다. 다른 닉네임을 사용해주세요.');
+    await expectAlertMessage(page, '금칙어가 들어갔습니다. 다른 닉네임을 사용해주세요.');
     await page.click('button:has-text("중복 확인")');
 
     await page.waitForTimeout(3000);
@@ -75,7 +84,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
     // 중복된 닉네임 입력
     await nicknameInput.clear();
     await nicknameInput.fill('선생님1');
-    expectAlertMessage(page, '현재 사용 중인 닉네임입니다.');
+    await expectAlertMessage(page, '현재 사용 중인 닉네임입니다.');
     await page.click('button:has-text("중복 확인")');
 
     await page.waitForTimeout(3000);
@@ -86,7 +95,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
 
     await nicknameInput.clear();
     await nicknameInput.fill(testNickname);
-    expectAlertMessage(page, '사용 가능한 닉네임입니다!');
+    await expectAlertMessage(page, '사용 가능한 닉네임입니다!');
     await page.click('button:has-text("중복 확인")');
     await expect(page.locator('button:has-text("저장")')).toBeEnabled();
 
@@ -109,7 +118,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
   test('4. 프로필 수정 - 과목과 학교를 변경하고 저장하기 버튼을 누르면 API 응답이 200으로 정상적으로 내려온다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
 
     await page.click('header img[alt="profile image"]');
     await page.click('a[href="/mypage"]');
@@ -197,7 +206,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
   test('5. 비밀번호 수정 - 비밀번호 유효성 검사 및 다양한 에러 케이스에 맞는 UI가 나오고, 정상적으로 현재 비밀번호, 새 비밀번호, 새 비밀번호 확인을 입력하고 저장하기 버튼을 누르면 성공적으로 변경되었다는 alert 창이 나온다', async ({
     page,
   }) => {
-    await performLogin(page, 'test@edukit.co.kr', 'bbangs$00');
+    await loginAsUser(page);
 
     await page.click('header img[alt="profile image"]');
     await page.click('a[href="/mypage"]');
@@ -208,6 +217,8 @@ test.describe('프로필 관리 E2E 테스트', () => {
     await expect(page.locator('input[placeholder="새 비밀번호"]')).toBeVisible();
     await expect(page.locator('input[placeholder="새 비밀번호 확인"]')).toBeVisible();
 
+    const currentPassword = getUserPassword();
+
     // 3개의 빈칸 상태일떄 저장 버튼 누르기
     await page.click('button:has-text("저장")');
     await expect(page.locator('[data-testid="current-password-error"]')).toBeVisible();
@@ -215,7 +226,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
     await expect(page.locator('[data-testid="confirm-password-error"]')).toBeVisible();
 
     // 새 비밀번호에 유효하지 않은 값 입력
-    await page.fill('input[placeholder="현재 비밀번호"]', 'bbangs$00');
+    await page.fill('input[placeholder="현재 비밀번호"]', currentPassword);
     await page.fill('input[placeholder="새 비밀번호"]', '123');
     await page.click('button:has-text("저장")');
     await expect(page.locator('text=비밀번호는 최소 8자 이상이어야 합니다.')).toBeVisible();
@@ -227,9 +238,9 @@ test.describe('프로필 관리 E2E 테스트', () => {
     await expect(page.locator('text=새 비밀번호가 일치하지 않습니다.')).toBeVisible();
 
     // 기존 비밀번호와 같은 값 입력
-    await page.fill('input[placeholder="새 비밀번호"]', 'bbangs$00');
-    await page.fill('input[placeholder="새 비밀번호 확인"]', 'bbangs$00');
-    expectAlertMessage(page, '새로운 비밀번호는 기존 비밀번호와 같을 수 없습니다.');
+    await page.fill('input[placeholder="새 비밀번호"]', currentPassword);
+    await page.fill('input[placeholder="새 비밀번호 확인"]', currentPassword);
+    await expectAlertMessage(page, '새로운 비밀번호는 기존 비밀번호와 같을 수 없습니다.');
     await page.click('button:has-text("저장")');
 
     await page.waitForTimeout(1000);
@@ -238,17 +249,17 @@ test.describe('프로필 관리 E2E 테스트', () => {
     await page.fill('input[placeholder="현재 비밀번호"]', 'password1234');
     await page.fill('input[placeholder="새 비밀번호"]', 'password1234!');
     await page.fill('input[placeholder="새 비밀번호 확인"]', 'password1234!');
-    expectAlertMessage(page, '현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
+    await expectAlertMessage(page, '현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
     await page.click('button:has-text("저장")');
 
     await page.waitForTimeout(1000);
 
     // 정상적인 비밀번호 변경
-    await page.fill('input[placeholder="현재 비밀번호"]', 'bbangs$00');
+    await page.fill('input[placeholder="현재 비밀번호"]', currentPassword);
     await page.fill('input[placeholder="새 비밀번호"]', 'password1234');
     await page.fill('input[placeholder="새 비밀번호 확인"]', 'password1234');
 
-    expectAlertMessage(page, '비밀번호가 성공적으로 변경되었습니다.');
+    await expectAlertMessage(page, '비밀번호가 성공적으로 변경되었습니다.');
     await page.click('button:has-text("저장")');
 
     await page.waitForTimeout(1000);
@@ -256,9 +267,9 @@ test.describe('프로필 관리 E2E 테스트', () => {
     // 변경된 비밀번호 원상복구 시키는 로직
     await page.locator('[data-testid="password-edit-button"]').click();
     await page.fill('input[placeholder="현재 비밀번호"]', 'password1234');
-    await page.fill('input[placeholder="새 비밀번호"]', 'bbangs$00');
-    await page.fill('input[placeholder="새 비밀번호 확인"]', 'bbangs$00');
-    expectAlertMessage(page, '비밀번호가 성공적으로 변경되었습니다.');
+    await page.fill('input[placeholder="새 비밀번호"]', currentPassword);
+    await page.fill('input[placeholder="새 비밀번호 확인"]', currentPassword);
+    await expectAlertMessage(page, '비밀번호가 성공적으로 변경되었습니다.');
     await page.click('button:has-text("저장")');
   });
 });
