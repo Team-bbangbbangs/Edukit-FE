@@ -1,11 +1,10 @@
 'use client';
 
-import { type ReactNode, createContext, useContext } from 'react';
-import { useState, useEffect } from 'react';
+import { type ReactNode, createContext, useContext, useState, useEffect } from 'react';
 
 import { reissue } from '@/domains/auth/apis/reissue';
 import { setAmplitudeUserFromAccessToken } from '@/shared/lib/amplitude';
-import { setAuthContext } from '@/shared/lib/api';
+import { tokenStore } from '@/shared/lib/token-store';
 
 export interface AuthContextProps {
   accessToken: string | null;
@@ -17,11 +16,9 @@ export const AuthContext = createContext<AuthContextProps | null>(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-
   if (context === null) {
     throw new Error('useAuth는 AuthProvider내부에 선언되어야 합니다.');
   }
-
   return context;
 };
 
@@ -31,26 +28,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
 
   const setAuthData = (token: string | null, adminStatus?: boolean | null) => {
-    setAccessToken(token);
+    const admin = adminStatus !== undefined ? adminStatus : isAdmin;
 
-    if (adminStatus !== undefined) {
-      setIsAdmin(adminStatus);
-    }
+    setAccessToken(token);
+    setIsAdmin(admin);
+
+    tokenStore.setToken(token, admin);
 
     if (token) {
       setAmplitudeUserFromAccessToken({ accessToken: token });
     }
   };
 
-  const contextValue = {
-    accessToken,
-    isAdmin,
-    setAuthData,
-  };
-
   useEffect(() => {
-    setAuthContext(contextValue);
-  }, [accessToken, isAdmin]);
+    const unsubscribe = tokenStore.subscribe((token, admin) => {
+      setAccessToken(token);
+      setIsAdmin(admin);
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -63,6 +60,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     initializeAuth();
   }, []);
+
+  const contextValue = {
+    accessToken,
+    isAdmin,
+    setAuthData,
+  };
 
   if (!isReady) return null;
 
