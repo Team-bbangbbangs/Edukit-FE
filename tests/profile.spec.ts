@@ -148,12 +148,12 @@ test.describe('프로필 관리 E2E 테스트', () => {
     let newSubject = '';
     if (currentSubject === '국어') {
       // 국어이면 수학으로 변경
-      const mathOption = page.locator('button').filter({ hasText: '수학' });
+      const mathOption = page.getByRole('button', { name: '수학', exact: true });
       await mathOption.click();
       newSubject = '수학';
     } else {
       // 국어가 아니면 국어로 변경
-      const koreanOption = page.locator('button').filter({ hasText: '국어' });
+      const koreanOption = page.getByRole('button', { name: '국어', exact: true });
       await koreanOption.click();
       newSubject = '국어';
     }
