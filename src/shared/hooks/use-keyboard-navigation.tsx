@@ -38,8 +38,7 @@ export function useKeyboardNavigation({
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!isOpen || itemCount === 0) return;
-
+      if (!isOpen || itemCount === 0 || event.isComposing) return;
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
