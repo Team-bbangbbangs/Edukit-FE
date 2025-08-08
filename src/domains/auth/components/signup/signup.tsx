@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useSignup } from '@/domains/auth/apis/mutations/use-signup';
 import { subjects } from '@/domains/auth/constants/signup-data';
+import Dropdown from '@/shared/components/ui/dropdown/dropdown';
 import { Input } from '@/shared/components/ui/input/input';
 
 import { signupSchema } from './signup-scheme';
@@ -47,66 +48,35 @@ export default function Signup() {
   };
 
   const selectedSubjectValue = watch('subject');
+  const selectedSchoolValue = watch('school');
 
-  const [open, setOpen] = useState(false);
   const [comboBoxInput, setComboBoxInput] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const filteredSubjects = subjects.filter((subject) => subject.label.includes(comboBoxInput));
 
   const handleButtonClick = () => {
-    setOpen(true);
-    setSelectedIndex(0);
     setComboBoxInput('');
     setTimeout(() => {
       inputRef.current?.focus();
-    }, 0);
+    }, 50);
   };
 
   const handleSelectSubject = (value: string, label: string) => {
     setValue('subject', value);
     setComboBoxInput(label);
-    setOpen(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComboBoxInput(e.target.value);
-    setSelectedIndex(0);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (filteredSubjects.length === 0) {
-      if (e.key === 'Enter') e.preventDefault();
-      return;
-    }
-
-    if (e.key === 'ArrowDown') {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev === filteredSubjects.length - 1 ? prev : prev + 1));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setSelectedIndex((prev) => (prev === 0 ? prev : prev - 1));
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      const selected = filteredSubjects[selectedIndex];
-      if (selected) {
-        handleSelectSubject(selected.value, selected.label);
-      }
     }
   };
-
-  useEffect(() => {
-    const selectedItem = itemRefs.current[selectedIndex];
-    if (selectedItem) {
-      selectedItem.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }
-  }, [selectedIndex]);
 
   if (isSuccess) {
     return <SuccessSignup />;
@@ -175,57 +145,50 @@ export default function Signup() {
           ) : null}
         </div>
 
-        <div className="relative flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <label className="font-bold" id="subject">
             담당 교과목
           </label>
-          <button
-            type="button"
-            className="h-12 w-full rounded-md border bg-white text-black hover:bg-slate-200"
-            onClick={handleButtonClick}
-          >
-            {selectedSubjectValue
-              ? subjects.find((subject) => subject.value === selectedSubjectValue)?.label
-              : '담당 교과목 선택'}
-          </button>
-          {open ? (
-            <div className="absolute top-[86px] w-full rounded-lg border bg-slate-100">
+
+          <Dropdown initialFocusIndex={0}>
+            <Dropdown.Trigger className="h-12" onClick={() => handleButtonClick()}>
+              {selectedSubjectValue
+                ? subjects.find((subject) => subject.value === selectedSubjectValue)?.label
+                : '담당 교과목 선택'}
+            </Dropdown.Trigger>
+
+            <Dropdown.Content itemCount={filteredSubjects.length}>
               <input
                 ref={inputRef}
+                onKeyDown={handleInputKeyDown}
                 type="text"
                 value={comboBoxInput}
                 onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                onBlur={() => setOpen(false)}
                 placeholder="과목을 입력하세요"
-                className="h-12 w-full rounded-t-lg pl-2"
+                className="z-50 h-12 w-full rounded-t-md pl-2 focus:outline-none focus:ring-0"
               />
-              <div className="max-h-52 overflow-y-scroll border-t px-1 py-2">
+              <div className="max-h-44 overflow-y-scroll border-t px-1 py-2">
                 {filteredSubjects.length === 0 ? (
-                  <div className="flex h-52 items-center justify-center text-slate-700">
+                  <div className="flex h-44 items-center justify-center text-slate-700">
                     검색 결과가 없습니다.
                   </div>
                 ) : (
                   filteredSubjects.map((subject, index) => (
-                    <div
+                    <Dropdown.Item
                       key={subject.value}
-                      ref={(el) => {
-                        itemRefs.current[index] = el;
-                      }}
-                      onMouseDown={() => {
-                        handleSelectSubject(subject.value, subject.label);
-                      }}
-                      className={`flex h-10 cursor-pointer items-center rounded-md hover:bg-slate-200 ${
-                        index === selectedIndex ? 'bg-slate-300' : ''
-                      }`}
+                      index={index}
+                      onClick={() => handleSelectSubject(subject.value, subject.label)}
+                      selected={selectedSubjectValue === subject.value}
+                      className="h-10 items-center rounded-md text-left"
                     >
-                      <span className="pl-2">{subject.label}</span>
-                    </div>
+                      {subject.label}
+                    </Dropdown.Item>
                   ))
                 )}
               </div>
-            </div>
-          ) : null}
+            </Dropdown.Content>
+          </Dropdown>
+
           {errors.subject ? <p className="text-sm text-red-500">{errors.subject.message}</p> : null}
         </div>
 
@@ -237,11 +200,11 @@ export default function Signup() {
             <button
               type="button"
               role="radio"
-              aria-checked={watch('school') === 'middle'}
+              aria-checked={selectedSchoolValue === 'middle'}
               aria-labelledby="school-label"
               onClick={() => setValue('school', 'middle', { shouldValidate: true })}
               className={`flex-1 border-r py-2 text-center ${
-                watch('school') === 'middle' ? 'bg-black text-white' : 'bg-white text-black'
+                selectedSchoolValue === 'middle' ? 'bg-black text-white' : 'bg-white text-black'
               }`}
             >
               중학교
@@ -249,11 +212,11 @@ export default function Signup() {
             <button
               type="button"
               role="radio"
-              aria-checked={watch('school') === 'high'}
+              aria-checked={selectedSchoolValue === 'high'}
               aria-labelledby="school-label"
               onClick={() => setValue('school', 'high', { shouldValidate: true })}
               className={`flex-1 py-2 text-center ${
-                watch('school') === 'high' ? 'bg-black text-white' : 'bg-white text-black'
+                selectedSchoolValue === 'high' ? 'bg-black text-white' : 'bg-white text-black'
               }`}
             >
               고등학교

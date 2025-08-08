@@ -3,7 +3,7 @@ import { type ReactElement } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, type RenderOptions } from '@testing-library/react';
 
-import { setAuthContext } from '@/shared/lib/api';
+import { tokenStore } from '@/shared/lib/token-store';
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient({
@@ -56,11 +56,7 @@ export const loginAsAdmin = async () => {
     setAuthData: mockSetAuthData,
   });
 
-  setAuthContext({
-    accessToken,
-    isAdmin,
-    setAuthData: mockSetAuthData,
-  });
+  tokenStore.setToken(accessToken, isAdmin);
 };
 
 /**
@@ -82,19 +78,15 @@ export const loginAsUser = async () => {
   });
 
   if (!response.ok) {
-    throw new Error(`사용자 로그인 실패: ${response.status}`);
+    throw new Error(`일반 사용자 로그인 실패: ${response.status}`);
   }
 
   const { data } = await response.json();
   const { accessToken, isAdmin } = data;
 
-  mockUseAuth.mockReturnValue({
-    accessToken,
-    isAdmin,
-    setAuthData: mockSetAuthData,
-  });
+  tokenStore.setToken(accessToken, isAdmin);
 
-  setAuthContext({
+  mockUseAuth.mockReturnValue({
     accessToken,
     isAdmin,
     setAuthData: mockSetAuthData,
@@ -126,11 +118,7 @@ export const loginAsUnverifiedUser = async () => {
     setAuthData: mockSetAuthData,
   });
 
-  setAuthContext({
-    accessToken,
-    isAdmin,
-    setAuthData: mockSetAuthData,
-  });
+  tokenStore.setToken(accessToken, isAdmin);
 };
 
 export { customRender as render };

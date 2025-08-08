@@ -29,6 +29,10 @@ interface DropdownProps {
   className?: string;
 }
 
+interface DropdownContentProps extends DropdownProps {
+  itemCount?: number;
+}
+
 interface RootDropdownProps extends DropdownProps {
   defaultOpen?: boolean;
   initialFocusIndex?: number;
@@ -38,6 +42,7 @@ interface DropdownTriggerProps extends DropdownProps {
   iconPosition?: 'left' | 'right' | 'none';
   iconSize?: number;
   iconClassName?: string;
+  onClick?: () => void;
 }
 
 interface DropdownItemProps extends DropdownProps {
@@ -130,10 +135,12 @@ function DropdownTrigger({
   children,
   className = '',
   iconPosition = 'none',
+  onClick,
 }: DropdownTriggerProps) {
   const { open, setOpen } = useDropdownContext();
 
   const handleClick = (e: React.MouseEvent) => {
+    onClick?.();
     e.stopPropagation();
     setOpen(!open);
   };
@@ -146,7 +153,7 @@ function DropdownTrigger({
   return (
     <button
       type="button"
-      className={`flex justify-between focus:outline-none ${className}`}
+      className={`flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 hover:border-gray-400 ${className}`}
       aria-expanded={open}
       aria-haspopup="menu"
       data-state={open ? 'open' : 'closed'}
@@ -165,21 +172,21 @@ DropdownTrigger.displayName = 'DropdownTrigger';
  * Dropdown Content
  * -----------------------------------------------------------------------------------------------*/
 
-function DropdownContent({ children, className = '' }: DropdownProps) {
+function DropdownContent({ children, className = '', itemCount }: DropdownContentProps) {
   const { open, setItemCount } = useDropdownContext();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [renderOpen, setRenderOpen] = useState(false);
 
-  const itemCount = React.Children.count(children);
+  const calculatedItemCount = itemCount ?? React.Children.count(children);
 
   useEffect(() => {
     if (open) {
-      setItemCount(itemCount);
+      setItemCount(calculatedItemCount);
     } else {
       setItemCount(0);
     }
-  }, [open, itemCount, setItemCount]);
+  }, [open, calculatedItemCount, setItemCount]);
 
   useEffect(() => {
     if (open) {

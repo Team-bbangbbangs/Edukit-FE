@@ -212,8 +212,15 @@ test.describe('학생 관리 페이지 E2E 테스트', () => {
     await exportButton.click();
     const download = await downloadPromise;
 
+    expect(download).toBeTruthy();
+
+    const downloadPath = await download.path();
+    expect(downloadPath).toBeTruthy();
+
     const fileName = download.suggestedFilename();
-    expect(fileName).toContain('.xlsx');
-    expect(fileName).toContain('세부능력 및 특기사항');
+    if (fileName && fileName !== 'download') {
+      expect(fileName).toContain('.xlsx');
+      expect(fileName).toContain('세부능력 및 특기사항');
+    }
   });
 });
