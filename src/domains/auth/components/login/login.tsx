@@ -63,7 +63,7 @@ export default function Login() {
           ) : null}
         </div>
 
-        {serverError ? <p className="text-sm text-red-500">{serverError}</p> : null}
+        {serverError ? <p className="w-80 truncate text-sm text-red-500">{serverError}</p> : null}
 
         <button
           type="submit"

@@ -1,6 +1,6 @@
 import { reissue } from '@/domains/auth/apis/reissue';
 import { ApiError } from '@/shared/lib/errors';
-import type { AuthContextProps } from '@/shared/providers/auth-provider';
+import { tokenStore } from '@/shared/lib/token-store';
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
   body?: unknown;
@@ -8,25 +8,8 @@ interface FetchOptions extends Omit<RequestInit, 'body'> {
   skipTokenRefresh?: boolean;
 }
 
-let authContextRef: AuthContextProps | null = null;
+// 토큰 갱신 중복 요청 방지를 위한 Promise 캐시
 let tokenRefreshPromise: Promise<string | null> | null = null;
-
-// AuthProvider에서 Context를 등록하는 함수
-export function setAuthContext(context: AuthContextProps) {
-  authContextRef = context;
-}
-
-// 현재 저장된 토큰을 가져오는 함수
-function getCurrentToken(): string | null {
-  return authContextRef?.accessToken || null;
-}
-
-// accessToken 값을 없애주는 함수
-function clearAuthContext(): void {
-  if (authContextRef) {
-    authContextRef.setAuthData(null, null);
-  }
-}
 
 // 쿼리 파라미터를 URL에 추가하는 헬퍼 함수
 function addQueryParams(url: string, params?: Record<string, string | number | boolean>): string {
@@ -86,7 +69,7 @@ function buildHeaders(options: FetchOptions): HeadersInit {
     Object.assign(headers, options.headers);
   }
 
-  const token = getCurrentToken();
+  const token = tokenStore.getToken();
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
@@ -105,18 +88,20 @@ async function refreshAccessToken(): Promise<string | null> {
   }
 
   tokenRefreshPromise = (async () => {
-    const authData = await reissue();
+    try {
+      const authData = await reissue();
 
-    if (authData) {
-      if (authContextRef) {
-        authContextRef.setAuthData(authData.accessToken, authData.isAdmin);
+      if (authData) {
+        // TokenStore에 새로운 토큰 저장
+        tokenStore.setToken(authData.accessToken, authData.isAdmin);
+        return authData.accessToken;
+      } else {
+        // 토큰 갱신 실패 시 로그아웃 처리
+        tokenStore.clearToken();
+        return null;
       }
-      return authData.accessToken;
-    } else {
-      if (authContextRef) {
-        clearAuthContext();
-      }
-      return null;
+    } finally {
+      tokenRefreshPromise = null;
     }
   })();
 
@@ -147,12 +132,7 @@ async function handleResponse<T>(response: globalThis.Response): Promise<T> {
   }
 
   const json = await response.json();
-
-  if ('data' in json) {
-    return json.data as T;
-  } else {
-    return json as T;
-  }
+  return 'data' in json ? (json.data as T) : (json as T);
 }
 
 /**
@@ -183,6 +163,7 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
 
   const response = await fetch(url, config);
 
+  // 401 인터셉터: 토큰 만료 시 자동 갱신 후 재요청
   if (response.status === 401 && !skipTokenRefresh) {
     const newToken = await refreshAccessToken();
 
