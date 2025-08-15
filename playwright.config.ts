@@ -14,7 +14,7 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    baseURL: 'https://edukit.co.kr',
+    baseURL: 'https://develop.d12tblgwwf00b7.amplifyapp.com/',
     headless: process.env.CI ? true : false,
     trace: 'on-first-retry',
     actionTimeout: 10000,
