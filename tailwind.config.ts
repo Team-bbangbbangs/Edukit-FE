@@ -49,8 +49,25 @@ const config: Config = {
           black: '#121212',
         },
         blue: {
+          50: '#F0F4FE',
+          100: '#DCE5FD',
+          200: '#C2D3F8',
+          300: '#98B7F8',
           400: '#5484f2',
+          500: '#436BEE',
+          600: '#2D4CE3',
+          700: '#2539D0',
+          800: '#2430A9',
+          900: '#232E85',
+          950: '#1A1E51',
         },
+        skyblue: '#D8EEFF',
+        pink: '#FFDEEE',
+        orange: '#FDE3D2',
+        green: '#D9F4D7',
+        purple: '#F0E4FC',
+        dim: '#121212',
+        red: '#F25454',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -58,7 +75,7 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        suit: ['var(--font-suit)'],
+        suit: ['var(--font-suit)', 'sans-serif'],
       },
 
       fontSize: {
