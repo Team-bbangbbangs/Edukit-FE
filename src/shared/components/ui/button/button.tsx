@@ -46,6 +46,7 @@ export default function Button({
   color = 'primary',
   shape = 'rect',
   size = 'medium',
+  type = 'button',
   children,
   ...props
 }: ButtonProps) {
@@ -58,7 +59,7 @@ export default function Button({
   );
 
   return (
-    <button className={buttonClass} {...props}>
+    <button type={type} className={buttonClass} {...props}>
       {children}
     </button>
   );
