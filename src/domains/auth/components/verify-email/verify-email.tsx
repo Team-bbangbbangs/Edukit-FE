@@ -34,7 +34,7 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
       ) : (
         <>
           <h1 className="text-2xl font-bold text-red-700">이메일 인증에 실패했습니다.</h1>
-          <p className="mt-2 text-gray-600">이미 만료된 인증 코드입니다.</p>
+          <p className="mt-2 text-gray-600">다시 인증해주세요.</p>
         </>
       )}
       <VerifyEmailHandler isSuccess={isSuccess} />
