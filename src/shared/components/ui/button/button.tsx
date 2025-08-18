@@ -13,17 +13,19 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   asChild?: boolean;
 }
 
-const baseStyles = 'inline-flex items-center justify-center cursor-pointer';
+const baseStyles = 'inline-flex items-center justify-center cursor-pointer whitespace-nowrap';
 
-const shapeStyles: Record<ButtonShape, string> = {
-  pill: 'rounded-[36px]',
-  rect: 'rounded-[20px]',
-};
+const getShapeSizeStyles = (shape: ButtonShape, size: ButtonSize): string => {
+  const combinations = {
+    'pill-large': 'px-7 py-6 !text-label-18 rounded-[36px]',
+    'pill-medium': 'px-5 py-3 !text-label-16 rounded-[23px]',
+    'pill-small': 'px-3 py-2 !text-label-16 rounded-[19px]',
+    'rect-large': 'px-7 py-6 !text-label-18 rounded-[20px]',
+    'rect-medium': 'px-5 py-3 !text-label-16 rounded-[10px]',
+    'rect-small': 'px-3 py-2 !text-label-16 rounded-[8px]',
+  };
 
-const sizeStyles: Record<ButtonSize, string> = {
-  large: 'px-7 py-6 !text-label-18',
-  medium: 'px-5 py-3 !text-label-16',
-  small: 'px-3 py-2 !text-label-16',
+  return combinations[`${shape}-${size}`] || '';
 };
 
 const getColorVariantStyles = (color: ButtonColor, variant: ButtonVariant): string => {
@@ -52,8 +54,7 @@ export default function Button({
 }: ButtonProps) {
   const buttonClass = cn(
     baseStyles,
-    shapeStyles[shape],
-    sizeStyles[size],
+    getShapeSizeStyles(shape, size),
     getColorVariantStyles(color, variant),
     className,
   );
