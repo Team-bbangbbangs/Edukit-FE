@@ -50,6 +50,7 @@ export const signupSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string().min(1, { message: '비밀번호 확인을 입력해주세요.' }),
+    nickname: z.string().min(1, { message: '닉네임을 입력해주세요.' }),
     subject: z.string().min(1, { message: '교과목을 입력해주세요.' }),
     school: z.string().min(1, { message: '학교를 선택해주세요.' }),
   })

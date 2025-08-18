@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { emailSchema } from '@/domains/auth/components/signup/signup-scheme';
+import { emailSchema } from '@/domains/auth/types/auth-scheme';
 import { usePatchEmail } from '@/domains/profile/apis/mutations/use-patch-email';
 import { Input } from '@/shared/components/ui/input/input';
 
