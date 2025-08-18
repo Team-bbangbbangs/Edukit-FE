@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { usePostVerifyEmail } from '@/domains/auth/apis/mutations/use-post-verify-email';
-import { emailSchema } from '@/domains/auth/components/signup/signup-scheme';
+import { emailSchema } from '@/domains/auth/types/auth-scheme';
 import { Input } from '@/shared/components/ui/input/input';
 
 const emailVerificationSchema = z.object({

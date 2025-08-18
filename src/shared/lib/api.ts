@@ -123,16 +123,21 @@ async function handleResponse<T>(response: globalThis.Response): Promise<T> {
     } catch {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-
-    if (errorData.status && errorData.code) {
-      throw new ApiError(errorData.status, errorData.code, errorData.message);
-    }
-
     throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
   }
 
-  const json = await response.json();
-  return 'data' in json ? (json.data as T) : (json as T);
+  let responseData;
+  try {
+    responseData = await response.json();
+  } catch {
+    throw new Error('Invalid JSON response');
+  }
+
+  if (responseData.code && responseData.code !== 'SUCCESS') {
+    throw new ApiError(responseData.code, responseData.message || 'Unknown error');
+  }
+
+  return 'data' in responseData ? (responseData.data as T) : (responseData as T);
 }
 
 /**

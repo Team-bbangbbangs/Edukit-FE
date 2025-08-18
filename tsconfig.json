@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "next.config.mjs",
+    "next.config.ts",
     "tailwind.config.ts",
     "jest.config.ts",
     "jest.setup.ts"
