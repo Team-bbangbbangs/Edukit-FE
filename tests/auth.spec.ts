@@ -252,11 +252,11 @@ test.describe('인증 기능 E2E 테스트', () => {
   }) => {
     await page.goto('/verify-email?id=test@naver.com&code=wrong');
     await expect(page.locator('h1:has-text("이메일 인증에 실패했습니다.")')).toBeVisible();
-    await expect(page.locator('text=이미 만료된 인증 코드입니다.')).toBeVisible();
+    await expect(page.locator('text=다시 인증해주세요.')).toBeVisible();
 
     await page.goto('/verify-email?id=wrong@email.com&code=abc');
     await expect(page.locator('h1:has-text("이메일 인증에 실패했습니다.")')).toBeVisible();
-    await expect(page.locator('text=이미 만료된 인증 코드입니다.')).toBeVisible();
+    await expect(page.locator('text=다시 인증해주세요.')).toBeVisible();
   });
 
   test('8. 로그인상태에서 로그아웃 버튼을 누르면 헤더의 프로필 이미지에서 로그인 버튼으로 바뀐다', async ({

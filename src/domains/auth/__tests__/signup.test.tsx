@@ -16,6 +16,7 @@ describe('signup 컴포넌트 단위 테스트', () => {
     expect(screen.getByLabelText('이메일')).toBeInTheDocument();
     expect(screen.getByLabelText('비밀번호')).toBeInTheDocument();
     expect(screen.getByLabelText('비밀번호 확인')).toBeInTheDocument();
+    expect(screen.getByLabelText('닉네임')).toBeInTheDocument();
     expect(screen.getByText('담당 교과목')).toBeInTheDocument();
     expect(screen.getByText('중학교')).toBeInTheDocument();
     expect(screen.getByText('고등학교')).toBeInTheDocument();
