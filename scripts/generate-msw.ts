@@ -61,8 +61,7 @@ export const ${handlerName} = [
 
     return HttpResponse.json(
       {
-        status: 200,
-        code: 'EDMT-200',
+        code: 'SUCCESS',
         message: '성공 메세지 작성',
       },
       { status: 200 }

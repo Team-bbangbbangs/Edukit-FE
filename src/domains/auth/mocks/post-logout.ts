@@ -4,8 +4,7 @@ export const postLogout = [
   http.post('/api/v1/auth/logout', async () => {
     return HttpResponse.json(
       {
-        status: 200,
-        code: 'EDMT-20002',
+        code: 'SUCCESS',
         message: '로그아웃이 완료되었습니다.',
       },
       {

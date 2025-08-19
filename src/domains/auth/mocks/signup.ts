@@ -9,11 +9,10 @@ export const signup = [
     if (email === 'test123@edukit.co.kr') {
       return HttpResponse.json(
         {
-          status: 401,
-          code: 'EDMT-40001',
+          code: 'A-40906',
           message: '이미 등록된 회원입니다.',
         },
-        { status: 401 },
+        { status: 200 },
       );
     }
 
@@ -21,8 +20,7 @@ export const signup = [
 
     return HttpResponse.json(
       {
-        status: 200,
-        code: 'EDMT-20002',
+        code: 'SUCCESS',
         message: '요청에 성공했습니다.',
         data: {
           accessToken: `user-access-token.${expiresAt}`,
