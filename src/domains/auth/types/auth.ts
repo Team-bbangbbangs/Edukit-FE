@@ -11,6 +11,7 @@ export interface LoginBody {
 export interface SignupBody {
   email: string;
   password: string;
+  nickname: string;
   subject: string;
   school: string;
 }
