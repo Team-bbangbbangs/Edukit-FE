@@ -1,5 +1,5 @@
 import { reissue } from '@/domains/auth/apis/reissue';
-import { ApiError } from '@/shared/lib/errors';
+import { ApiError, TokenExpiredError } from '@/shared/lib/errors';
 import { tokenStore } from '@/shared/lib/token-store';
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
@@ -115,7 +115,10 @@ async function refreshAccessToken(): Promise<string | null> {
  * 3. 커스텀 에러 코드가 있으면 ApiError로 변환
  * 4. Response wrapper에서 data 추출
  */
-async function handleResponse<T>(response: globalThis.Response): Promise<T> {
+async function handleResponse<T>(
+  response: globalThis.Response,
+  skipTokenRefresh = false,
+): Promise<T> {
   if (!response.ok) {
     let errorData;
     try {
@@ -131,6 +134,10 @@ async function handleResponse<T>(response: globalThis.Response): Promise<T> {
     responseData = await response.json();
   } catch {
     throw new Error('Invalid JSON response');
+  }
+
+  if (!skipTokenRefresh && (responseData.code === 'A-40101' || responseData.code === 'A-40102')) {
+    throw new TokenExpiredError(responseData.code, responseData.message || 'Token expired');
   }
 
   if (responseData.code && responseData.code !== 'SUCCESS') {
@@ -168,20 +175,22 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
 
   const response = await fetch(url, config);
 
-  // 401 인터셉터: 토큰 만료 시 자동 갱신 후 재요청
-  if (response.status === 401 && !skipTokenRefresh) {
-    const newToken = await refreshAccessToken();
+  try {
+    return await handleResponse<T>(response, skipTokenRefresh);
+  } catch (error) {
+    if (error instanceof TokenExpiredError && !skipTokenRefresh) {
+      const newToken = await refreshAccessToken();
 
-    if (newToken) {
-      const retryResponse = await fetch(url, {
-        ...config,
-        headers: { ...config.headers, Authorization: `Bearer ${newToken}` },
-      });
-      return await handleResponse<T>(retryResponse);
+      if (newToken) {
+        const retryResponse = await fetch(url, {
+          ...config,
+          headers: { ...config.headers, Authorization: `Bearer ${newToken}` },
+        });
+        return await handleResponse<T>(retryResponse, true);
+      }
     }
+    throw error;
   }
-
-  return await handleResponse<T>(response);
 }
 
 // HTTP 메서드 함수 (get, post, patch, put, delete)
