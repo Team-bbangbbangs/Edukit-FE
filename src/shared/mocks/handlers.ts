@@ -1,3 +1,4 @@
+import { getCheckAuthValidNickname } from '../../domains/auth/mocks/get-check-auth-valid-nickname';
 import { getVerifyEmail } from '../../domains/auth/mocks/get-verify-email';
 import { patchResetPassword } from '../../domains/auth/mocks/patch-reset-password';
 import { postLogin } from '../../domains/auth/mocks/post-login';
@@ -27,6 +28,7 @@ import { postPrompt } from '../../domains/record/mocks/post-prompt';
 import { postSummaryRecordDetail } from '../../domains/record/mocks/post-summary-record-detail';
 
 export const handlers = [
+  ...getCheckAuthValidNickname,
   ...postLogin,
   ...getRecords,
   ...getNoticeList,

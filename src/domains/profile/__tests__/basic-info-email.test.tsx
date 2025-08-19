@@ -40,7 +40,7 @@ describe('basic-info-email 컴포넌트 단위 테스트', () => {
     await user.type(emailInput, 'invalid-email');
     await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(screen.getByText('이메일 형식이 유효하지 않습니다.')).toBeInTheDocument();
+    expect(screen.getByText('이메일 형식이 올바르지 않습니다.')).toBeInTheDocument();
     expect(emailInput).toHaveClass('border-red-500');
   });
 

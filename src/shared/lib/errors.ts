@@ -8,6 +8,16 @@ export class ApiError extends Error {
   }
 }
 
+export class TokenExpiredError extends Error {
+  constructor(
+    public code: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'TokenExpiredError';
+  }
+}
+
 export const isUnauthorizedError = (error: unknown): boolean => {
   return (
     error instanceof ApiError &&

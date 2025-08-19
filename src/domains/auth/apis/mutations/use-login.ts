@@ -7,15 +7,11 @@ import { setAmplitudeUserFromAccessToken } from '@/shared/lib/amplitude';
 import { api } from '@/shared/lib/api';
 import { useAuth } from '@/shared/providers/auth-provider';
 
-export const login = async ({ email, password }: LoginBody) => {
-  return api.post<AuthResponse>(
-    '/api/v1/auth/login',
-    { email, password },
-    {
-      credentials: 'include',
-      skipTokenRefresh: true,
-    },
-  );
+export const login = async (loginData: LoginBody) => {
+  return api.post<AuthResponse>('/api/v1/auth/login', loginData, {
+    credentials: 'include',
+    skipTokenRefresh: true,
+  });
 };
 
 export const useLogin = () => {

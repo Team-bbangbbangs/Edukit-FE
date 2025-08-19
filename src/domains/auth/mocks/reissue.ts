@@ -21,19 +21,20 @@ export const reissue = [
     } else {
       return HttpResponse.json(
         {
-          status: 401,
-          code: 'EDMT-401',
-          message: '유효하지 않은 리프레시 토큰입니다.',
+          code: 'A-40102',
+          message: '유효하지 않은 토큰입니다.',
         },
-        { status: 401 },
+        { status: 200 },
       );
     }
 
-    return HttpResponse.json({
-      status: 200,
-      code: 'EDMT-200',
-      message: '요청이 성공했습니다.',
-      data: { accessToken, isAdmin },
-    });
+    return HttpResponse.json(
+      {
+        code: 'SUCCESS',
+        message: '요청이 성공했습니다.',
+        data: { accessToken, isAdmin },
+      },
+      { status: 200 },
+    );
   }),
 ];
