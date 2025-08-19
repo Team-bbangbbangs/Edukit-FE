@@ -43,7 +43,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     const emailFormatError = page
       .locator('p.text-red-500')
-      .filter({ hasText: '이메일 형식이 유효하지 않습니다.' });
+      .filter({ hasText: '이메일 형식이 올바르지 않습니다.' });
     await expect(emailFormatError).toBeVisible();
     expect(apiRequests.length).toBe(0);
 
@@ -55,7 +55,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     const teacherEmailError = page
       .locator('p.text-red-500')
-      .filter({ hasText: '교직 이메일이 아닙니다.' });
+      .filter({ hasText: '유효하지 않은 교사 이메일입니다. 교육청 이메일 도메인만 허용됩니다.' });
     await expect(teacherEmailError).toBeVisible();
     expect(apiRequests.length).toBe(0);
 
@@ -112,7 +112,7 @@ test.describe('인증 기능 E2E 테스트', () => {
     await page.waitForSelector('p.text-red-500', { timeout: 5000 });
     const passwordError = page
       .locator('p.text-red-500')
-      .filter({ hasText: '비밀번호가 일치하지 않습니다.' });
+      .filter({ hasText: '비밀번호가 올바르지 않습니다.' });
     await expect(passwordError).toBeVisible();
 
     await page.fill('input[placeholder="이메일"]', '123@edukit.co.kr');
@@ -158,7 +158,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     const emailFormatError = page
       .locator('p.text-red-500')
-      .filter({ hasText: '이메일 형식이 유효하지 않습니다.' });
+      .filter({ hasText: '이메일 형식이 올바르지 않습니다.' });
     await expect(emailFormatError).toBeVisible();
     expect(apiRequests.length).toBe(0);
 
@@ -171,7 +171,7 @@ test.describe('인증 기능 E2E 테스트', () => {
 
     const teacherEmailError = page
       .locator('p.text-red-500')
-      .filter({ hasText: '교직 이메일이 아닙니다.' });
+      .filter({ hasText: '유효하지 않은 교사 이메일입니다. 교육청 이메일 도메인만 허용됩니다.' });
     await expect(teacherEmailError).toBeVisible();
     expect(apiRequests.length).toBe(0);
 

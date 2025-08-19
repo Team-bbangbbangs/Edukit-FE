@@ -5,7 +5,7 @@ import { getValidDomains } from '@/domains/auth/constants/signup-data';
 export const emailSchema = z
   .string()
   .min(1, { message: '이메일을 입력해주세요.' })
-  .email({ message: '이메일 형식이 유효하지 않습니다.' })
+  .email({ message: '이메일 형식이 올바르지 않습니다.' })
   .refine(
     (email) => {
       const parts = email.split('@');
@@ -15,7 +15,7 @@ export const emailSchema = z
       const validDomains = getValidDomains();
       return validDomains.includes(domain);
     },
-    { message: '교직 이메일이 아닙니다.' },
+    { message: '유효하지 않은 교사 이메일입니다. 교육청 이메일 도메인만 허용됩니다.' },
   );
 
 export const passwordSchema = z

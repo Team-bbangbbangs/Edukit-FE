@@ -13,7 +13,7 @@ describe('login 컴포넌트 단위 테스트', () => {
   it('로그인 폼이 정상적으로 렌더링된다', () => {
     render(<Login />);
 
-    expect(screen.getByText('Edukit')).toBeInTheDocument();
+    expect(screen.getByAltText('Edukit')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('이메일')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('비밀번호')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '로그인' })).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('login 컴포넌트 단위 테스트', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('이메일 형식이 유효하지 않습니다.')).toBeInTheDocument();
+      expect(screen.getByText('이메일 형식이 올바르지 않습니다.')).toBeInTheDocument();
       expect(emailInput).toHaveClass('border-red-500');
     });
   });
@@ -48,7 +48,9 @@ describe('login 컴포넌트 단위 테스트', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('교직 이메일이 아닙니다.')).toBeInTheDocument();
+      expect(
+        screen.getByText('유효하지 않은 교사 이메일입니다. 교육청 이메일 도메인만 허용됩니다.'),
+      ).toBeInTheDocument();
       expect(emailInput).toHaveClass('border-red-500');
     });
   });
@@ -193,7 +195,7 @@ describe('login 컴포넌트 단위 테스트', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('비밀번호가 일치하지 않습니다.')).toBeInTheDocument();
+      expect(screen.getByText('비밀번호가 올바르지 않습니다.')).toBeInTheDocument();
     });
   });
 
@@ -250,7 +252,7 @@ describe('login 컴포넌트 단위 테스트', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('비밀번호가 일치하지 않습니다.')).toBeInTheDocument();
+      expect(screen.getByText('비밀번호가 올바르지 않습니다.')).toBeInTheDocument();
     });
 
     await user.clear(passwordInput);
@@ -259,7 +261,7 @@ describe('login 컴포넌트 단위 테스트', () => {
 
     await waitFor(() => {
       expect(mockSetAuthData).toHaveBeenCalled();
-      expect(screen.queryByText('비밀번호가 일치하지 않습니다.')).not.toBeInTheDocument();
+      expect(screen.queryByText('비밀번호가 올바르지 않습니다.')).not.toBeInTheDocument();
     });
   });
 
