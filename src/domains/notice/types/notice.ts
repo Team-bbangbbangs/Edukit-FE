@@ -1,12 +1,14 @@
 export type NoticeTagType = '공지' | '이벤트';
 
+export type NoticeCategoryType = 'announcement' | 'event';
+
 export interface NoticeListRequest {
-  categoryId?: '2' | '3';
-  page?: string;
+  category?: NoticeCategoryType;
+  page?: number;
 }
 
 export interface Notice {
-  noticeId: string;
+  noticeId: number;
   category: NoticeTagType;
   title: string;
   createdAt: string;
@@ -22,11 +24,11 @@ export interface DetailNoticeResponse extends Notice {
 }
 
 export interface AdminNoticeBody {
-  categoryId: number;
+  category: string;
   title: string;
   content: string;
 }
 
 export interface EditAdminNoticeRequest extends AdminNoticeBody {
-  id: string;
+  noticeId: number;
 }
