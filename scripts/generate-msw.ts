@@ -40,7 +40,7 @@ function generateMSWHandler(apiInfo: APIInfo): string {
   const hasParam = url.includes(':') || url.includes('${') ? ', params' : '';
 
   // body가 존재하는지
-  const hasBody = ['POST', 'PATCH', 'PUT'].includes(method);
+  const hasBody = ['post', 'patch', 'put'].includes(method.toLowerCase());
 
   let template = `import { http, HttpResponse } from 'msw';
 
