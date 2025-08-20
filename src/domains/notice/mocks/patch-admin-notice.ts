@@ -4,7 +4,7 @@ import type { AdminNoticeBody } from '@/domains/notice/types/notice';
 import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
 export const patchAdminNotice = [
-  http.patch('/api/v1/admin/notices/:noticeId', async ({ request, params }) => {
+  http.patch('/api/v2/admin/notices/:noticeId', async ({ request, params }) => {
     const authHeader = request.headers.get('authorization');
 
     const { noticeId } = params;
@@ -46,7 +46,7 @@ export const patchAdminNotice = [
       );
     }
 
-    if (body.categoryId !== 2 && body.categoryId !== 3) {
+    if (body.category !== 'announcement' && body.category !== 'event') {
       return HttpResponse.json(
         {
           status: 400,

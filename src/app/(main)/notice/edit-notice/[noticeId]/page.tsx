@@ -3,11 +3,11 @@ import EditNotice from '@/domains/notice/components/edit-notice';
 
 interface PageProps {
   params: {
-    id: string;
+    noticeId: string;
   };
 }
 
 export default async function Page({ params }: PageProps) {
-  const notice = await getNoticeDetail(params.id);
+  const notice = await getNoticeDetail(Number(params.noticeId));
   return <EditNotice notice={notice} />;
 }
