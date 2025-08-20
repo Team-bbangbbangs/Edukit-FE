@@ -60,7 +60,7 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   test('4. 이벤트 태그 필터링이 올바르게 작동한다', async ({ page }) => {
     await page.click('a[href="/notice?category=event"]');
 
-    await expect(page).toHaveURL('/notice?category=event"');
+    await expect(page).toHaveURL('/notice?category=event');
 
     const activeCategory = page.locator('a[href="/notice?category=event"]');
     await expect(activeCategory).toHaveClass(/bg-slate-800/);
