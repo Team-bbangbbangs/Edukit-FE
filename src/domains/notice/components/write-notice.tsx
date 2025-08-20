@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { usePostAdminNotice } from '@/domains/notice/apis/mutations/use-post-admin-notice';
+import { type NoticeCategoryType } from '@/domains/notice/types/notice';
 import TipTapEditor, { type TipTapEditorRef } from '@/shared/components/ui/editor/tiptap-editor';
 import { Input } from '@/shared/components/ui/input/input';
 import { revalidateNotice } from '@/shared/lib/actions/revalidateNotice';
@@ -17,7 +18,7 @@ const nonActiveStyle = 'bg-white text-black border border-slate-400';
 
 export default function WriteNotice() {
   const router = useRouter();
-  const [selectedTag, isSelectedTag] = useState(2);
+  const [selectedTag, isSelectedTag] = useState<NoticeCategoryType>('announcement');
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<TipTapEditorRef>(null);
@@ -33,7 +34,7 @@ export default function WriteNotice() {
     }
 
     postAdminNotice(
-      { title, content, categoryId: selectedTag },
+      { title, content, category: selectedTag },
       {
         onSuccess: async () => {
           await revalidateNotice();
@@ -47,14 +48,14 @@ export default function WriteNotice() {
     <div className="flex flex-col items-center justify-center gap-10">
       <div className="flex gap-4">
         <button
-          onClick={() => isSelectedTag(2)}
-          className={`${baseStyle} ${selectedTag === 2 ? activeStyle : nonActiveStyle}`}
+          onClick={() => isSelectedTag('announcement')}
+          className={`${baseStyle} ${selectedTag === 'announcement' ? activeStyle : nonActiveStyle}`}
         >
           공지
         </button>
         <button
-          onClick={() => isSelectedTag(3)}
-          className={`${baseStyle} ${selectedTag === 3 ? activeStyle : nonActiveStyle}`}
+          onClick={() => isSelectedTag('event')}
+          className={`${baseStyle} ${selectedTag === 'event' ? activeStyle : nonActiveStyle}`}
         >
           이벤트
         </button>

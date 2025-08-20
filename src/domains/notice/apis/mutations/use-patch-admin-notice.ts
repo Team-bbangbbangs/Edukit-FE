@@ -5,13 +5,13 @@ import { api } from '@/shared/lib/api';
 import type { ApiResponseWithoutData } from '@/shared/types/response';
 
 export const patchAdminNotice = async ({
-  id,
-  categoryId,
+  noticeId,
+  category,
   title,
   content,
 }: EditAdminNoticeRequest) => {
-  return api.patch<ApiResponseWithoutData>(`/api/v1/admin/notices/${id}`, {
-    categoryId,
+  return api.patch<ApiResponseWithoutData>(`/api/v2/admin/notices/${noticeId}`, {
+    category,
     title,
     content,
   });

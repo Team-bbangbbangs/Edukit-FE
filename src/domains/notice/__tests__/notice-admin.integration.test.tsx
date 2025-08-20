@@ -35,7 +35,7 @@ jest.mock('@/shared/components/ui/editor/tiptap-editor', () => {
 });
 
 const mockNoticeDetail: DetailNoticeResponse = {
-  noticeId: '1',
+  noticeId: 1,
   title: '테스트 공지사항',
   content: '<p>테스트 내용입니다.</p>',
   category: '공지',
@@ -154,12 +154,12 @@ describe('notice-admin 기능 통합 테스트', () => {
       clearAllTestMocks();
       await loginAsUser();
 
-      const { container } = render(<EditDeleteNoticeButton id="1" />);
+      const { container } = render(<EditDeleteNoticeButton noticeId={1} />);
       expect(container.firstChild).toBeNull();
     });
 
     it('어드민 시 수정/삭제 버튼 노출', () => {
-      render(<EditDeleteNoticeButton id="1" />);
+      render(<EditDeleteNoticeButton noticeId={1} />);
       expect(screen.getByText('수정하기')).toBeInTheDocument();
       expect(screen.getByText('삭제하기')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: '수정하기' })).toHaveAttribute(
@@ -169,7 +169,7 @@ describe('notice-admin 기능 통합 테스트', () => {
     });
 
     it('삭제 버튼 클릭 -> 모달 열림 -> 삭제 버튼 클릭 -> 삭제 api 요청이 성공하고 notice 페이지로 이동한다', async () => {
-      render(<EditDeleteNoticeButton id="1" />);
+      render(<EditDeleteNoticeButton noticeId={1} />);
 
       await user.click(screen.getByText('삭제하기'));
 

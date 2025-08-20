@@ -6,14 +6,14 @@ import { formatDate } from '@/shared/utils/formatDate';
 
 interface PageProps {
   params: {
-    id: string;
+    noticeId: string;
   };
 }
 
 export default async function Page({ params }: PageProps) {
-  const { id } = params;
+  const { noticeId } = params;
 
-  const data = await getNoticeDetail(id);
+  const data = await getNoticeDetail(Number(noticeId));
 
   return (
     <div className="w-full">
@@ -29,7 +29,7 @@ export default async function Page({ params }: PageProps) {
         >
           돌아가기
         </Link>
-        <EditDeleteNoticeButton id={id} />
+        <EditDeleteNoticeButton noticeId={Number(noticeId)} />
       </div>
     </div>
   );
