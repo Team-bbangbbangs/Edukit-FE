@@ -4,7 +4,7 @@ import type { AdminNoticeBody } from '@/domains/notice/types/notice';
 import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
 export const postAdminNotice = [
-  http.post('/api/v1/admin/notices', async ({ request }) => {
+  http.post('/api/v2/admin/notices', async ({ request }) => {
     const authHeader = request.headers.get('authorization');
 
     const validation = checkAccessToken(authHeader);
@@ -33,7 +33,7 @@ export const postAdminNotice = [
       );
     }
 
-    if (body.categoryId !== 2 && body.categoryId !== 3) {
+    if (body.category !== 'announcement' && body.category !== 'event') {
       return HttpResponse.json(
         {
           status: 400,
