@@ -173,9 +173,9 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
     config.cache = 'no-store';
   }
 
-  const response = await fetch(url, config);
-
   try {
+    const response = await fetch(url, config);
+
     return await handleResponse<T>(response, skipTokenRefresh);
   } catch (error) {
     if (error instanceof TokenExpiredError && !skipTokenRefresh) {
