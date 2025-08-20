@@ -39,11 +39,11 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   });
 
   test('3. 공지 태그 필터링이 올바르게 작동한다', async ({ page }) => {
-    await page.click('a[href="/notice?categoryId=2"]');
+    await page.click('a[href="/notice?category=announcement"]');
 
-    await expect(page).toHaveURL('/notice?categoryId=2');
+    await expect(page).toHaveURL('/notice?category=announcement');
 
-    const activeCategory = page.locator('a[href="/notice?categoryId=2"]');
+    const activeCategory = page.locator('a[href="/notice?category=announcement"]');
     await expect(activeCategory).toHaveClass(/bg-slate-800/);
 
     const noticeItems = page.locator('a[href^="/notice/"]');
@@ -58,11 +58,11 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   });
 
   test('4. 이벤트 태그 필터링이 올바르게 작동한다', async ({ page }) => {
-    await page.click('a[href="/notice?categoryId=3"]');
+    await page.click('a[href="/notice?category=event"]');
 
-    await expect(page).toHaveURL('/notice?categoryId=3');
+    await expect(page).toHaveURL('/notice?category=event"');
 
-    const activeCategory = page.locator('a[href="/notice?categoryId=3"]');
+    const activeCategory = page.locator('a[href="/notice?category=event"]');
     await expect(activeCategory).toHaveClass(/bg-slate-800/);
 
     const noticeItems = page.locator('a[href^="/notice/"]');
@@ -92,14 +92,14 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   });
 
   test('6. 카테고리와 페이지네이션이 함께 정상적으로 동작한다', async ({ page }) => {
-    await page.click('a[href="/notice?categoryId=2"]');
+    await page.click('a[href="/notice?category=announcement"]');
 
-    const page2Button = page.locator('a[href*="categoryId=2"][href*="page=2"]');
+    const page2Button = page.locator('a[href*="category=announcement"][href*="page=2"]');
 
     if (await page2Button.isVisible()) {
       await page2Button.click();
 
-      await expect(page).toHaveURL('/notice?categoryId=2&page=2');
+      await expect(page).toHaveURL('/notice?category=announcement&page=2');
 
       const noticeItems = page.locator('a[href^="/notice/"]');
       const count = await noticeItems.count();
@@ -154,11 +154,11 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   });
 
   test('8. URL로 직접 접근 시 올바른 데이터가 표시된다', async ({ page }) => {
-    await page.goto('/notice?categoryId=2&page=2');
+    await page.goto('/notice?category=announcement&page=2');
 
-    await expect(page).toHaveURL('/notice?categoryId=2&page=2');
+    await expect(page).toHaveURL('/notice?category=announcement&page=2');
 
-    const activeCategory = page.locator('a[href="/notice?categoryId=2"]');
+    const activeCategory = page.locator('a[href="/notice?category=announcement"]');
     await expect(activeCategory).toHaveClass(/bg-slate-800/);
 
     const noticeItems = page.locator('a[href^="/notice/"]');
@@ -174,14 +174,14 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   });
 
   test('9. 브라우저 새로고침 시 상태가 유지된다', async ({ page }) => {
-    await page.goto('/notice?categoryId=3&page=1');
+    await page.goto('/notice?category=event&page=1');
 
     await page.reload();
     await page.waitForTimeout(1000);
 
-    await expect(page).toHaveURL('/notice?categoryId=3&page=1');
+    await expect(page).toHaveURL('/notice?category=event&page=1');
 
-    const activeCategory = page.locator('a[href="/notice?categoryId=3"]');
+    const activeCategory = page.locator('a[href="/notice?category=event"]');
     await expect(activeCategory).toHaveClass(/bg-slate-800/);
 
     const noticeItems = page.locator('a[href^="/notice/"]');
@@ -236,7 +236,7 @@ test.describe('공지사항 기본 기능 E2E 테스트', () => {
   });
 
   test('11. 잘못된 categortId로 접근할 때 /notice 페이지로 리다이렉트된다.', async ({ page }) => {
-    await page.goto('/notice?categoryId=22');
+    await page.goto('/notice?category=22');
 
     await expect(page).toHaveURL('/notice');
   });
