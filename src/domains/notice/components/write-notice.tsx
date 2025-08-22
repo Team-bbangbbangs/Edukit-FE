@@ -47,9 +47,6 @@ export default function WriteNotice() {
           await revalidateNotice();
           router.push('/notice');
         },
-        onError: () => {
-          alert('공지사항 작성에 실패했습니다. 다시 시도해주세요.');
-        },
       },
     );
   };

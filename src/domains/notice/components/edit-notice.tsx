@@ -64,9 +64,6 @@ export default function EditNotice({ notice }: EditNoticeProps) {
           await revalidateNotice(notice.noticeId);
           router.push(`/notice/${notice.noticeId}`);
         },
-        onError: () => {
-          alert('공지사항 수정에 실패했습니다. 다시 시도해주세요.');
-        },
       },
     );
   };

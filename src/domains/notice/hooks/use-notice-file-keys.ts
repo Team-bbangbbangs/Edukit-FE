@@ -57,7 +57,7 @@ export const useNoticeFileKeys = ({
 
     uploadedImages.forEach(({ tmpFileUrl, fileUrl }) => {
       if (convertedContent.includes(tmpFileUrl)) {
-        convertedContent = convertedContent.replace(new RegExp(tmpFileUrl, 'g'), fileUrl);
+        convertedContent = convertedContent.replaceAll(tmpFileUrl, fileUrl);
       }
     });
 
