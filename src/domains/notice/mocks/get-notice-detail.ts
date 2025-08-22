@@ -14,6 +14,7 @@ const notices: DetailNoticeResponse[] = Array.from({ length: 80 }, (_, i) => {
     title: `공지사항 제목 ${i + 1}`,
     createdAt: new Date(Date.now() - i * 1000 * 60 * 60).toISOString(),
     content,
+    noticeFileKeys: ['1', '2', '3'],
   };
 });
 

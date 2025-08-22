@@ -40,6 +40,7 @@ const mockNoticeDetail: DetailNoticeResponse = {
   content: '<p>테스트 내용입니다.</p>',
   category: '공지',
   createdAt: '2024-01-01T00:00:00Z',
+  noticeFileKeys: ['1', '2', '3'],
 };
 
 describe('notice-admin 기능 통합 테스트', () => {

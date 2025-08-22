@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { usePatchAdminNotice } from '@/domains/notice/apis/mutations/use-patch-admin-notice';
+import { useNoticeFileKeys } from '@/domains/notice/hooks/use-notice-file-keys';
 import type { DetailNoticeResponse, NoticeCategoryType } from '@/domains/notice/types/notice';
 import TipTapEditor, { type TipTapEditorRef } from '@/shared/components/ui/editor/tiptap-editor';
 import { Input } from '@/shared/components/ui/input/input';
@@ -30,23 +31,33 @@ export default function EditNotice({ notice }: EditNoticeProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<TipTapEditorRef>(null);
 
+  const { handleImageUpload, extractUsedFileKeys, convertTmpUrlsToFileUrls } = useNoticeFileKeys({
+    existingFileKeys: notice.noticeFileKeys || [],
+    existingContent: notice.content || '',
+  });
+
   const { mutate: patchAdminNotice } = usePatchAdminNotice();
 
   const handleSubmit = () => {
     const title = titleRef.current?.value;
-    const content = editorRef.current?.getHTML();
+    const rawContent = editorRef.current?.getHTML();
 
-    if (!title?.trim() || !content?.replace(/<[^>]*>/g, '').trim()) {
+    if (!title?.trim() || !rawContent?.replace(/<[^>]*>/g, '').trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
+
+    const convertedContent = convertTmpUrlsToFileUrls(rawContent);
+
+    const fileKeys = extractUsedFileKeys(rawContent);
 
     patchAdminNotice(
       {
         noticeId: notice.noticeId,
         title,
-        content,
+        content: convertedContent,
         category: selectedTag,
+        fileKeys,
       },
       {
         onSuccess: async () => {
@@ -88,6 +99,7 @@ export default function EditNotice({ notice }: EditNoticeProps) {
         initialContent={notice?.content || ''}
         placeholder="내용을 입력해주세요."
         className="w-full max-w-4xl"
+        onImageUpload={handleImageUpload}
       />
 
       <div className="flex gap-4">
