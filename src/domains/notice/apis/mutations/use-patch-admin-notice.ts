@@ -9,11 +9,13 @@ export const patchAdminNotice = async ({
   category,
   title,
   content,
+  fileKeys,
 }: EditAdminNoticeRequest) => {
   return api.patch<ApiResponseWithoutData>(`/api/v2/admin/notices/${noticeId}`, {
     category,
     title,
     content,
+    fileKeys,
   });
 };
 
