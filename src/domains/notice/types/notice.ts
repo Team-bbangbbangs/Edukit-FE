@@ -21,14 +21,34 @@ export interface NoticeListResponse {
 
 export interface DetailNoticeResponse extends Notice {
   content: string;
+  noticeFileKeys: string[];
 }
 
 export interface AdminNoticeBody {
-  category: string;
+  category: NoticeCategoryType;
   title: string;
   content: string;
+  fileKeys?: string[];
 }
 
 export interface EditAdminNoticeRequest extends AdminNoticeBody {
   noticeId: number;
+  fileKeys?: string[];
+}
+
+export interface ImageUploadData {
+  uploadPresignedUrl: string;
+  tmpFileUrl: string;
+  fileUrl: string;
+  fileKey: string;
+}
+
+export interface PresignedUrlResponse {
+  images: ImageUploadData[];
+}
+
+export interface UploadedImageInfo {
+  tmpFileUrl: string;
+  fileUrl: string;
+  fileKey: string;
 }
