@@ -29,8 +29,9 @@ export default function Header() {
   const isLogIn = !!accessToken;
 
   const isActiveTab = (tabPath: string) => {
-    if (tabPath === '/ai-record') {
+    if (tabPath === '/manage-student') {
       const recordPaths = [
+        '/manage-student',
         '/manage-subject',
         '/manage-behavior',
         '/manage-career',
