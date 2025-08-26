@@ -24,6 +24,7 @@ export default function BasicInfoEmailEdit({ currentEmail, onView }: EmailEditPr
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<EmailEditType>({
     resolver: zodResolver(emailEditSchema),
     defaultValues: {
@@ -37,6 +38,12 @@ export default function BasicInfoEmailEdit({ currentEmail, onView }: EmailEditPr
       onSuccess: () => {
         alert('이메일이 성공적으로 변경되었습니다.');
         onView();
+      },
+      onError: (error) => {
+        setError('email', {
+          type: 'server',
+          message: error.message || '이메일 변경 중 오류가 발생했습니다.',
+        });
       },
     });
   };
