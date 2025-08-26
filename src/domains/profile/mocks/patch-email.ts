@@ -7,18 +7,19 @@ export const patchEmail = [
     if (email === 'test@edukit.co.kr') {
       return HttpResponse.json(
         {
-          status: 409,
-          code: 'EDMT-4090101',
-          message: '이미 등록된 회원입니다.',
+          code: 'M-40908',
+          message: '이미 등록된 이메일입니다.',
         },
-        { status: 409 },
+        { status: 200 },
       );
     }
 
-    return HttpResponse.json({
-      status: 200,
-      code: 'EDMT-200',
-      message: '이메일이 성공적으로 변경되었습니다.',
-    });
+    return HttpResponse.json(
+      {
+        code: 'SUCCESS',
+        message: '요청이 성공했습니다.',
+      },
+      { status: 200 },
+    );
   }),
 ];

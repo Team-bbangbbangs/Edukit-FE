@@ -15,30 +15,27 @@ export const getProfile = [
     if (!validation.isValid) {
       return HttpResponse.json(
         {
-          status: 401,
-          code: 'EDMT-4010101',
+          code: 'A-40102',
           message: '유효하지 않은 토큰입니다.',
         },
-        { status: 401 },
+        { status: 200 },
       );
     }
 
     if (validation.isExpired) {
       return HttpResponse.json(
         {
-          status: 401,
-          code: 'EDMT-4010102',
-          message: '만료된 토큰입니다.',
+          code: 'A-40102',
+          message: '유효하지 않은 토큰입니다.',
         },
-        { status: 401 },
+        { status: 200 },
       );
     }
 
     if (validation.isNotVerified) {
       return HttpResponse.json(
         {
-          status: 200,
-          code: 'EDMT-200',
+          code: 'SUCCESS',
           message: '요청에 성공했습니다.',
           data: NOT_VERIFUED_USER_INFO_DATA,
         },
@@ -48,8 +45,7 @@ export const getProfile = [
 
     return HttpResponse.json(
       {
-        status: 200,
-        code: 'EDMT-200',
+        code: 'SUCCESS',
         message: '요청에 성공했습니다.',
         data: USER_INFO_DATA,
       },
