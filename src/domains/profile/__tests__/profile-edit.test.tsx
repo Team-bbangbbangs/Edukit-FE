@@ -62,9 +62,7 @@ describe('profile-edit 컴포넌트 단위 테스트', () => {
       await user.click(checkButton);
 
       await waitFor(() => {
-        expect(global.alert).toHaveBeenCalledWith(
-          '금칙어가 들어갔습니다. 다른 닉네임을 사용해주세요.',
-        );
+        expect(global.alert).toHaveBeenCalledWith('입력하신 닉네임은 유효하지 않습니다.');
       });
     });
 
@@ -77,7 +75,7 @@ describe('profile-edit 컴포넌트 단위 테스트', () => {
       await user.click(checkButton);
 
       await waitFor(() => {
-        expect(global.alert).toHaveBeenCalledWith('현재 사용 중인 닉네임입니다.');
+        expect(global.alert).toHaveBeenCalledWith('입력하신 닉네임은 중복된 닉네임입니다.');
       });
     });
 

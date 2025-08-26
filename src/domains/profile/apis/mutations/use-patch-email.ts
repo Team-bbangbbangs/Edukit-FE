@@ -17,8 +17,5 @@ export const usePatchEmail = () => {
         queryKey: ['profile'],
       });
     },
-    onError: (error) => {
-      alert(error.message);
-    },
   });
 };

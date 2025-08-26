@@ -9,29 +9,31 @@ export const patchAfterLoginPassword = [
     if (currentPassword === 'password1234') {
       return HttpResponse.json(
         {
-          status: 400,
-          code: 'EDMT-4000402',
+          code: 'M-40006',
           message: '현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.',
         },
-        { status: 400 },
+        { status: 200 },
       );
     }
 
     if (currentPassword === 'password123!' && newPassword === 'password123!') {
       return HttpResponse.json(
         {
-          status: 400,
-          code: 'EDMT-4000403',
+          code: 'M-40007',
           message: '새로운 비밀번호는 기존 비밀번호와 같을 수 없습니다.',
         },
-        { status: 400 },
+        { status: 200 },
       );
     }
 
-    return HttpResponse.json({
-      status: 200,
-      code: 'EDMT-200',
-      message: '비밀번호가 성공적으로 변경되었습니다.',
-    });
+    return HttpResponse.json(
+      {
+        code: 'SUCCESS',
+        message: '요청이 성공했습니다.',
+      },
+      {
+        status: 200,
+      },
+    );
   }),
 ];

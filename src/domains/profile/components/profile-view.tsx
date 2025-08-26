@@ -5,6 +5,8 @@ import { CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 
 import { usePostSendEmail } from '@/domains/auth/apis/mutations/use-post-send-email';
+import { useDeleteWithdraw } from '@/domains/profile/apis/mutations/use-delete-withdraw';
+import ConfirmWithdrawModal from '@/domains/profile/components/confirm-withdraw-modal';
 import EmailSentModal from '@/domains/profile/components/email-sent-modal';
 import type { ProfileResponse } from '@/domains/profile/types/profile';
 
@@ -16,17 +18,37 @@ interface ProfileViewProps {
 }
 
 export default function ProfileView({ profile, onChangeEdit }: ProfileViewProps) {
-  const [open, setOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [confirmWithdrawModalOpen, setConfirmWithdrawModalOpen] = useState(false);
 
   const { mutate: postSendEmail } = usePostSendEmail();
+  const { mutate: deleteWithdraw, isPending: isWithdrawPending } = useDeleteWithdraw();
 
   const handleSendEmail = () => {
     postSendEmail(undefined, {
       onSuccess: () => {
-        setOpen(true);
+        setEmailModalOpen(true);
       },
       onError: (error) => {
         alert(error.message);
+      },
+    });
+  };
+
+  const handleWithdrawClick = () => {
+    setConfirmWithdrawModalOpen(true);
+  };
+
+  const handleConfirmWithdraw = () => {
+    deleteWithdraw(undefined, {
+      onSuccess: () => {
+        alert('회원 탈퇴가 완료되었습니다.');
+      },
+      onError: (error) => {
+        alert(error.message);
+      },
+      onSettled: () => {
+        setConfirmWithdrawModalOpen(false);
       },
     });
   };
@@ -72,13 +94,28 @@ export default function ProfileView({ profile, onChangeEdit }: ProfileViewProps)
           <span className="pt-[2px] text-sm">고등학교</span>
         </div>
       </div>
-      <button
-        onClick={onChangeEdit}
-        className="w-40 rounded-md bg-blue-800 px-6 py-2 text-white hover:bg-blue-950"
-      >
-        프로필 수정하기
-      </button>
-      <EmailSentModal open={open} onOpenChange={setOpen} />
+      <div className="flex gap-2">
+        <button
+          onClick={onChangeEdit}
+          className="w-40 rounded-md bg-blue-800 px-6 py-2 text-white hover:bg-blue-950"
+        >
+          프로필 수정하기
+        </button>
+        <button
+          onClick={handleWithdrawClick}
+          className="rounded-md bg-red-600 px-6 py-2 text-white hover:bg-red-700"
+          disabled={isWithdrawPending}
+        >
+          회원 탈퇴하기
+        </button>
+      </div>
+
+      <EmailSentModal open={emailModalOpen} onOpenChange={setEmailModalOpen} />
+      <ConfirmWithdrawModal
+        open={confirmWithdrawModalOpen}
+        onOpenChange={setConfirmWithdrawModalOpen}
+        onConfirm={handleConfirmWithdraw}
+      />
     </div>
   );
 }
