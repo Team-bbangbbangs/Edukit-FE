@@ -109,4 +109,81 @@ describe('profile 기능 통합 테스트', () => {
 
     expect(screen.getByText('내 프로필')).toBeInTheDocument();
   });
+
+  it('회원 탈퇴하기 버튼을 클릭하면 확인 모달이 표시된다', async () => {
+    await loginAsUser();
+
+    render(<Mypage />);
+
+    await waitFor(() => {
+      const loading = document.querySelector('[class*="animate-spin"]');
+      expect(loading).not.toBeInTheDocument();
+    });
+
+    const withdrawButton = screen.getByRole('button', { name: '회원 탈퇴하기' });
+    await user.click(withdrawButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('탈퇴하기')).toBeInTheDocument();
+  });
+
+  it('회원 탈퇴 모달에서 취소하기 버튼을 누르면 모달이 닫힌다', async () => {
+    await loginAsUser();
+
+    render(<Mypage />);
+
+    await waitFor(() => {
+      const loading = document.querySelector('[class*="animate-spin"]');
+      expect(loading).not.toBeInTheDocument();
+    });
+
+    const withdrawButton = screen.getByRole('button', { name: '회원 탈퇴하기' });
+    await user.click(withdrawButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    const cancelButton = screen.getByRole('button', { name: '취소' });
+    await user.click(cancelButton);
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByText('내 프로필')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '회원 탈퇴하기' })).toBeInTheDocument();
+  });
+
+  it('회원 탈퇴 모달에서 탈퇴하기 버튼을 누르면 회원 탈퇴가 실행되고 성공 메시지가 표시된다', async () => {
+    await loginAsUser();
+
+    render(<Mypage />);
+
+    await waitFor(() => {
+      const loading = document.querySelector('[class*="animate-spin"]');
+      expect(loading).not.toBeInTheDocument();
+    });
+
+    const withdrawButton = screen.getByRole('button', { name: '회원 탈퇴하기' });
+    await user.click(withdrawButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    const confirmButton = screen.getByRole('button', { name: '탈퇴하기' });
+    await user.click(confirmButton);
+
+    await waitFor(() => {
+      expect(global.alert).toHaveBeenCalledWith('회원 탈퇴가 완료되었습니다.');
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+  });
 });
