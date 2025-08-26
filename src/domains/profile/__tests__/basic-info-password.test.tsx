@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { render, loginAsUser } from '@/__tests__/utils/test-utils';
@@ -34,11 +34,15 @@ describe('basic-info-password 컴포넌트 단위 테스트', () => {
     const currentPasswordInput = screen.getByPlaceholderText('현재 비밀번호');
     const newPasswordInput = screen.getByPlaceholderText('새 비밀번호');
     const confirmPasswordInput = screen.getByPlaceholderText('새 비밀번호 확인');
+
     await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(screen.getByTestId('current-password-error')).toBeInTheDocument();
-    expect(screen.getByTestId('new-password-error')).toBeInTheDocument();
-    expect(screen.getByTestId('confirm-password-error')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('current-password-error')).toBeInTheDocument();
+      expect(screen.getByTestId('new-password-error')).toBeInTheDocument();
+      expect(screen.getByTestId('confirm-password-error')).toBeInTheDocument();
+    });
+
     expect(currentPasswordInput).toHaveClass('border-red-500');
     expect(newPasswordInput).toHaveClass('border-red-500');
     expect(confirmPasswordInput).toHaveClass('border-red-500');
@@ -52,9 +56,11 @@ describe('basic-info-password 컴포넌트 단위 테스트', () => {
     await user.type(currentPasswordInput, 'password123!');
     await user.type(newPasswordInput, '123');
     await user.type(confirmPasswordInput, '123');
-    await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(screen.getByTestId('new-password-error')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('new-password-error')).toBeInTheDocument();
+    });
+
     expect(newPasswordInput).toHaveClass('border-red-500');
   });
 
@@ -65,10 +71,15 @@ describe('basic-info-password 컴포넌트 단위 테스트', () => {
 
     await user.type(currentPasswordInput, 'password123!');
     await user.type(newPasswordInput, 'newPassword123!');
-    await user.type(confirmPasswordInput, 'differentPassword');
-    await user.click(screen.getByRole('button', { name: '저장' }));
+    await user.type(confirmPasswordInput, 'different123!');
 
-    expect(screen.getByTestId('confirm-password-error')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('confirm-password-error')).toBeInTheDocument();
+      expect(
+        screen.getByText('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.'),
+      ).toBeInTheDocument();
+    });
+
     expect(confirmPasswordInput).toHaveClass('border-red-500');
   });
 
@@ -82,9 +93,11 @@ describe('basic-info-password 컴포넌트 단위 테스트', () => {
     await user.type(confirmPasswordInput, 'newPassword123!');
     await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(global.alert).toHaveBeenCalledWith(
-      '현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.',
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('current-password-error')).toBeInTheDocument();
+    });
+
+    expect(currentPasswordInput).toHaveClass('border-red-500');
   });
 
   it('기존 비밀번호와 동일한 새 비밀번호 사용 시 에러 메시지가 표시된다', async () => {
@@ -95,11 +108,15 @@ describe('basic-info-password 컴포넌트 단위 테스트', () => {
     await user.type(currentPasswordInput, 'password123!');
     await user.type(newPasswordInput, 'password123!');
     await user.type(confirmPasswordInput, 'password123!');
-    await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(global.alert).toHaveBeenCalledWith(
-      '새로운 비밀번호는 기존 비밀번호와 같을 수 없습니다.',
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('new-password-error')).toBeInTheDocument();
+      expect(
+        screen.getByText('새로운 비밀번호는 기존 비밀번호와 같을 수 없습니다.'),
+      ).toBeInTheDocument();
+    });
+
+    expect(newPasswordInput).toHaveClass('border-red-500');
   });
 
   it('정상적인 비밀번호 변경이 성공한다', async () => {
@@ -112,7 +129,9 @@ describe('basic-info-password 컴포넌트 단위 테스트', () => {
     await user.type(confirmPasswordInput, 'newPassword123!');
     await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(global.alert).toHaveBeenCalledWith('비밀번호가 성공적으로 변경되었습니다.');
+    await waitFor(() => {
+      expect(global.alert).toHaveBeenCalledWith('비밀번호가 성공적으로 변경되었습니다.');
+    });
   });
 
   it('비밀번호 수정을 취소할 수 있다', async () => {

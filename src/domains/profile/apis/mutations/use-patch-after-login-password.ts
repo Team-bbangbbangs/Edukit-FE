@@ -17,8 +17,5 @@ export const patchAfterLoginPassword = async ({
 export const usePatchAfterLoginPassword = () => {
   return useMutation<ApiResponseWithoutData, Error, EditPasswordBody>({
     mutationFn: patchAfterLoginPassword,
-    onError: (error) => {
-      alert(error.message);
-    },
   });
 };

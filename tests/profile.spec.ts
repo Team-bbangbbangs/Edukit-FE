@@ -235,7 +235,9 @@ test.describe('프로필 관리 E2E 테스트', () => {
     await page.fill('input[placeholder="새 비밀번호"]', 'newPassword123!');
     await page.fill('input[placeholder="새 비밀번호 확인"]', 'differentPassword');
     await page.click('button:has-text("저장")');
-    await expect(page.locator('text=새 비밀번호가 일치하지 않습니다.')).toBeVisible();
+    await expect(
+      page.locator('text=새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.'),
+    ).toBeVisible();
 
     // 기존 비밀번호와 같은 값 입력
     await page.fill('input[placeholder="새 비밀번호"]', currentPassword);
