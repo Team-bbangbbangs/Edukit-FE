@@ -72,8 +72,60 @@ export const ${handlerName} = [
   return template;
 }
 
-// 파일 경로를 도메인과 상대 경로로 분리
+// 새 핸들러를 기존 handlers.ts에 추가
+function addToHandlersFile(domain: string, fileName: string) {
+  const projectRoot = process.cwd();
+  const handlersPath = path.join(projectRoot, 'src', 'shared', 'mocks', 'handlers.ts');
 
+  const exportName = toCamelCase(fileName);
+  const importPath = `../../domains/${domain}/mocks/${fileName}`;
+  const newImport = `import { ${exportName} } from '${importPath}';`;
+  const newHandler = `...${exportName}`;
+
+  // 기존 파일 읽기
+  let content = fs.readFileSync(handlersPath, 'utf-8');
+
+  // import 구문 추가 (마지막 import 다음에)
+  const lastImportMatch = content.match(/^import.*$/gm);
+  if (lastImportMatch) {
+    const lastImportIndex = content.lastIndexOf(lastImportMatch[lastImportMatch.length - 1]);
+    const afterLastImport = lastImportIndex + lastImportMatch[lastImportMatch.length - 1].length;
+    content = content.slice(0, afterLastImport) + `\n${newImport}` + content.slice(afterLastImport);
+  } else {
+    // import가 없으면 파일 맨 위에 추가
+    content = `${newImport}\n\n${content}`;
+  }
+
+  // handlers 배열에 추가 (마지막 항목 뒤에)
+  const handlersMatch = content.match(/export const handlers = \[([\s\S]*?)\];/);
+  if (handlersMatch) {
+    const handlersContent = handlersMatch[1].trim();
+    let newHandlersContent;
+
+    if (handlersContent) {
+      // 기존 핸들러들이 있으면 끝에 추가
+      newHandlersContent = `${handlersContent}\n  ${newHandler}`;
+    } else {
+      // 빈 배열이면 첫 번째로 추가
+      newHandlersContent = `\n  ${newHandler},`;
+    }
+
+    content = content.replace(
+      /export const handlers = \[([\s\S]*?)\];/,
+      `export const handlers = [${newHandlersContent},\n];`,
+    );
+  }
+
+  // 파일 저장
+  fs.writeFileSync(handlersPath, content);
+}
+
+// 카멜케이스로 변환
+function toCamelCase(str: string): string {
+  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+}
+
+// 파일 경로를 도메인과 상대 경로로 분리
 function parseFilePath(inputPath: string): { domain: string; fileName: string } {
   const parts = inputPath.split('/');
 
@@ -82,7 +134,11 @@ function parseFilePath(inputPath: string): { domain: string; fileName: string } 
   }
 
   const domain = parts[0];
-  const fileName = path.basename(inputPath, path.extname(inputPath));
+  let fileName = path.basename(inputPath, path.extname(inputPath));
+
+  if (fileName.startsWith('use-')) {
+    fileName = fileName.substring(4);
+  }
 
   return {
     domain,
@@ -130,8 +186,11 @@ async function main() {
 
     // 파일 작성
     fs.writeFileSync(handlerFilePath, handlerContent);
-
     console.log(`MSW 핸들러 생성 완료: src/domains/${domain}/mocks/${fileName}.ts`);
+
+    // handlers.ts에 새 핸들러 추가
+    console.log('\nhandlers.ts에 새 핸들러를 추가합니다.');
+    addToHandlersFile(domain, fileName);
   } catch (error) {
     console.error('오류 발생:', error instanceof Error ? error.message : error);
     process.exit(1);
