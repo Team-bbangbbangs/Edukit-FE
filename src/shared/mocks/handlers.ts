@@ -12,6 +12,7 @@ import { getNoticeDetail } from '../../domains/notice/mocks/get-notice-detail';
 import { getNoticeList } from '../../domains/notice/mocks/get-notice-list';
 import { patchAdminNotice } from '../../domains/notice/mocks/patch-admin-notice';
 import { postAdminNotice } from '../../domains/notice/mocks/post-admin-notice';
+import { deleteWithdraw } from '../../domains/profile/mocks/delete-withdraw';
 import { getCheckValidNickname } from '../../domains/profile/mocks/get-check-valid-nickname';
 import { getProfile } from '../../domains/profile/mocks/get-profile';
 import { patchAfterLoginPassword } from '../../domains/profile/mocks/patch-after-login-password';
@@ -56,4 +57,5 @@ export const handlers = [
   ...postAdminNotice,
   ...patchAdminNotice,
   ...deleteAdminNotice,
+  ...deleteWithdraw,
 ];

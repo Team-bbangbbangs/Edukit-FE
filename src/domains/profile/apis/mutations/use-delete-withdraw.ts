@@ -7,7 +7,7 @@ export const deleteWithdraw = async () => {
   return api.delete<ApiResponseWithoutData>('/api/v1/users/withdraw');
 };
 
-export const useGetCheckValidNickname = () => {
+export const useDeleteWithdraw = () => {
   return useMutation<ApiResponseWithoutData, Error>({
     mutationFn: deleteWithdraw,
     onError: (error) => {
