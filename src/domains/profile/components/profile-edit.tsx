@@ -31,17 +31,13 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
 
   const handleNicknameCheck = () => {
     getCheckValidNickname(nickname, {
-      onSuccess: (data) => {
-        if (!data.isDuplicated && !data.isInvalid) {
-          setIsNicknameValidated(true);
-          alert('사용 가능한 닉네임입니다!');
-        } else if (data.isDuplicated) {
-          setIsNicknameValidated(false);
-          alert('현재 사용 중인 닉네임입니다.');
-        } else if (data.isInvalid) {
-          setIsNicknameValidated(false);
-          alert('금칙어가 들어갔습니다. 다른 닉네임을 사용해주세요.');
-        }
+      onSuccess: () => {
+        setIsNicknameValidated(true);
+        alert('사용 가능한 닉네임입니다!');
+      },
+      onError: (error) => {
+        setIsNicknameValidated(false);
+        alert(error.message);
       },
     });
   };
