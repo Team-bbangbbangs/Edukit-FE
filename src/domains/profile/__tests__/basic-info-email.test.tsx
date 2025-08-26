@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { render, loginAsUser } from '@/__tests__/utils/test-utils';
@@ -53,7 +53,9 @@ describe('basic-info-email 컴포넌트 단위 테스트', () => {
     await user.type(emailInput, 'new123@daum.net');
     await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(screen.getByText('교직 이메일이 아닙니다.')).toBeInTheDocument();
+    expect(
+      screen.getByText('유효하지 않은 교사 이메일입니다. 교육청 이메일 도메인만 허용됩니다.'),
+    ).toBeInTheDocument();
     expect(emailInput).toHaveClass('border-red-500');
   });
 
@@ -66,7 +68,10 @@ describe('basic-info-email 컴포넌트 단위 테스트', () => {
     await user.type(emailInput, 'test@edukit.co.kr');
     await user.click(screen.getByRole('button', { name: '저장' }));
 
-    expect(global.alert).toHaveBeenCalledWith('이미 등록된 회원입니다.');
+    await waitFor(() => {
+      expect(screen.getByText('이미 등록된 이메일입니다.')).toBeInTheDocument();
+    });
+    expect(emailInput).toHaveClass('border-red-500');
   });
 
   it('이메일 변경 성공 시 성공 메시지가 표시되고 뷰 모드로 전환된다', async () => {
