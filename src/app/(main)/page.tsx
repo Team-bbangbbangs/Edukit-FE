@@ -9,7 +9,7 @@ export const metadata = createPageMetadata('home');
 
 export default function Page() {
   return (
-    <article className="flex flex-col items-center gap-8">
+    <article className="flex flex-col items-center gap-8 p-2 md:p-10">
       <Image src={landingPageImage} alt="랜딩 페이지 이미지" width={1000} />
       <div className="flex max-w-[1000px] gap-4">
         <Link
