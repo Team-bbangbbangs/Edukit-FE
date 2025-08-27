@@ -1,4 +1,4 @@
-import ClubRecordTable from '@/domains/record/components/student-manage/club-record-table';
+import ClubRecordTable from '@/domains/record/components/record-manage/club-record-table';
 import { createPageMetadata } from '@/shared/constants/metadata';
 
 export const metadata = createPageMetadata('manageStudent', { url: '/manage-club' });

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import ExcelUploadModal from '@/domains/record/components/student-manage/excel-upload-modal';
+import ExcelUploadModal from '@/domains/record/components/record-manage/excel-upload-modal';
 import type { RecordType } from '@/domains/record/types/record';
 
 export default function NotFoundError({ recordType }: { recordType: RecordType }) {

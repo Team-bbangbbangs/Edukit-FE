@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { useGetRecords } from '@/domains/record/apis/queries/use-get-records';
-import ExcelUploadModal from '@/domains/record/components/student-manage/excel-upload-modal';
+import ExcelUploadModal from '@/domains/record/components/record-manage/excel-upload-modal';
 import type { RecordType } from '@/domains/record/types/record';
 import { downloadExcel } from '@/domains/record/utils/download-excel';
 
