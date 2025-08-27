@@ -13,29 +13,29 @@ export const deleteAdminNotice = [
     if (!validation.tokenData?.isAdmin) {
       return HttpResponse.json(
         {
-          status: 403,
-          code: 'EDMT-403',
-          message: '관리자 권한이 필요합니다.',
+          code: 'A-40304',
+          message: '접근 권한이 없는 사용자입니다. 교사 인증을 진행해주세요.',
         },
-        { status: 403 },
+        { status: 200 },
       );
     }
 
     if (noticeId === '999') {
       return HttpResponse.json(
         {
-          status: 404,
-          code: 'EDMT-4040301',
+          code: 'NO-40402',
           message: '해당 공지사항이 존재하지 않습니다.',
         },
-        { status: 404 },
+        { status: 200 },
       );
     }
 
-    return HttpResponse.json({
-      status: 200,
-      code: 'EDMT-20000',
-      message: '요청이 성공했습니다.',
-    });
+    return HttpResponse.json(
+      {
+        code: 'SUCCESS',
+        message: '요청이 성공했습니다.',
+      },
+      { status: 200 },
+    );
   }),
 ];
