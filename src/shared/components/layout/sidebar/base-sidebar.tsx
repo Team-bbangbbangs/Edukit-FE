@@ -11,8 +11,6 @@ import { cn } from '@/shared/lib/utils';
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible';
 
-const SIDEBAR_COOKIE_NAME = 'sidebar_state';
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '325px';
 
 type SidebarContextProps = {
@@ -63,8 +61,6 @@ const SidebarProvider = React.forwardRef<
         } else {
           _setOpen(openState);
         }
-
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
       },
       [setOpenProp, open],
     );
@@ -227,8 +223,8 @@ const SidebarMenuSub = React.forwardRef<
   const [isOpen, setIsOpen] = React.useState(true);
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="group/collapsible">
-      <li className="group/menu-item relative">
+    <li className="group/menu-item relative">
+      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="group/collapsible">
         <div className="flex w-full items-center px-6 py-2">
           <CollapsibleTrigger asChild>
             <button
@@ -251,7 +247,6 @@ const SidebarMenuSub = React.forwardRef<
             </button>
           </CollapsibleTrigger>
         </div>
-
         <CollapsibleContent>
           <ul
             ref={ref}
@@ -262,10 +257,11 @@ const SidebarMenuSub = React.forwardRef<
             {children}
           </ul>
         </CollapsibleContent>
-      </li>
-    </Collapsible>
+      </Collapsible>
+    </li>
   );
 });
+
 SidebarMenuSub.displayName = 'SidebarMenuSub';
 
 const SidebarMenuSubItem = React.forwardRef<
