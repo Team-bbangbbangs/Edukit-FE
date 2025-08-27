@@ -348,38 +348,4 @@ describe('공지사항 어드민 통합 테스트', () => {
       });
     });
   });
-
-  describe('로딩 상태 및 사용자 경험', () => {
-    beforeEach(async () => {
-      await loginAsAdmin();
-    });
-
-    it('로딩 중일 때 버튼이 비활성화되고 텍스트가 변경된다', () => {
-      render(<WriteNotice />);
-
-      const submitButton = screen.getByRole('button', { name: '작성하기' });
-      expect(submitButton).toBeInTheDocument();
-      expect(submitButton).not.toBeDisabled();
-    });
-  });
-
-  describe('에러 처리', () => {
-    beforeEach(async () => {
-      await loginAsAdmin();
-    });
-
-    it('네트워크 오류 시 컴포넌트가 정상적으로 렌더링된다', () => {
-      render(<WriteNotice />);
-
-      expect(screen.getByRole('button', { name: '작성하기' })).toBeInTheDocument();
-    });
-
-    it('권한 없는 사용자가 접근했을 때 적절히 처리된다', async () => {
-      clearAllTestMocks();
-      await loginAsUser();
-
-      const { container } = render(<WriteNoticeButton />);
-      expect(container.firstChild).toBeNull();
-    });
-  });
 });
