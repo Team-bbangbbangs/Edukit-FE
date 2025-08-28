@@ -50,7 +50,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
   }
 
   if (isNotFound) {
-    return <NotFoundError recordType={recordType} />;
+    return <NotFoundError />;
   }
 
   if (isUnauthorized) {
@@ -66,7 +66,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
   }
 
   if (data && data.studentDetails.length === 0) {
-    return <NotFoundError recordType={recordType} />;
+    return <NotFoundError />;
   }
 
   return (
