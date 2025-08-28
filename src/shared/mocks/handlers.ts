@@ -19,7 +19,6 @@ import { patchAfterLoginPassword } from '../../domains/profile/mocks/patch-after
 import { patchEmail } from '../../domains/profile/mocks/patch-email';
 import { patchProfile } from '../../domains/profile/mocks/patch-profile';
 import { createRecordDetail } from '../../domains/record/mocks/create-record-detail';
-import { createRecords } from '../../domains/record/mocks/create-records';
 import { deleteRecordDetail } from '../../domains/record/mocks/delete-record-detail';
 import { getRecords } from '../../domains/record/mocks/get-records';
 import { getStudentsName } from '../../domains/record/mocks/get-students-name';
@@ -35,7 +34,6 @@ export const handlers = [
   ...getRecords,
   ...getNoticeList,
   ...getNoticeDetail,
-  ...createRecords,
   ...patchRecordDetail,
   ...deleteRecordDetail,
   ...createRecordDetail,

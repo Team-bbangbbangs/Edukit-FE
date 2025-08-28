@@ -20,12 +20,6 @@ export interface CreateStudentRecords {
   studentNumber: string;
 }
 
-export interface CreateStudentRecordsRequest {
-  recordType: RecordType;
-  studentRecords: CreateStudentRecords[];
-  semester: string;
-}
-
 interface CreateStudentRecord extends CreateStudentRecords {
   description: string;
   byteCount: number;
@@ -66,4 +60,18 @@ export interface PromptResponse {
   description1: string;
   description2: string;
   description3: string;
+}
+
+export interface InvalidRows {
+  rowNumber: number;
+  grade: string;
+  classNumber: string;
+  studentNumber: string;
+  studentName: string;
+}
+
+export interface ExcelUploadResponse {
+  successCount: number;
+  failureCount: number;
+  invalidRows: InvalidRows[];
 }
