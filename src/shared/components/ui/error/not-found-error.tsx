@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 
-import ExcelUploadModal from '@/domains/record/components/record-manage/excel-upload-modal';
-import type { RecordType } from '@/domains/record/types/record';
+import ExcelUploadModal from '@/shared/components/ui/modal/excel-upload-modal';
 
-export default function NotFoundError({ recordType }: { recordType: RecordType }) {
+export default function NotFoundError() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
 
   return (
@@ -19,11 +18,7 @@ export default function NotFoundError({ recordType }: { recordType: RecordType }
         <br /> 생활기록부 관리하기
       </button>
 
-      <ExcelUploadModal
-        open={excelModalOpen}
-        onOpenChange={setExcelModalOpen}
-        recordType={recordType}
-      />
+      <ExcelUploadModal open={excelModalOpen} onOpenChange={setExcelModalOpen} />
     </div>
   );
 }

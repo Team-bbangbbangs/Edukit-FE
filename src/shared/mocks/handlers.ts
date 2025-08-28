@@ -27,6 +27,7 @@ import { getSummaryRecordDetail } from '../../domains/record/mocks/get-summary-r
 import { patchRecordDetail } from '../../domains/record/mocks/patch-record-detail';
 import { postPrompt } from '../../domains/record/mocks/post-prompt';
 import { postSummaryRecordDetail } from '../../domains/record/mocks/post-summary-record-detail';
+import { postUploadExcel } from '../../domains/record/mocks/post-upload-excel';
 
 export const handlers = [
   ...getCheckAuthValidNickname,
@@ -58,4 +59,5 @@ export const handlers = [
   ...patchAdminNotice,
   ...deleteAdminNotice,
   ...deleteWithdraw,
+  ...postUploadExcel,
 ];

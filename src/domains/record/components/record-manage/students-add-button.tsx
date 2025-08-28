@@ -3,9 +3,9 @@
 import { useState } from 'react';
 
 import { useGetRecords } from '@/domains/record/apis/queries/use-get-records';
-import ExcelUploadModal from '@/domains/record/components/record-manage/excel-upload-modal';
 import type { RecordType } from '@/domains/record/types/record';
 import { downloadExcel } from '@/domains/record/utils/download-excel';
+import ExcelUploadModal from '@/shared/components/ui/modal/excel-upload-modal';
 
 export default function StudentAddButton({ recordType }: { recordType: RecordType }) {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
@@ -45,11 +45,7 @@ export default function StudentAddButton({ recordType }: { recordType: RecordTyp
         엑셀로 내보내기
       </button>
 
-      <ExcelUploadModal
-        open={excelModalOpen}
-        onOpenChange={setExcelModalOpen}
-        recordType={recordType}
-      />
+      <ExcelUploadModal open={excelModalOpen} onOpenChange={setExcelModalOpen} />
     </div>
   );
 }
