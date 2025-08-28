@@ -11,8 +11,8 @@ export const postUploadExcel = [
           successCount: 23,
           failCount: 2,
           failedStudents: [
-            { row: 5, name: '홍길동', reason: '중복된 학생 정보입니다.' },
-            { row: 12, name: '김철수', reason: '필수 정보가 누락되었습니다.' },
+            { rowNumber: 5, grade: '1', classNumber: '1', studentNumber: '1', name: '홍길동' },
+            { rowNumber: 5, grade: '1', classNumber: '1', studentNumber: '1', name: '홍길동' },
           ],
         },
       },
