@@ -15,6 +15,8 @@ interface ExcelUploadModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,6 +48,16 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
     saveAs(blob, '학생목록_템플릿.xlsx');
   };
 
+  const setFileWithValidation = (file: File) => {
+    if (file.size > MAX_FILE_SIZE) {
+      setSelectedFile(null);
+      alert('파일 크기는 10MB를 초과할 수 없습니다.');
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
   const handleSubmit = () => {
     if (!selectedFile) {
       alert('업로드할 파일을 선택해주세요.');
@@ -70,7 +82,7 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setSelectedFile(file);
+    setFileWithValidation(file);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -79,7 +91,7 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
 
     const file = e.dataTransfer.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      setFileWithValidation(file);
     }
   };
 
@@ -169,16 +181,11 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   className={`flex flex-col items-center rounded-[8px] bg-gray-1 p-8 transition-colors duration-200 hover:bg-gray-2 ${
-                    isDragOver ? 'bg-gray-2' : null
+                    isDragOver ? 'bg-gray-2' : ''
                   } ${isPending ? 'pointer-events-none opacity-50' : ''} `}
                 >
                   <div className="flex flex-col items-center gap-4">
-                    <Image
-                      src={'/svgs/ic_24_upload.svg'}
-                      alt="downloading"
-                      width={24}
-                      height={24}
-                    />
+                    <Image src={'/svgs/ic_24_upload.svg'} alt="uploading" width={24} height={24} />
                     <p className="text-label-14 text-gray-5">드래그하거나 클릭하여 파일 업로드</p>
                   </div>
                 </button>
