@@ -5,7 +5,7 @@ export default function RecordLayout({ children }: { children: React.ReactNode }
   return (
     <SidebarProvider>
       <RecordSidebar />
-      <div className="p-[60px]">{children}</div>
+      <div className="min-w-0 flex-1 p-[60px]">{children}</div>
     </SidebarProvider>
   );
 }
