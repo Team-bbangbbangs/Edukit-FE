@@ -21,6 +21,7 @@ import { patchProfile } from '../../domains/profile/mocks/patch-profile';
 import { createRecordDetail } from '../../domains/record/mocks/create-record-detail';
 import { deleteRecordDetail } from '../../domains/record/mocks/delete-record-detail';
 import { getRecords } from '../../domains/record/mocks/get-records';
+import { getStudent } from '../../domains/record/mocks/get-student';
 import { getStudentsName } from '../../domains/record/mocks/get-students-name';
 import { getSummaryRecordDetail } from '../../domains/record/mocks/get-summary-record-detail';
 import { patchRecordDetail } from '../../domains/record/mocks/patch-record-detail';
@@ -58,4 +59,5 @@ export const handlers = [
   ...deleteAdminNotice,
   ...deleteWithdraw,
   ...postUploadExcel,
+  ...getStudent,
 ];
