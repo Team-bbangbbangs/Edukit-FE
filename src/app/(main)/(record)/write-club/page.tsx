@@ -4,5 +4,5 @@ import { createPageMetadata } from '@/shared/constants/metadata';
 export const metadata = createPageMetadata('writeRecords', { url: '/write-club' });
 
 export default function Page({ searchParams }: { searchParams: { recordId?: string } }) {
-  return <StudentRecordWrite recordType="club" recordId={searchParams.recordId} />;
+  return <StudentRecordWrite recordType="CLUB" recordId={searchParams.recordId} />;
 }

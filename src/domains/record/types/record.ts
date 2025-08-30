@@ -1,4 +1,4 @@
-export type RecordType = 'subject' | 'behavior' | 'career' | 'free' | 'club';
+export type RecordType = 'SUBJECT' | 'BEHAVIOR' | 'CAREER' | 'FREE' | 'CLUB';
 
 export interface StudentRecord {
   recordDetailId: string;
@@ -74,4 +74,29 @@ export interface ExcelUploadResponse {
   successCount: number;
   failureCount: number;
   invalidRows: InvalidRows[];
+}
+
+export interface Student {
+  studentId: number;
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+  recordTypes: string[];
+}
+
+export interface StudentsResponse {
+  studentCount: number;
+  students: Student[];
+}
+
+export interface StudentFilters {
+  grades?: number[];
+  classNumbers?: number[];
+  recordTypes?: string[];
+}
+
+export interface GetStudentsParams extends StudentFilters {
+  lastStudentId?: number;
+  pageSize?: number;
 }

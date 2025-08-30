@@ -9,7 +9,7 @@ interface AiResponseProps {
 }
 
 export default function AiResponse({ responses, isGenerating, recordType }: AiResponseProps) {
-  const bytesLimit = recordType === 'career' ? 2100 : 1500;
+  const bytesLimit = recordType === 'CAREER' ? 2100 : 1500;
 
   const getContentForVersion = (version: number) => {
     if (isGenerating) {
