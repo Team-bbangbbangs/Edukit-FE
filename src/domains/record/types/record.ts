@@ -1,4 +1,4 @@
-export type RecordType = 'subject' | 'behavior' | 'career' | 'free' | 'club';
+export type RecordType = 'SUBJECT' | 'BEHAVIOR' | 'CAREER' | 'FREE' | 'CLUB';
 
 export interface StudentRecord {
   recordDetailId: string;

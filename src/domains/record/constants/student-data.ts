@@ -37,7 +37,7 @@ const getRandomDescription = () => {
 };
 
 export const STUDENT_DATA: Record<RecordType, MockStudentData[]> = {
-  career: [
+  CAREER: [
     {
       recordId: 1,
       studentName: '김민수',
@@ -84,7 +84,7 @@ export const STUDENT_DATA: Record<RecordType, MockStudentData[]> = {
       byteCount: calculateByte('창업 동아리 활동을 통해 기업가 정신을 기르고 있습니다.'),
     },
   ],
-  subject: Array.from({ length: 8 }, (_, i) => {
+  SUBJECT: Array.from({ length: 8 }, (_, i) => {
     const description = getRandomDescription();
     return {
       recordId: 100 + i,
@@ -93,8 +93,8 @@ export const STUDENT_DATA: Record<RecordType, MockStudentData[]> = {
       byteCount: calculateByte(description),
     };
   }),
-  behavior: [],
-  free: Array.from({ length: 5 }, (_, i) => {
+  BEHAVIOR: [],
+  FREE: Array.from({ length: 5 }, (_, i) => {
     const description = getRandomDescription();
     return {
       recordId: 300 + i,
@@ -103,7 +103,7 @@ export const STUDENT_DATA: Record<RecordType, MockStudentData[]> = {
       byteCount: calculateByte(description),
     };
   }),
-  club: Array.from({ length: 10 }, (_, i) => {
+  CLUB: Array.from({ length: 10 }, (_, i) => {
     const description = getRandomDescription();
     return {
       recordId: 400 + i,

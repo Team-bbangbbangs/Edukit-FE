@@ -17,8 +17,8 @@ const generateMockStudent = (): Student[] => {
     ['SUBJECT', 'BEHAVIOR', 'CAREER'],
   ];
   for (let i = 1; i <= 120; i++) {
-    const grade = Math.ceil(i / 40);
-    const classNumber = Math.ceil(((i - 1) % 40) / 10) + 1;
+    const grade = Math.floor(i / 40);
+    const classNumber = Math.floor(((i - 1) % 40) / 10) + 1;
     const studentNumber = ((i - 1) % 10) + 1;
 
     students.push({
