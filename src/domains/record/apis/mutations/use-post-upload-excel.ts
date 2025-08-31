@@ -11,7 +11,7 @@ export const postUploadExcel = async ({ file }: ExcelUploadRequest) => {
   const formData = new FormData();
   formData.append('file', file);
 
-  return api.post<ExcelUploadResponse>('/api/v1/student/excel', formData);
+  return api.post<ExcelUploadResponse>('/api/v1/students/excel', formData);
 };
 
 export const usePostUploadExcel = () => {

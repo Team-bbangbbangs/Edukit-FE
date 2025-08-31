@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 
-import type { Student } from '@/domains/record/types/record';
+import type { Student, RecordType } from '@/domains/record/types/record';
 
 const generateMockStudent = (): Student[] => {
   const students: Student[] = [];
-  const recordTypeOptions = [
+  const recordTypeOptions: RecordType[][] = [
     ['SUBJECT'],
     ['BEHAVIOR'],
     ['SUBJECT', 'BEHAVIOR'],
@@ -15,9 +15,11 @@ const generateMockStudent = (): Student[] => {
     ['BEHAVIOR', 'FREE'],
     ['CAREER', 'CLUB'],
     ['SUBJECT', 'BEHAVIOR', 'CAREER'],
+    [],
   ];
+
   for (let i = 1; i <= 120; i++) {
-    const grade = Math.floor(i / 40);
+    const grade = Math.floor(i / 40) + 1;
     const classNumber = Math.floor(((i - 1) % 40) / 10) + 1;
     const studentNumber = ((i - 1) % 10) + 1;
 
@@ -36,13 +38,13 @@ const generateMockStudent = (): Student[] => {
 
 const MOCK_STUDENTS = generateMockStudent();
 
-export const getStudent = [
-  http.get('/api/v1/student', ({ request }) => {
+export const getStudents = [
+  http.get('/api/v1/students', ({ request }) => {
     const url = new URL(request.url);
 
     const grades = url.searchParams.getAll('grades').map(Number);
     const classNumbers = url.searchParams.getAll('classNumbers').map(Number);
-    const recordTypes = url.searchParams.getAll('recordTypes');
+    const recordTypes = url.searchParams.getAll('recordTypes') as RecordType[];
     const lastStudentId = url.searchParams.get('lastStudentId');
     const pageSize = parseInt(url.searchParams.get('pageSize') || '20');
 
