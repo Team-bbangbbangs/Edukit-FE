@@ -82,7 +82,7 @@ export interface Student {
   classNumber: number;
   studentNumber: number;
   studentName: string;
-  recordTypes: string[];
+  recordTypes: RecordType[];
 }
 
 export interface StudentsResponse {
