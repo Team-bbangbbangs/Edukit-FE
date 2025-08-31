@@ -36,6 +36,7 @@ interface DropdownContentProps extends DropdownProps {
 interface RootDropdownProps extends DropdownProps {
   defaultOpen?: boolean;
   initialFocusIndex?: number;
+  onOpenChange?: (open: boolean) => void;
 }
 
 interface DropdownTriggerProps extends DropdownProps {
@@ -74,9 +75,30 @@ function Dropdown({
   defaultOpen = false,
   className = '',
   initialFocusIndex = -1,
+  onOpenChange,
 }: RootDropdownProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [itemCount, setItemCount] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open]);
 
   const { focusedIndex, setFocusedIndex } = useKeyboardNavigation({
     isOpen: open,
@@ -103,8 +125,7 @@ function Dropdown({
 
   return (
     <DropdownContext.Provider value={contextValue}>
-      <div className={`relative ${className}`}>
-        <Dropdown.Overlay />
+      <div ref={wrapperRef} className={`relative ${className}`}>
         {children}
       </div>
     </DropdownContext.Provider>
@@ -112,20 +133,6 @@ function Dropdown({
 }
 
 Dropdown.displayName = 'Dropdown';
-
-/* -------------------------------------------------------------------------------------------------
- * Dropdown Overlay
- * -----------------------------------------------------------------------------------------------*/
-
-function DropdownOverlay() {
-  const { open, setOpen } = useDropdownContext();
-
-  if (!open) return null;
-
-  return <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setOpen(false)} />;
-}
-
-DropdownOverlay.displayName = 'DropdownOverlay';
 
 /* -------------------------------------------------------------------------------------------------
  * Dropdown Trigger
@@ -279,7 +286,6 @@ DropdownSeparator.displayName = 'DropdownSeparator';
  * -----------------------------------------------------------------------------------------------*/
 
 Dropdown.Trigger = DropdownTrigger;
-Dropdown.Overlay = DropdownOverlay;
 Dropdown.Content = DropdownContent;
 Dropdown.Item = DropdownItem;
 Dropdown.Separator = DropdownSeparator;
