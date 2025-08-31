@@ -94,12 +94,12 @@ export default function ProfileEdit({ profile, onChangeView }: ProfileEditProps)
         <span className="w-16 text-sm text-slate-600">과목</span>
         <Dropdown className="w-80">
           <Dropdown.Trigger
-            className="!justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex w-full items-center !justify-between gap-2 rounded-md border border-gray-300 bg-white p-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             iconPosition="right"
           >
             {subject || '과목을 선택하세요'}
           </Dropdown.Trigger>
-          <Dropdown.Content>
+          <Dropdown.Content className="max-h-60 overflow-y-auto">
             {subjects.map((subjectOption, index) => (
               <Dropdown.Item
                 key={subjectOption.value}

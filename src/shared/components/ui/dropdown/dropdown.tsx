@@ -153,7 +153,7 @@ function DropdownTrigger({
   return (
     <button
       type="button"
-      className={`flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 hover:border-gray-400 ${className}`}
+      className={` ${className}`}
       aria-expanded={open}
       aria-haspopup="menu"
       data-state={open ? 'open' : 'closed'}
@@ -206,7 +206,7 @@ function DropdownContent({ children, className = '', itemCount }: DropdownConten
   return (
     <div
       ref={dropdownRef}
-      className={`absolute top-full z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg transition-all duration-200 ease-out ${
+      className={`absolute top-full z-50 mt-1 w-full rounded-[13px] border border-gray-2 bg-white shadow-md transition-all duration-200 ease-out ${
         renderOpen
           ? 'animate-in fade-in-0 zoom-in-95'
           : 'invisible animate-out fade-out-0 zoom-out-95'

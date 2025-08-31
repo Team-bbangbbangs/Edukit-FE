@@ -265,13 +265,19 @@ export default function Signup() {
           </label>
 
           <Dropdown initialFocusIndex={0}>
-            <Dropdown.Trigger className="h-12" onClick={() => handleButtonClick()}>
+            <Dropdown.Trigger
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 hover:border-gray-400"
+              onClick={() => handleButtonClick()}
+            >
               {selectedSubjectValue
                 ? subjects.find((subject) => subject.value === selectedSubjectValue)?.label
                 : '담당 교과목 선택'}
             </Dropdown.Trigger>
 
-            <Dropdown.Content itemCount={filteredSubjects.length}>
+            <Dropdown.Content
+              className="max-h-60 overflow-y-auto"
+              itemCount={filteredSubjects.length}
+            >
               <input
                 ref={subjectInputRef}
                 onKeyDown={handleInputKeyDown}
