@@ -158,7 +158,7 @@ ModalClose.displayName = 'ModalClose';
  * -----------------------------------------------------------------------------------------------*/
 
 function ModalTitle({ children, className = '' }: ModalComponentProps) {
-  return <h2 className={`text-title-20 ${className}`}>{children}</h2>;
+  return <h2 className={`${className}`}>{children}</h2>;
 }
 
 ModalTitle.displayName = 'ModalTitle';
@@ -168,7 +168,7 @@ ModalTitle.displayName = 'ModalTitle';
  * -----------------------------------------------------------------------------------------------*/
 
 function ModalDescription({ children, className = '' }: ModalComponentProps) {
-  return <p className={`text-lg text-muted-foreground ${className}`}>{children}</p>;
+  return <p className={`${className}`}>{children}</p>;
 }
 
 ModalDescription.displayName = 'ModalDescription';
