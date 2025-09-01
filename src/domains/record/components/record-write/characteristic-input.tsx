@@ -62,12 +62,12 @@ export default function CharacteristicInput({
         <Dropdown>
           <Dropdown.Trigger
             iconPosition="right"
-            className="gap-2 text-left focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {selectedStudentName}
           </Dropdown.Trigger>
 
-          <Dropdown.Content>
+          <Dropdown.Content className="max-h-60 overflow-y-auto">
             {students.map((student, index) => {
               const isSelected = selectedId === student.recordId;
               return (

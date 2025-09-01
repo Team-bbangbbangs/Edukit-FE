@@ -1,6 +1,6 @@
 'use client';
 
-import { TriangleAlert } from 'lucide-react';
+import Button from '@/shared/components/ui/button/button';
 
 import Modal from './modal';
 
@@ -22,29 +22,36 @@ export default function DeleteConfirmModal({
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
       <Modal.Overlay />
-      <Modal.Content aria-describedby={undefined} className="max-w-md rounded-xl px-8 py-6">
+      <Modal.Content aria-describedby={undefined} className="max-w-[787px] rounded-[20px] p-14">
         <Modal.Close />
-        <Modal.Title className="flex flex-col items-center justify-center gap-4 text-[20px]">
-          <div className="flex h-16 w-16 items-center justify-center">
-            <TriangleAlert className="h-8 w-8 text-red-600" />
-          </div>
-          <span className="text-gray-800">정말 삭제하시겠습니까?</span>
+        <Modal.Title className="mb-4 text-title-20 text-gray-black">
+          정말 삭제하시겠습니까?
         </Modal.Title>
+        <Modal.Description className="mb-10 text-title-18 text-gray-5">
+          현재까지 작성한 학생들의 생활기록부 내용이 사라집니다.
+        </Modal.Description>
 
-        <div className="mt-6 flex justify-center gap-4">
-          <button
+        <div className="flex items-start gap-6 self-stretch">
+          <Button
+            color="secondary"
+            variant="stroke"
+            size="large"
+            shape="rect"
+            className="flex flex-1 items-center justify-center"
             onClick={handleCancel}
-            className="rounded-md bg-slate-800 px-6 py-2 font-bold text-white transition-colors hover:bg-slate-950"
           >
-            취소
-          </button>
-          <button
-            data-testid="modal-remove-button"
+            <span className="text-label-18 text-gray-4">취소</span>
+          </Button>
+          <Button
+            className="flex flex-1 items-center justify-center bg-brandRed hover:bg-red-600"
+            variant="stroke"
+            size="large"
+            shape="rect"
             onClick={onDelete}
-            className="rounded-md bg-red-700 px-6 py-2 font-bold text-white hover:bg-red-600"
+            data-testid="modal-remove-button"
           >
-            삭제
-          </button>
+            <span className="text-label-18 text-white">삭제</span>
+          </Button>
         </div>
       </Modal.Content>
     </Modal>

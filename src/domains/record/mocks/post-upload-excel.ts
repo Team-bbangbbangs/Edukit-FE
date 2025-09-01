@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const postUploadExcel = [
-  http.post('/api/v1/student/excel', async () => {
+  http.post('/api/v1/students/excel', async () => {
     return HttpResponse.json(
       {
         code: 'SUCCESS',

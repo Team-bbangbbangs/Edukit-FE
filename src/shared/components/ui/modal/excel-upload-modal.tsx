@@ -119,7 +119,7 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
       <Modal.Content aria-describedby={undefined} className="max-w-[987px]">
         <Modal.Close />
 
-        <Modal.Title className="mb-8 text-title-20">
+        <Modal.Title className="mb-8 text-title-20 text-gray-black">
           템플릿을 다운로드하여 학생 정보를 입력한 후 업로드해주세요.
         </Modal.Title>
 

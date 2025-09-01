@@ -7,7 +7,7 @@ import type {
 } from '@/domains/record/types/record';
 import { api } from '@/shared/lib/api';
 
-export const getStudent = async (params: GetStudentsParams = {}) => {
+export const getStudents = async (params: GetStudentsParams = {}) => {
   const searchParams = new URLSearchParams();
 
   if (params.grades && params.grades.length > 0) {
@@ -33,12 +33,12 @@ export const getStudent = async (params: GetStudentsParams = {}) => {
   }
 
   const queryString = searchParams.toString();
-  const endpoint = queryString ? `/api/v1/student?${queryString}` : '/api/v1/student';
+  const endpoint = queryString ? `/api/v1/students?${queryString}` : '/api/v1/students';
 
   return api.get<StudentsResponse>(endpoint);
 };
 
-export const useGetStudent = (filters: StudentFilters = {}) => {
+export const useGetStudents = (filters: StudentFilters = {}) => {
   return useInfiniteQuery<
     StudentsResponse,
     Error,
@@ -48,7 +48,7 @@ export const useGetStudent = (filters: StudentFilters = {}) => {
   >({
     queryKey: ['students', 'infinite', filters],
     queryFn: ({ pageParam }: { pageParam: number | undefined }) =>
-      getStudent({
+      getStudents({
         ...filters,
         lastStudentId: pageParam,
       }),

@@ -45,7 +45,7 @@ export default function RecordSidebar() {
   };
 
   return (
-    <Sidebar>
+    <Sidebar className="bg-white">
       <SidebarMenu>
         {RECORD_SIDEBAR_CONFIG.map((item) =>
           item.type === 'collapsible' ? (

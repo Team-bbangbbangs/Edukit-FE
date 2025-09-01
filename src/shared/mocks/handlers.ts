@@ -20,11 +20,13 @@ import { patchEmail } from '../../domains/profile/mocks/patch-email';
 import { patchProfile } from '../../domains/profile/mocks/patch-profile';
 import { createRecordDetail } from '../../domains/record/mocks/create-record-detail';
 import { deleteRecordDetail } from '../../domains/record/mocks/delete-record-detail';
+import { deleteStudents } from '../../domains/record/mocks/delete-students';
 import { getRecords } from '../../domains/record/mocks/get-records';
-import { getStudent } from '../../domains/record/mocks/get-student';
+import { getStudents } from '../../domains/record/mocks/get-students';
 import { getStudentsName } from '../../domains/record/mocks/get-students-name';
 import { getSummaryRecordDetail } from '../../domains/record/mocks/get-summary-record-detail';
 import { patchRecordDetail } from '../../domains/record/mocks/patch-record-detail';
+import { patchStudents } from '../../domains/record/mocks/patch-students';
 import { postPrompt } from '../../domains/record/mocks/post-prompt';
 import { postSummaryRecordDetail } from '../../domains/record/mocks/post-summary-record-detail';
 import { postUploadExcel } from '../../domains/record/mocks/post-upload-excel';
@@ -59,5 +61,7 @@ export const handlers = [
   ...deleteAdminNotice,
   ...deleteWithdraw,
   ...postUploadExcel,
-  ...getStudent,
+  ...getStudents,
+  ...deleteStudents,
+  ...patchStudents,
 ];
