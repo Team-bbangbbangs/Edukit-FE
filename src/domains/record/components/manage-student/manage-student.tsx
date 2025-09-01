@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useGetStudents } from '@/domains/record/apis/infinite-queries/get-students';
 import { useDeleteStudents } from '@/domains/record/apis/mutations/use-delete-students';
 import { usePatchStudents } from '@/domains/record/apis/mutations/use-patch-students';
-import { RecordTag } from '@/domains/record/components/magage-student/record-tag';
+import { RecordTag } from '@/domains/record/components/manage-student/record-tag';
 import { RECORD_TYPE } from '@/domains/record/constants/record-type';
 import type { StudentsResponse, Student, RecordType } from '@/domains/record/types/record';
 import Button from '@/shared/components/ui/button/button';
@@ -43,9 +43,22 @@ function EditableCell({ student, field, value, onSave, className }: EditableCell
     setIsEditing(false);
 
     if (tempValue !== value.toString()) {
+      const isNumberField = ['grade', 'classNumber', 'studentNumber'].includes(field);
+      let finalValue: string | number = tempValue;
+
+      if (isNumberField) {
+        const numValue = Number(tempValue);
+        if (isNaN(numValue)) {
+          setError('숫자만 입력 가능합니다.');
+          setIsEditing(true);
+          return;
+        }
+        finalValue = numValue;
+      }
+
       const updatedStudent: Student = {
         ...student,
-        [field]: tempValue,
+        [field]: finalValue,
       };
       onSave(updatedStudent);
     }

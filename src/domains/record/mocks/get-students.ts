@@ -19,7 +19,7 @@ const generateMockStudent = (): Student[] => {
   ];
 
   for (let i = 1; i <= 120; i++) {
-    const grade = Math.floor(i / 40) + 1;
+    const grade = Math.floor((i - 1) / 40) + 1;
     const classNumber = Math.floor(((i - 1) % 40) / 10) + 1;
     const studentNumber = ((i - 1) % 10) + 1;
 

@@ -93,7 +93,7 @@ export interface StudentsResponse {
 export interface StudentFilters {
   grades?: number[];
   classNumbers?: number[];
-  recordTypes?: string[];
+  recordTypes?: RecordType[];
 }
 
 export interface GetStudentsParams extends StudentFilters {

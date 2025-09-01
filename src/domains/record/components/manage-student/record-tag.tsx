@@ -38,7 +38,10 @@ export function RecordTag({ recordType, showClose = false, onRemove, onClick }: 
           alt="close"
           width={18}
           height={18}
-          onClick={onRemove}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove?.(e);
+          }}
           className="cursor-pointer hover:opacity-70"
         />
       ) : null}
