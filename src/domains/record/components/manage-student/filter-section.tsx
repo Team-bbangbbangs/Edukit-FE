@@ -131,9 +131,19 @@ export function FilterSection({
   const getFilterDisplayText = (filterType: 'grade' | 'class' | 'record') => {
     switch (filterType) {
       case 'grade':
-        return selectedGrades.length > 0 ? selectedGrades.map((g) => `${g}`).join(', ') : '';
+        return selectedGrades.length > 0
+          ? selectedGrades
+              .sort((a, b) => a - b)
+              .map((g) => `${g}`)
+              .join(', ')
+          : '';
       case 'class':
-        return selectedClasses.length > 0 ? selectedClasses.map((c) => `${c}`).join(', ') : '';
+        return selectedClasses.length > 0
+          ? selectedClasses
+              .sort((a, b) => a - b)
+              .map((c) => `${c}`)
+              .join(', ')
+          : '';
       case 'record':
         return selectedRecordTypes.length > 0
           ? selectedRecordTypes.map((r) => RECORD_TYPE.find((t) => t.value === r)?.label).join(', ')
@@ -194,7 +204,7 @@ export function FilterSection({
                   className="text-gray-4"
                 />
               </Dropdown.Trigger>
-              <Dropdown.Content className="right-0 flex w-[146px] flex-col items-start p-2">
+              <Dropdown.Content className="right-0 flex !w-[146px] flex-col items-start p-2">
                 <Dropdown.Item
                   className="flex w-full cursor-pointer items-center rounded-[8px] hover:bg-gray-1"
                   onClick={() => handleFilterToggle('grade')}
@@ -250,7 +260,7 @@ export function FilterSection({
                   }}
                 />
               </Dropdown.Trigger>
-              <Dropdown.Content className="flex w-[95px] flex-col items-start p-2">
+              <Dropdown.Content className="flex !w-[95px] flex-col items-start p-2">
                 {grades?.map((grade) => (
                   <div
                     key={grade}
@@ -301,7 +311,7 @@ export function FilterSection({
                   }}
                 />
               </Dropdown.Trigger>
-              <Dropdown.Content className="flex w-[95px] flex-col items-start p-2">
+              <Dropdown.Content className="flex !w-[95px] flex-col items-start p-2">
                 {classNumbers?.map((classNumber) => (
                   <div
                     key={classNumber}
@@ -352,7 +362,7 @@ export function FilterSection({
                   }}
                 />
               </Dropdown.Trigger>
-              <Dropdown.Content className="!mt-2 inline-flex w-[152px] flex-col items-start p-2">
+              <Dropdown.Content className="!mt-2 inline-flex !w-[152px] flex-col items-start p-2">
                 {RECORD_TYPE.map((option) => {
                   const isSelected = selectedRecordTypes.includes(option.value);
 
