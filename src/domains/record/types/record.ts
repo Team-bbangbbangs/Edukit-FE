@@ -85,8 +85,12 @@ export interface Student {
   recordTypes: RecordType[];
 }
 
+export type CreateStudentRequest = Omit<Student, 'studentId'>;
+
 export interface StudentsResponse {
   studentCount: number;
+  grades: number[];
+  classNumbers: number[];
   students: Student[];
 }
 
