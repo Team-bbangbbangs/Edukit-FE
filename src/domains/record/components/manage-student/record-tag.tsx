@@ -7,7 +7,7 @@ interface RecordTagProps {
   recordType: RecordType;
   showClose?: boolean;
   onRemove?: (e: React.MouseEvent) => void;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 const getRecordTypeStyles = (recordType: RecordType): string => {

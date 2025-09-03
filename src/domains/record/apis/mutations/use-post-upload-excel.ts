@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { type ExcelUploadResponse } from '@/domains/record/types/record';
 import { api } from '@/shared/lib/api';
@@ -15,7 +15,17 @@ export const postUploadExcel = async ({ file }: ExcelUploadRequest) => {
 };
 
 export const usePostUploadExcel = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<ExcelUploadResponse, Error, ExcelUploadRequest>({
     mutationFn: postUploadExcel,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['students'],
+      });
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 };

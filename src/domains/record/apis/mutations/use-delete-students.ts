@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/shared/lib/api';
 import { type ApiResponseWithoutData } from '@/shared/types/response';
@@ -14,7 +14,17 @@ export const deleteStudents = async ({ studentIds }: DeleteStudents) => {
 };
 
 export const useDeleteStudents = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<ApiResponseWithoutData, Error, DeleteStudents>({
     mutationFn: deleteStudents,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['students'],
+      });
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 };

@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { type Student } from '@/domains/record/types/record';
+import { type CreateStudentRequest } from '@/domains/record/types/record';
 import { api } from '@/shared/lib/api';
 import { type ApiResponseWithoutData } from '@/shared/types/response';
 
-export const patchStudents = async (studentInfo: Student) => {
-  return api.patch<ApiResponseWithoutData>(`/api/v1/students/${studentInfo.studentId}`, {
+export const postStudents = async (studentInfo: CreateStudentRequest) => {
+  return api.post<ApiResponseWithoutData>('/api/v1/students', {
     grade: studentInfo.grade,
     classNumber: studentInfo.classNumber,
     studentNumber: studentInfo.studentNumber,
@@ -14,18 +14,14 @@ export const patchStudents = async (studentInfo: Student) => {
   });
 };
 
-export const usePatchStudents = () => {
+export const usePostStudents = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ApiResponseWithoutData, Error, Student>({
-    mutationFn: patchStudents,
-    onSuccess: (_, variables) => {
+  return useMutation<ApiResponseWithoutData, Error, CreateStudentRequest>({
+    mutationFn: postStudents,
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['students'],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ['student', variables.studentId],
       });
     },
     onError: (error) => {

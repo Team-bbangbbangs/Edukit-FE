@@ -28,6 +28,7 @@ import { getSummaryRecordDetail } from '../../domains/record/mocks/get-summary-r
 import { patchRecordDetail } from '../../domains/record/mocks/patch-record-detail';
 import { patchStudents } from '../../domains/record/mocks/patch-students';
 import { postPrompt } from '../../domains/record/mocks/post-prompt';
+import { postStudents } from '../../domains/record/mocks/post-students';
 import { postSummaryRecordDetail } from '../../domains/record/mocks/post-summary-record-detail';
 import { postUploadExcel } from '../../domains/record/mocks/post-upload-excel';
 
@@ -64,4 +65,5 @@ export const handlers = [
   ...getStudents,
   ...deleteStudents,
   ...patchStudents,
+  ...postStudents,
 ];
