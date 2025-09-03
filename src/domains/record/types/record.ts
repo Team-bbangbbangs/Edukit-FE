@@ -64,9 +64,9 @@ export interface PromptResponse {
 
 export interface InvalidRows {
   rowNumber: number;
-  grade: string;
-  classNumber: string;
-  studentNumber: string;
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
   studentName: string;
 }
 
@@ -85,8 +85,13 @@ export interface Student {
   recordTypes: RecordType[];
 }
 
-export type CreateStudentRequest = Omit<Student, 'studentId'>;
-
+export interface CreateStudentRequest {
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+  recordTypes: RecordType[];
+}
 export interface StudentsResponse {
   studentCount: number;
   grades: number[];
