@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 interface DashboardHeaderProps {
   isAllSelected: boolean;
@@ -12,12 +12,11 @@ export function DashboardHeader({ isAllSelected, onToggleAll }: DashboardHeaderP
         className="flex w-14 cursor-pointer items-center justify-center py-4"
         onClick={onToggleAll}
       >
-        <Image
-          src={isAllSelected ? '/svgs/ic_24_box_checked.svg' : '/svgs/ic_24_box_default.svg'}
-          alt="defaultBox"
-          width={24}
-          height={24}
-        />
+        {isAllSelected ? (
+          <Icons.BoxChecked color="text-blue-400" />
+        ) : (
+          <Icons.BoxDefault color="text-gray-2" hoverColor="text-gray-5" />
+        )}
       </div>
       <div className="flex w-[100px] items-center justify-center px-9 py-4">
         <span className="text-label-16 text-gray-4">학년</span>

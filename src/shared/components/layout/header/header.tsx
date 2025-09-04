@@ -10,7 +10,6 @@ import { ProfileDropDown } from '@/domains/profile/components/profile-dropdown';
 import { useAuth } from '@/shared/providers/auth-provider';
 
 import ProfileImage from '../../../../../public/images/profile-image.png';
-import Logo from '../../../../../public/svgs/logo.svg';
 
 const tabStyle = 'flex pt-6 mx-5 flex-col justify-between items-center whitespace-nowrap';
 
@@ -73,13 +72,7 @@ export default function Header() {
       <div className="flex w-[1440px] justify-between px-10">
         <div className="flex gap-4 lg:gap-40">
           <Link href="/" className="flex items-center">
-            <Image
-              src={Logo}
-              alt="logo"
-              width={126}
-              height={28}
-              className="h-[28px] w-[126px] object-contain"
-            />
+            <Image src="/svgs/logo.svg" alt="logo" width={126} height={28} />
           </Link>
           <div className="flex">
             {tabs.map((tab, index) => {

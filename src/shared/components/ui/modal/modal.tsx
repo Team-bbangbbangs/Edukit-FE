@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
+
+import { Icons } from '../icon/icon';
 
 /* -------------------------------------------------------------------------------------------------
  * ModalTypes
@@ -143,10 +144,10 @@ function ModalClose() {
     <button
       type="button"
       onClick={handleClick}
-      className="absolute right-8 top-8 duration-200 hover:scale-125"
+      className="absolute right-8 top-8"
       aria-label="닫기"
     >
-      <X className="h-6 w-6" />
+      <Icons.Close size={28} color="text-gray-4" hoverColor="text-gray-black" />
     </button>
   );
 }

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import Image from 'next/image';
-
 import Button from '@/shared/components/ui/button/button';
+import { Icons } from '@/shared/components/ui/icon/icon';
 import ExcelUploadModal from '@/shared/components/ui/modal/excel-upload-modal';
 
 interface ManageStudentHeaderProps {
@@ -27,13 +26,7 @@ export function ManageStudentHeader({ onAddStudent, isAddingStudent }: ManageStu
           disabled={isAddingStudent}
         >
           <span className="text-label-16 text-blue-400">학생 추가</span>
-          <Image
-            src={'/svgs/ic_18_add.svg'}
-            alt="plus"
-            width={20}
-            height={20}
-            className="text-blue-400"
-          />
+          <Icons.Add color="text-blue-400" size={20} />
         </Button>
         <Button
           color="primary"
