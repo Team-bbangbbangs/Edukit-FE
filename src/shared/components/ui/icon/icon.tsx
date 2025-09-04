@@ -100,21 +100,19 @@ const BaseIcon = React.forwardRef<
       width={size}
       height={size}
       className={className}
-      style={{ ...style, ...styleProps }}
+      style={{ ...styleProps, ...style }}
       onMouseEnter={
         hoverColor
-          ? (e: any) =>
-              Object.assign(e.currentTarget.style, {
-                ...hoverStyleProps,
-              })
+          ? (e: React.MouseEvent<SVGSVGElement>) => {
+              Object.assign(e.currentTarget.style, hoverStyleProps);
+            }
           : undefined
       }
       onMouseLeave={
         hoverColor
-          ? (e: any) =>
-              Object.assign(e.currentTarget.style, {
-                ...styleProps,
-              })
+          ? (e: React.MouseEvent<SVGSVGElement>) => {
+              Object.assign(e.currentTarget.style, styleProps);
+            }
           : undefined
       }
       {...props}

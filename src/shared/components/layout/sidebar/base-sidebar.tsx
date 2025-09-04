@@ -241,7 +241,6 @@ const SidebarMenuSub = React.forwardRef<
                   'transition-transform duration-200',
                   isOpen ? 'rotate-180' : 'rotate-0',
                 )}
-                aria-label={isOpen ? 'collapse' : 'expand'}
               />
             </button>
           </CollapsibleTrigger>
