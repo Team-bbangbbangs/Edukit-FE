@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 
-import Image from 'next/image';
-
 import { usePatchStudents } from '@/domains/record/apis/mutations/use-patch-students';
 import { RecordTag } from '@/domains/record/components/manage-student/record-tag';
 import { RECORD_TYPE } from '@/domains/record/constants/record-type';
 import type { Student, RecordType } from '@/domains/record/types/record';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 import { EditCell } from './edit-cell';
 
@@ -71,12 +70,11 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
         className="flex w-14 cursor-pointer items-center justify-center border-r border-gray-2 py-4"
         onClick={() => onToggleSelect(student.studentId)}
       >
-        <Image
-          src={isSelected ? '/svgs/ic_24_box_checked.svg' : '/svgs/ic_24_box_default.svg'}
-          alt="checkbox"
-          width={24}
-          height={24}
-        />
+        {isSelected ? (
+          <Icons.BoxChecked color="text-blue-400" />
+        ) : (
+          <Icons.BoxDefault color="text-gray-2" hoverColor="text-gray-5" />
+        )}
       </div>
 
       <EditCell

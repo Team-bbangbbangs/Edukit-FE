@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import Image from 'next/image';
-
 import { useDeleteStudents } from '@/domains/record/apis/mutations/use-delete-students';
 import { RecordTag } from '@/domains/record/components/manage-student/record-tag';
 import { RECORD_TYPE } from '@/domains/record/constants/record-type';
 import type { RecordType, StudentFilters } from '@/domains/record/types/record';
 import Button from '@/shared/components/ui/button/button';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import { Icons } from '@/shared/components/ui/icon/icon';
 import DeleteConfirmModal from '@/shared/components/ui/modal/delete-confirm-modal';
 
 interface FilterSectionProps {
@@ -189,20 +188,18 @@ export function FilterSection({
             <span className="text-title-20 text-gray-4">총 {totalCount}명의 학생 등록</span>
             <Dropdown>
               <Dropdown.Trigger
-                className={`flex items-center justify-center gap-2 rounded-full border ${activeFilters.size > 0 ? 'border-blue-400' : 'border-gray-2'} bg-white px-3 py-2 hover:bg-gray-1 hover:text-gray-3 disabled:bg-gray-1 disabled:text-gray-3`}
+                className={`flex items-center justify-center gap-2 rounded-full border ${activeFilters.size > 0 ? 'border-blue-400' : 'border-gray-2'} bg-white px-3 py-2 hover:bg-gray-1 disabled:bg-gray-1 disabled:text-gray-3`}
               >
                 <span
                   className={`text-label-16 ${activeFilters.size > 0 ? 'text-blue-400' : 'text-gray-4'}`}
                 >
                   필터
                 </span>
-                <Image
-                  src={'/svgs/ic_20_filter.svg'}
-                  alt="filter"
-                  width={20}
-                  height={20}
-                  className="text-gray-4"
-                />
+                {activeFilters.size > 0 ? (
+                  <Icons.Filter size={20} color="text-blue-400" />
+                ) : (
+                  <Icons.Filter size={20} color="text-gray-4" />
+                )}
               </Dropdown.Trigger>
               <Dropdown.Content className="right-0 flex !w-[146px] flex-col items-start p-2">
                 <Dropdown.Item
@@ -239,21 +236,19 @@ export function FilterSection({
             >
               <Dropdown.Trigger className="group flex items-center justify-center gap-2 rounded-full bg-blue-50 px-3 py-1.5">
                 <span className="text-label-16 text-blue-400">
-                  학년: {getFilterDisplayText('grade') || '전체'}
+                  학년: {getFilterDisplayText('grade')}
                 </span>
-                <Image
-                  src="/svgs/ic_18_chevron-up.svg"
-                  alt="열림"
-                  width={18}
-                  height={18}
+                <Icons.ChevronUp
+                  size={18}
+                  color="text-blue-400"
                   className="hidden group-data-[state=open]:block"
                 />
-                <Image
-                  src="/svgs/ic_18_close.svg"
-                  alt="필터 제거"
-                  width={18}
-                  height={18}
-                  className={`hidden cursor-pointer hover:opacity-70 ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
+
+                <Icons.Close
+                  size={18}
+                  color="text-blue-400"
+                  hoverColor="text-blue-600"
+                  className={`hidden cursor-pointer ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     removeFilter('grade');
@@ -269,13 +264,7 @@ export function FilterSection({
                   >
                     <span className="w-[31px] text-body-16-m text-gray-black">{grade}</span>
                     {selectedGrades.includes(grade) ? (
-                      <Image
-                        src="/svgs/ic_16_check.svg"
-                        alt="선택됨"
-                        width={18}
-                        height={18}
-                        className="ml-2"
-                      />
+                      <Icons.Check size={18} className="ml-2" color="text-blue-400" />
                     ) : null}
                   </div>
                 ))}
@@ -290,21 +279,19 @@ export function FilterSection({
             >
               <Dropdown.Trigger className="group flex items-center justify-center gap-2 rounded-full bg-blue-50 px-3 py-1.5">
                 <span className="text-label-16 text-blue-400">
-                  반: {getFilterDisplayText('class') || '전체'}
+                  반: {getFilterDisplayText('class')}
                 </span>
-                <Image
-                  src="/svgs/ic_18_chevron-up.svg"
-                  alt="열림"
-                  width={18}
-                  height={18}
+                <Icons.ChevronUp
+                  size={18}
+                  color="text-blue-400"
                   className="hidden group-data-[state=open]:block"
                 />
-                <Image
-                  src="/svgs/ic_18_close.svg"
-                  alt="필터 제거"
-                  width={18}
-                  height={18}
-                  className={`hidden cursor-pointer hover:opacity-70 ${selectedClasses.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
+
+                <Icons.Close
+                  size={18}
+                  color="text-blue-400"
+                  hoverColor="text-blue-600"
+                  className={`hidden cursor-pointer ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     removeFilter('class');
@@ -320,13 +307,7 @@ export function FilterSection({
                   >
                     <span className="w-[31px] text-body-16-m text-gray-black">{classNumber}</span>
                     {selectedClasses.includes(classNumber) ? (
-                      <Image
-                        src="/svgs/ic_16_check.svg"
-                        alt="선택됨"
-                        width={18}
-                        height={18}
-                        className="ml-2"
-                      />
+                      <Icons.Check size={18} className="ml-2" color="text-blue-400" />
                     ) : null}
                   </div>
                 ))}
@@ -341,21 +322,19 @@ export function FilterSection({
             >
               <Dropdown.Trigger className="group flex items-center justify-center gap-2 rounded-full bg-blue-50 px-3 py-1.5">
                 <span className="text-label-16 text-blue-400">
-                  생활기록부 관리 항목: {getFilterDisplayText('record') || '전체'}
+                  생활기록부 관리 항목: {getFilterDisplayText('record')}
                 </span>
-                <Image
-                  src="/svgs/ic_18_chevron-up.svg"
-                  alt="열림"
-                  width={18}
-                  height={18}
+                <Icons.ChevronUp
+                  size={18}
+                  color="text-blue-400"
                   className="hidden group-data-[state=open]:block"
                 />
-                <Image
-                  src="/svgs/ic_18_close.svg"
-                  alt="필터 제거"
-                  width={18}
-                  height={18}
-                  className={`hidden cursor-pointer hover:opacity-70 ${selectedRecordTypes.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
+
+                <Icons.Close
+                  size={18}
+                  color="text-blue-400"
+                  hoverColor="text-blue-600"
+                  className={`hidden cursor-pointer ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     removeFilter('record');

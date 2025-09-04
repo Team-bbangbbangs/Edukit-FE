@@ -5,9 +5,8 @@ import { useRef, useState } from 'react';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
-import Image from 'next/image';
-
 import { usePostUploadExcel } from '@/domains/record/apis/mutations/use-post-upload-excel';
+import { Icons } from '@/shared/components/ui/icon/icon';
 import Modal from '@/shared/components/ui/modal/modal';
 
 interface ExcelUploadModalProps {
@@ -136,7 +135,7 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
               className="flex flex-col items-center rounded-[8px] bg-gray-1 p-8 transition-colors duration-200 hover:bg-gray-2"
             >
               <div className="flex flex-col items-center gap-4">
-                <Image src={'/svgs/ic_24_download.svg'} alt="download" width={24} height={24} />
+                <Icons.Download size={24} color="text-gray-5" />
                 <p className="text-label-14 text-gray-5">템플릿 다운로드</p>
               </div>
             </button>
@@ -185,7 +184,7 @@ export default function ExcelUploadModal({ open, onOpenChange }: ExcelUploadModa
                   } ${isPending ? 'pointer-events-none opacity-50' : ''} `}
                 >
                   <div className="flex flex-col items-center gap-4">
-                    <Image src={'/svgs/ic_24_upload.svg'} alt="uploading" width={24} height={24} />
+                    <Icons.Upload size={24} color="text-gray-5" />
                     <p className="text-label-14 text-gray-5">드래그하거나 클릭하여 파일 업로드</p>
                   </div>
                 </button>

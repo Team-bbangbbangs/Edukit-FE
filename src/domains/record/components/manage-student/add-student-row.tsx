@@ -1,12 +1,11 @@
 import { useRef, useState } from 'react';
 
-import Image from 'next/image';
-
 import { usePostStudents } from '@/domains/record/apis/mutations/use-post-students';
 import { RECORD_TYPE } from '@/domains/record/constants/record-type';
 import type { RecordType, CreateStudentRequest } from '@/domains/record/types/record';
 import Button from '@/shared/components/ui/button/button';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 import { RecordTag } from './record-tag';
 
@@ -107,13 +106,7 @@ export function AddStudentRow({ onCancel }: AddStudentProps) {
   return (
     <div className="flex items-center self-stretch border-b border-gray-2">
       <div className="flex w-14 items-center justify-center border-r border-gray-2 py-4">
-        <Image
-          src="/svgs/ic_24_box_default.svg"
-          alt="newStudentBox"
-          width={24}
-          height={24}
-          className="opacity-50"
-        />
+        <Icons.BoxDefault color="text-gray-2" />
       </div>
 
       {/* 학년 */}

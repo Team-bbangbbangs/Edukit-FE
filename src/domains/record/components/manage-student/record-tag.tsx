@@ -1,7 +1,6 @@
-import Image from 'next/image';
-
 import { RECORD_TYPE } from '@/domains/record/constants/record-type';
 import type { RecordType } from '@/domains/record/types/record';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 interface RecordTagProps {
   recordType: RecordType;
@@ -33,16 +32,15 @@ export function RecordTag({ recordType, showClose = false, onRemove, onClick }: 
     >
       <span>{label}</span>
       {showClose ? (
-        <Image
-          src="/svgs/ic_18_close.svg"
-          alt="close"
-          width={18}
-          height={18}
+        <Icons.Close
+          size={18}
+          color="text-gray-4"
+          hoverColor="text-gray-black"
+          className="ml-1 cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             onRemove?.(e);
           }}
-          className="cursor-pointer hover:opacity-70"
         />
       ) : null}
     </div>

@@ -4,9 +4,9 @@ import * as React from 'react';
 
 import { PanelLeft } from 'lucide-react';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { Icons } from '@/shared/components/ui/icon/icon';
 import { cn } from '@/shared/lib/utils';
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible';
@@ -234,15 +234,14 @@ const SidebarMenuSub = React.forwardRef<
               )}
             >
               <span>{title}</span>
-              <Image
-                src={'/svgs/ic_20_chevron-down.svg'}
-                alt={isOpen ? 'collapse' : 'expand'}
-                width={20}
-                height={20}
+              <Icons.ChevronDown
+                color="text-gray-black"
+                size={20}
                 className={cn(
                   'transition-transform duration-200',
                   isOpen ? 'rotate-180' : 'rotate-0',
                 )}
+                aria-label={isOpen ? 'collapse' : 'expand'}
               />
             </button>
           </CollapsibleTrigger>
