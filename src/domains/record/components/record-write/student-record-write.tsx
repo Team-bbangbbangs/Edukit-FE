@@ -1,20 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
-import { useGetStudentsName } from '@/domains/record/apis/queries/use-get-students-name';
 import type { RecordType, PromptResponse } from '@/domains/record/types/record';
-import DefaultError from '@/shared/components/ui/error/default-error';
-import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
-import NotFoundError from '@/shared/components/ui/error/not-found-error';
-import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
-import Loading from '@/shared/components/ui/loading/loading';
+import {
+  Sidebar,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/shared/components/layout/sidebar/base-sidebar';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 import AiResponse from './ai-response';
 import CharacteristicInput from './characteristic-input';
 import RecordSummary from './record-summary';
+import StudentSidebarContent from './student-sidebar-content';
 
 interface StudentRecordWriteProps {
   recordType: RecordType;
@@ -22,19 +23,12 @@ interface StudentRecordWriteProps {
 }
 
 export default function StudentRecordWrite({ recordType, recordId }: StudentRecordWriteProps) {
-  const { data, isPending, isError, isNotFound, isUnauthorized, isNotPermission } =
-    useGetStudentsName(recordType, '2025-1');
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const parsedRecordId = Number(recordId);
+  const studentName = searchParams.get('name');
 
   const [aiResponses, setAiResponses] = useState<PromptResponse | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  useEffect(() => {
-    if (!recordId && data && data.studentDetails.length > 0) {
-      router.replace(`?recordId=${data.studentDetails[0].recordId}`);
-    }
-  }, [data, recordId, router]);
 
   const handleAiResponseGenerated = (responseData: PromptResponse) => {
     setAiResponses(responseData);
@@ -45,41 +39,41 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
     setIsGenerating(true);
   };
 
-  if (isPending) {
-    return <Loading />;
-  }
-
-  if (isNotFound) {
-    return <NotFoundError />;
-  }
-
-  if (isUnauthorized) {
-    return <NotAuthorizedError />;
-  }
-
-  if (isNotPermission) {
-    return <NotPermissionError />;
-  }
-
-  if (isError) {
-    return <DefaultError />;
-  }
-
-  if (data && data.studentDetails.length === 0) {
-    return <NotFoundError />;
-  }
-
   return (
-    <div className="flex flex-col gap-10">
-      <CharacteristicInput
-        students={data.studentDetails}
-        selectedId={parsedRecordId}
-        onGenerationStart={handleGenerationStart}
-        onResponseGenerated={handleAiResponseGenerated}
-      />
-      <AiResponse recordType={recordType} responses={aiResponses} isGenerating={isGenerating} />
-      <hr className="h-[1px] border-0 bg-black" />
-      <RecordSummary selectedId={parsedRecordId} recordType={recordType} />
-    </div>
+    <SidebarProvider defaultOpen={false}>
+      <div className="mb-80 flex w-full flex-col gap-11 p-[60px]">
+        <div className="flex w-full justify-between">
+          <h2 className="text-heading-24 text-gray-black">학생생활기록부 작성</h2>
+          <SidebarTrigger
+            className="flex shrink-0 items-center justify-between rounded-[10px] border border-gray-2 px-4 py-[11px]"
+            type="button"
+          >
+            <span
+              className={`flex-1 text-body-16-m ${studentName ? 'text-gray-black' : 'text-gray-4'}`}
+            >
+              {studentName ? decodeURIComponent(studentName) : '학생 선택'}
+            </span>
+            <Icons.ChevronDown size={20} color="text-gray-4" className="ml-3" />
+          </SidebarTrigger>
+        </div>
+
+        <div className="flex w-full flex-col items-end gap-[83px]">
+          <CharacteristicInput
+            selectedId={parsedRecordId}
+            onGenerationStart={handleGenerationStart}
+            onResponseGenerated={handleAiResponseGenerated}
+          />
+          <AiResponse recordType={recordType} responses={aiResponses} isGenerating={isGenerating} />
+          <RecordSummary selectedId={parsedRecordId} recordType={recordType} />
+        </div>
+      </div>
+
+      <Sidebar side="right" className="bg-gray-1">
+        <SidebarTrigger className="absolute left-2 top-2 z-10 rounded-lg p-[4px] transition-colors hover:bg-gray-2">
+          <Icons.SidebarClose size={24} color="text-gray-5" />
+        </SidebarTrigger>
+        <StudentSidebarContent recordType={recordType} />
+      </Sidebar>
+    </SidebarProvider>
   );
 }

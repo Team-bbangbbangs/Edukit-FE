@@ -1,20 +1,15 @@
-import { useRouter } from 'next/navigation';
-
 import { usePostPrompt } from '@/domains/record/apis/mutations/use-post-prompt';
-import type { StudentNames, PromptResponse } from '@/domains/record/types/record';
-import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import type { PromptResponse } from '@/domains/record/types/record';
 import { Textarea } from '@/shared/components/ui/textarea/textarea';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 
 interface CharacteristicInputProps {
-  students: StudentNames[];
   selectedId: number;
   onGenerationStart: () => void;
   onResponseGenerated: (data: PromptResponse) => void;
 }
 
 export default function CharacteristicInput({
-  students,
   selectedId,
   onGenerationStart,
   onResponseGenerated,
@@ -24,11 +19,6 @@ export default function CharacteristicInput({
     '',
     240,
   );
-  const router = useRouter();
-
-  const selectedStudentName = students.find(
-    (student) => student.recordId === selectedId,
-  )?.studentName;
 
   const handleButtonClick = () => {
     const value = characteristicInputTextRef.current?.value;
@@ -51,40 +41,9 @@ export default function CharacteristicInput({
     );
   };
 
-  const handleStudentSelect = (recordId: number) => {
-    router.push(`?recordId=${recordId}`);
-  };
-
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between">
-        <h2 className="text-[24px] font-bold">학생 특성 기입란</h2>
-        <Dropdown>
-          <Dropdown.Trigger
-            iconPosition="right"
-            className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {selectedStudentName}
-          </Dropdown.Trigger>
-
-          <Dropdown.Content className="max-h-60 overflow-y-auto">
-            {students.map((student, index) => {
-              const isSelected = selectedId === student.recordId;
-              return (
-                <Dropdown.Item
-                  key={student.recordId}
-                  index={index}
-                  onClick={() => handleStudentSelect(student.recordId)}
-                  selected={isSelected}
-                  className="flex justify-center"
-                >
-                  {student.studentName}
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Content>
-        </Dropdown>
-      </div>
+      <h2 className="text-[24px] font-bold">학생 특성 기입란</h2>
 
       <Textarea
         ref={characteristicInputTextRef}
