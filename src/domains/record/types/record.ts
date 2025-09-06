@@ -37,7 +37,15 @@ export interface StudentNames {
 }
 
 export interface StudentNamesResponse {
-  studentDetails: StudentNames[];
+  grades: number[];
+  classNumbers: number[];
+  studentNames: StudentNames[];
+}
+
+export interface StudentsNamesFilters {
+  grade?: number;
+  classNumber?: number;
+  studentName?: string;
 }
 
 export interface SummaryRecordRequest {
