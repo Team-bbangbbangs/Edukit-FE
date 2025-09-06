@@ -60,7 +60,7 @@ export default function ManageStudent() {
   };
 
   return (
-    <div className="flex w-full flex-col justify-center">
+    <div className="flex w-full flex-col justify-center p-[60px]">
       <ManageStudentHeader
         onAddStudent={() => setIsAddingStudent(true)}
         isAddingStudent={isAddingStudent}
