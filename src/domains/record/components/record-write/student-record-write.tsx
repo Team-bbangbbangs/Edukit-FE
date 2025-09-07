@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { RECORD_TYPE_TITLES } from '@/domains/record/constants/record-type';
 import type { RecordType, PromptResponse } from '@/domains/record/types/record';
 import {
   Sidebar,
@@ -30,6 +31,7 @@ export default function StudentRecordWrite({
   const isValidRecordId = recordId && !isNaN(recordId);
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [bytesLimit, setBytesLimit] = useState(recordType === 'career' ? 2100 : 1500);
 
   const handleAiResponseGenerated = (responseData: PromptResponse) => {
     setAiResponses(responseData);
@@ -42,9 +44,9 @@ export default function StudentRecordWrite({
 
   return (
     <SidebarProvider defaultOpen={false}>
-      <div className="mb-80 flex w-full flex-col gap-11 p-[60px]">
-        <div className="flex w-full justify-between">
-          <h2 className="text-heading-24 text-gray-black">학생생활기록부 작성</h2>
+      <div className="mb-40 flex w-full flex-col gap-11 p-[60px]">
+        <div className="flex max-w-[1135px] justify-between">
+          <h2 className="text-heading-24 text-gray-black">{RECORD_TYPE_TITLES[recordType]}</h2>
           <SidebarTrigger
             className="flex shrink-0 items-center justify-between rounded-[10px] border border-gray-2 px-4 py-[11px]"
             type="button"
@@ -58,20 +60,26 @@ export default function StudentRecordWrite({
           </SidebarTrigger>
         </div>
 
-        <div className="flex w-full flex-col items-end gap-[83px]">
+        <div className="flex max-w-[1135px] flex-col items-end gap-[83px]">
           <CharacteristicInput
             selectedId={recordId}
+            bytesLimit={bytesLimit}
+            onBytesLimitChange={setBytesLimit}
             onGenerationStart={handleGenerationStart}
             onResponseGenerated={handleAiResponseGenerated}
           />
           {isValidRecordId ? (
             <>
               <AiResponse
-                recordType={recordType}
                 responses={aiResponses}
                 isGenerating={isGenerating}
+                bytesLimit={bytesLimit}
               />
-              <RecordSummary selectedId={recordId} recordType={recordType} />
+              <RecordSummary
+                selectedId={recordId}
+                recordType={recordType}
+                bytesLimit={bytesLimit}
+              />
             </>
           ) : null}
         </div>

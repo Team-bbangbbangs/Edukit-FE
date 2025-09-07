@@ -56,7 +56,6 @@ export interface SummaryRecordRequest {
 
 export interface SummaryRecordResponse {
   description: string;
-  byteCount: number;
 }
 
 export interface PromptRequest {

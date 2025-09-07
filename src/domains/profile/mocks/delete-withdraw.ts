@@ -5,7 +5,7 @@ export const deleteWithdraw = [
     return HttpResponse.json(
       {
         code: 'SUCCESS',
-        message: '성공 메세지 작성',
+        message: '요청이 성공했습니다.',
       },
       {
         status: 200,
