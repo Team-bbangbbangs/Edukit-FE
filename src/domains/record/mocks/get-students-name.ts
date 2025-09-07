@@ -33,7 +33,7 @@ const generateStudentsNameData = (recordType: RecordType) => {
 };
 
 export const getStudentsName = [
-  http.get<never, { recordType: RecordType }>(
+  http.get<{ recordType: RecordType }, never>(
     '/api/v1/students/:recordType',
     ({ params, request }) => {
       const authHeader = request.headers.get('Authorization');

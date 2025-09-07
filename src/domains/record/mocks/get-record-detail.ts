@@ -41,7 +41,7 @@ export const getRecordDetail = [
     return HttpResponse.json(
       {
         code: 'SUCCESS',
-        message: '성공 메세지 작성',
+        message: '요청이 성공했습니다.',
         data: {
           description: '수학 수업에 적극적으로 참여하는 모습을 보인다.',
         },
