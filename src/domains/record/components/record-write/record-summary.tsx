@@ -23,7 +23,7 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
   const { mutate: postSummaryRecordDetail } = usePostSummaryRecordDetail();
   const { data, isPending, isError } = useGetSummaryRecordDetail(selectedId);
   const { textareaRef, resizeTextarea } = useAutoResizeTextarea(description);
-  const bytesLimit = recordType === 'CAREER' ? 2100 : 1500;
+  const bytesLimit = recordType === 'career' ? 2100 : 1500;
 
   useEffect(() => {
     if (data) {

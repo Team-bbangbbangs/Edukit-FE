@@ -105,30 +105,33 @@ const Sidebar = React.forwardRef<
     side?: 'left' | 'right';
   }
 >(({ side = 'left', className, children, ...props }, ref) => {
-  const { state } = useSidebar();
+  const { state, open } = useSidebar();
 
   return (
     <div
       ref={ref}
-      className="group peer hidden text-sidebar-foreground md:block"
+      className="group peer text-sidebar-foreground"
       data-state={state}
       data-side={side}
     >
       <div
         className={cn(
-          'relative w-[--sidebar-width] bg-transparent transition-[width] duration-200 ease-linear',
-          'group-data-[side=right]:rotate-180',
+          'relative bg-transparent transition-[width] duration-200 ease-linear',
+          open ? 'w-[--sidebar-width]' : 'w-0',
+          side === 'right' && 'order-2',
         )}
       />
       <div
         className={cn(
-          'fixed z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex',
-          side === 'left' ? 'left-0' : 'right-0',
+          'fixed z-10 flex h-svh w-[--sidebar-width] transition-[left,right,transform] duration-200 ease-linear',
+          side === 'left'
+            ? cn('left-0', open ? 'translate-x-0' : '-translate-x-full')
+            : cn('right-0', open ? 'translate-x-0' : 'translate-x-full'),
           className,
         )}
         {...props}
       >
-        <div data-sidebar="sidebar" className="flex h-full w-full flex-col pt-[60px]">
+        <div data-sidebar="sidebar" className="relative flex h-full w-full flex-col pt-[60px]">
           {children}
         </div>
       </div>
@@ -138,22 +141,26 @@ const Sidebar = React.forwardRef<
 Sidebar.displayName = 'Sidebar';
 
 const SidebarTrigger = React.forwardRef<HTMLButtonElement, React.ComponentProps<'button'>>(
-  ({ className, onClick, ...props }, ref) => {
+  ({ className, onClick, children, ...props }, ref) => {
+    const { open, setOpen } = useSidebar();
+
     return (
       <button
         ref={ref}
         data-sidebar="trigger"
-        className={cn(
-          'flex h-10 w-10 items-center justify-center rounded-md hover:bg-sidebar-accent',
-          className,
-        )}
+        className={cn('flex items-center justify-center', className)}
         onClick={(event) => {
+          setOpen(!open);
           onClick?.(event);
         }}
         {...props}
       >
-        <PanelLeft />
-        <span className="sr-only">Toggle Sidebar</span>
+        {children || (
+          <>
+            <PanelLeft />
+            <span className="sr-only">Toggle Sidebar</span>
+          </>
+        )}
       </button>
     );
   },
@@ -183,7 +190,7 @@ const SidebarMenuItem = React.forwardRef<
   const content = (
     <div
       className={cn(
-        'w-full rounded-lg px-5 py-3 text-left text-label-18 transition-colors duration-200 hover:bg-gray-1',
+        'w-full cursor-pointer rounded-lg px-5 py-3 text-left text-label-18 transition-colors duration-200 hover:bg-gray-1',
         isActive && 'bg-gray-1',
       )}
     >

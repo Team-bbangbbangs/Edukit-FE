@@ -4,11 +4,11 @@ import { saveAs } from 'file-saver';
 import type { RecordType, StudentRecord } from '@/domains/record/types/record';
 
 const recordTypeToTitle: Record<RecordType, string> = {
-  SUBJECT: '세부능력 및 특기사항',
-  BEHAVIOR: '행동특성 및 종합의견',
-  CAREER: '창의적 체험활동 - 진로',
-  FREE: '창의적 체험활동 - 자율',
-  CLUB: '창의적 체험활동 - 동아리',
+  subject: '세부능력 및 특기사항',
+  behavior: '행동특성 및 종합의견',
+  career: '창의적 체험활동 - 진로',
+  free: '창의적 체험활동 - 자율',
+  club: '창의적 체험활동 - 동아리',
 };
 
 export const getYearAndMonthAndDay = (): string => {

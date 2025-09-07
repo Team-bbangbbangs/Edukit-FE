@@ -36,7 +36,7 @@ export function AddStudentRow({ onCancel }: AddStudentProps) {
         ? prev.filter((type) => type !== recordType)
         : [...prev, recordType];
 
-      const order: RecordType[] = ['SUBJECT', 'BEHAVIOR', 'CAREER', 'FREE', 'CLUB'];
+      const order: RecordType[] = ['subject', 'behavior', 'career', 'free', 'club'];
       return order.filter((type) => updatedRecordTypes.includes(type));
     });
   };

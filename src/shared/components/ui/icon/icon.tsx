@@ -8,9 +8,11 @@ import ChevronUpIcon from '../../../../../public/svgs/ic_18_chevron-up.svg';
 import CloseIcon from '../../../../../public/svgs/ic_18_close.svg';
 import ChevronDownIcon from '../../../../../public/svgs/ic_20_chevron-down.svg';
 import FilterIcon from '../../../../../public/svgs/ic_20_filter.svg';
+import SearchIcon from '../../../../../public/svgs/ic_20_search.svg';
 import BoxCheckedIcon from '../../../../../public/svgs/ic_24_box_checked.svg';
 import BoxDefaultIcon from '../../../../../public/svgs/ic_24_box_default.svg';
 import DownloadIcon from '../../../../../public/svgs/ic_24_download.svg';
+import SidebarCloseIcon from '../../../../../public/svgs/ic_24_sidebar_close.svg';
 import UploadIcon from '../../../../../public/svgs/ic_24_upload.svg';
 import LogoIcon from '../../../../../public/svgs/logo.svg';
 
@@ -151,6 +153,8 @@ export const BoxDefault = createIcon(BoxDefaultIcon, 24, 'fill', 'BoxDefault');
 export const BoxChecked = createIcon(BoxCheckedIcon, 24, 'fill', 'BoxChecked');
 export const Upload = createIcon(UploadIcon, 24, 'fill', 'Upload');
 export const Download = createIcon(DownloadIcon, 24, 'fill', 'Download');
+export const Search = createIcon(SearchIcon, 20, 'fill', 'Search');
+export const SidebarClose = createIcon(SidebarCloseIcon, 24, 'fill', 'SidebarClose');
 
 export const ChevronUp = createIcon(ChevronUpIcon, 18, 'stroke', 'ChevronUp');
 export const ChevronDown = createIcon(ChevronDownIcon, 20, 'stroke', 'ChevronDown');
@@ -182,6 +186,8 @@ export const Icons = {
   ChevronDown,
   Filter,
   Logo,
+  Search,
+  SidebarClose,
 } as const;
 
 export type IconName = keyof typeof Icons;

@@ -1,20 +1,15 @@
-import { useRouter } from 'next/navigation';
-
 import { usePostPrompt } from '@/domains/record/apis/mutations/use-post-prompt';
-import type { StudentNames, PromptResponse } from '@/domains/record/types/record';
-import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import type { PromptResponse } from '@/domains/record/types/record';
 import { Textarea } from '@/shared/components/ui/textarea/textarea';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 
 interface CharacteristicInputProps {
-  students: StudentNames[];
-  selectedId: number;
+  selectedId?: number;
   onGenerationStart: () => void;
   onResponseGenerated: (data: PromptResponse) => void;
 }
 
 export default function CharacteristicInput({
-  students,
   selectedId,
   onGenerationStart,
   onResponseGenerated,
@@ -24,13 +19,15 @@ export default function CharacteristicInput({
     '',
     240,
   );
-  const router = useRouter();
 
-  const selectedStudentName = students.find(
-    (student) => student.recordId === selectedId,
-  )?.studentName;
+  const isValidSelectedId = selectedId && !isNaN(selectedId);
 
   const handleButtonClick = () => {
+    if (!isValidSelectedId) {
+      alert('학생을 먼저 선택해주세요.');
+      return;
+    }
+
     const value = characteristicInputTextRef.current?.value;
     if (!value) {
       alert('내용을 입력해주세요.');
@@ -51,45 +48,19 @@ export default function CharacteristicInput({
     );
   };
 
-  const handleStudentSelect = (recordId: number) => {
-    router.push(`?recordId=${recordId}`);
-  };
-
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between">
-        <h2 className="text-[24px] font-bold">학생 특성 기입란</h2>
-        <Dropdown>
-          <Dropdown.Trigger
-            iconPosition="right"
-            className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {selectedStudentName}
-          </Dropdown.Trigger>
-
-          <Dropdown.Content className="max-h-60 overflow-y-auto">
-            {students.map((student, index) => {
-              const isSelected = selectedId === student.recordId;
-              return (
-                <Dropdown.Item
-                  key={student.recordId}
-                  index={index}
-                  onClick={() => handleStudentSelect(student.recordId)}
-                  selected={isSelected}
-                  className="flex justify-center"
-                >
-                  {student.studentName}
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Content>
-        </Dropdown>
-      </div>
+      <h2 className="text-[24px] font-bold">학생 특성 기입란</h2>
 
       <Textarea
         ref={characteristicInputTextRef}
-        placeholder="내용을 입력해주세요. (학생의 활동 내용이나 특성을 작성해주시면 생활기록부 지침에 맞게 작성해드립니다)"
-        className="min-h-60 resize-none border-slate-400 p-5 placeholder:text-slate-400"
+        placeholder={
+          isValidSelectedId
+            ? '내용을 입력해주세요. (학생의 활동 내용이나 특성을 작성해주시면 생활기록부 지침에 맞게 작성해드립니다)'
+            : '학생 선택 후 작성 가능합니다.'
+        }
+        disabled={!isValidSelectedId}
+        className="min-h-60 resize-none border-slate-400 p-5 placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
         style={{
           lineHeight: 'inherit',
           fontSize: 'inherit',
@@ -100,8 +71,8 @@ export default function CharacteristicInput({
       <div className="flex justify-end">
         <button
           onClick={handleButtonClick}
-          disabled={isPending}
-          className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950 disabled:bg-slate-400"
+          disabled={isPending || !isValidSelectedId}
+          className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950 disabled:cursor-not-allowed disabled:bg-slate-400"
         >
           {isPending ? '생성중...' : '생성'}
         </button>

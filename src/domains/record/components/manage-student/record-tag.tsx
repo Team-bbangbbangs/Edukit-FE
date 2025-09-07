@@ -11,11 +11,11 @@ interface RecordTagProps {
 
 const getRecordTypeStyles = (recordType: RecordType): string => {
   const styleMap: Record<RecordType, string> = {
-    SUBJECT: 'bg-brandSkyblue',
-    BEHAVIOR: 'bg-brandPink',
-    FREE: 'bg-brandOrange',
-    CAREER: 'bg-brandGreen',
-    CLUB: 'bg-brandPurple',
+    subject: 'bg-brandSkyblue',
+    behavior: 'bg-brandPink',
+    free: 'bg-brandOrange',
+    career: 'bg-brandGreen',
+    club: 'bg-brandPurple',
   };
 
   return styleMap[recordType] || 'bg-gray-200';
