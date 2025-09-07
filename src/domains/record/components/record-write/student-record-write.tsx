@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import { useSearchParams } from 'next/navigation';
-
 import type { RecordType, PromptResponse } from '@/domains/record/types/record';
 import {
   Sidebar,
@@ -19,15 +17,18 @@ import StudentSidebarContent from './student-sidebar-content';
 
 interface StudentRecordWriteProps {
   recordType: RecordType;
-  recordId?: string;
+  recordId?: number;
+  studentName?: string;
 }
 
-export default function StudentRecordWrite({ recordType, recordId }: StudentRecordWriteProps) {
-  const searchParams = useSearchParams();
-  const parsedRecordId = Number(recordId);
-  const studentName = searchParams.get('name');
-
+export default function StudentRecordWrite({
+  recordType,
+  recordId,
+  studentName,
+}: StudentRecordWriteProps) {
   const [aiResponses, setAiResponses] = useState<PromptResponse | null>(null);
+  const isValidRecordId = recordId && !isNaN(recordId);
+
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleAiResponseGenerated = (responseData: PromptResponse) => {
@@ -51,7 +52,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
             <span
               className={`flex-1 text-body-16-m ${studentName ? 'text-gray-black' : 'text-gray-4'}`}
             >
-              {studentName ? decodeURIComponent(studentName) : '학생 선택'}
+              {studentName ?? '학생 선택'}
             </span>
             <Icons.ChevronDown size={20} color="text-gray-4" className="ml-3" />
           </SidebarTrigger>
@@ -59,12 +60,20 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
 
         <div className="flex w-full flex-col items-end gap-[83px]">
           <CharacteristicInput
-            selectedId={parsedRecordId}
+            selectedId={recordId}
             onGenerationStart={handleGenerationStart}
             onResponseGenerated={handleAiResponseGenerated}
           />
-          <AiResponse recordType={recordType} responses={aiResponses} isGenerating={isGenerating} />
-          <RecordSummary selectedId={parsedRecordId} recordType={recordType} />
+          {isValidRecordId ? (
+            <>
+              <AiResponse
+                recordType={recordType}
+                responses={aiResponses}
+                isGenerating={isGenerating}
+              />
+              <RecordSummary selectedId={recordId} recordType={recordType} />
+            </>
+          ) : null}
         </div>
       </div>
 
@@ -72,7 +81,7 @@ export default function StudentRecordWrite({ recordType, recordId }: StudentReco
         <SidebarTrigger className="absolute left-2 top-2 z-10 rounded-lg p-[4px] transition-colors hover:bg-gray-2">
           <Icons.SidebarClose size={24} color="text-gray-5" />
         </SidebarTrigger>
-        <StudentSidebarContent recordType={recordType} />
+        <StudentSidebarContent recordType={recordType} currentRecordId={recordId} />
       </Sidebar>
     </SidebarProvider>
   );

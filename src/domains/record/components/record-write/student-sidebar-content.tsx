@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -11,12 +13,15 @@ import { cn } from '@/shared/lib/utils';
 
 interface StudentSidebarContentProps {
   recordType: RecordType;
+  currentRecordId?: number;
 }
 
-export default function StudentSidebarContent({ recordType }: StudentSidebarContentProps) {
+export default function StudentSidebarContent({
+  recordType,
+  currentRecordId,
+}: StudentSidebarContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentRecordId = searchParams.get('id');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGrade, setSelectedGrade] = useState<number | undefined>();
@@ -53,7 +58,7 @@ export default function StudentSidebarContent({ recordType }: StudentSidebarCont
   };
 
   const isStudentActive = (recordId: number) => {
-    return currentRecordId === recordId.toString();
+    return currentRecordId === recordId;
   };
 
   return (

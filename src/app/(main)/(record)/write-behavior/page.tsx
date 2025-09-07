@@ -3,6 +3,9 @@ import { createPageMetadata } from '@/shared/constants/metadata';
 
 export const metadata = createPageMetadata('writeRecords', { url: '/write-behavior' });
 
-export default function Page({ searchParams }: { searchParams: { recordId?: string } }) {
-  return <StudentRecordWrite recordType="BEHAVIOR" recordId={searchParams.recordId} />;
+export default function Page({ searchParams }: { searchParams: { id?: string; name?: string } }) {
+  const recordId = searchParams.id ? Number(searchParams.id) : undefined;
+  const studentName = searchParams.name ? decodeURIComponent(searchParams.name) : undefined;
+
+  return <StudentRecordWrite recordType="behavior" recordId={recordId} studentName={studentName} />;
 }
