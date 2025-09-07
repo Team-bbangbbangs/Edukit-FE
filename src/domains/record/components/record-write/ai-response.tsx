@@ -1,16 +1,14 @@
-import type { PromptResponse, RecordType } from '@/domains/record/types/record';
+import type { PromptResponse } from '@/domains/record/types/record';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
 import Loading from '@/shared/components/ui/loading/loading';
 
 interface AiResponseProps {
   responses: PromptResponse | null;
   isGenerating: boolean;
-  recordType: RecordType;
+  bytesLimit: number;
 }
 
-export default function AiResponse({ responses, isGenerating, recordType }: AiResponseProps) {
-  const bytesLimit = recordType === 'career' ? 2100 : 1500;
-
+export default function AiResponse({ responses, isGenerating, bytesLimit }: AiResponseProps) {
   const getContentForVersion = (version: number) => {
     if (isGenerating) {
       return (
@@ -47,7 +45,7 @@ export default function AiResponse({ responses, isGenerating, recordType }: AiRe
   };
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex w-full flex-col gap-10">
       <div className="flex flex-col gap-2">
         <h4 className="font-bold">(버전 1)</h4>
         <div
