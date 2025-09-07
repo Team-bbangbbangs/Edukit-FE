@@ -61,14 +61,14 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
 
   const handleAddRecordType = (recordType: RecordType) => {
     const normalizedType = recordType.toLowerCase() as RecordType;
-    if (!tempRecordTypes.includes(normalizedType)) {
-      setTempRecordTypes([...tempRecordTypes, normalizedType]);
-    }
+    setTempRecordTypes((prev) =>
+      prev.includes(normalizedType) ? prev : [...prev, normalizedType],
+    );
   };
 
   const handleRemoveRecordType = (recordType: RecordType) => {
     const normalizedType = recordType.toLowerCase() as RecordType;
-    setTempRecordTypes(tempRecordTypes.filter((rt) => rt !== normalizedType));
+    setTempRecordTypes((prev) => prev.filter((rt) => rt !== normalizedType));
   };
 
   const currentRecordTypes = isDropdownOpen ? tempRecordTypes : normalizedStudentRecordTypes;
