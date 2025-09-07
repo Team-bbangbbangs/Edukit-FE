@@ -23,7 +23,7 @@ export default function RecordSummary({ selectedId, recordType, bytesLimit }: Re
   const [description, setDescription] = useState('');
   const { mutate: postRecordDetail } = usePostRecordDetail();
   const { data, isPending, isError } = useGetRecordDetail(selectedId);
-  const { textareaRef, resizeTextarea } = useAutoResizeTextarea(description, 150);
+  const { textareaRef, resizeTextarea } = useAutoResizeTextarea(description);
 
   useEffect(() => {
     if (data) {
@@ -70,7 +70,7 @@ export default function RecordSummary({ selectedId, recordType, bytesLimit }: Re
           onChange={handleDescriptionChange}
           onInput={resizeTextarea}
           placeholder="완성본을 적어주세요."
-          className="resize-none border-none bg-transparent p-0 text-body-18-m text-gray-black outline-none placeholder:text-body-18-m placeholder:text-gray-4"
+          className="min-h-[150px] resize-none border-none bg-transparent p-0 text-body-18-m text-gray-black outline-none placeholder:text-body-18-m placeholder:text-gray-4"
         />
         <div className="flex flex-col items-end justify-center self-stretch">
           <Button
