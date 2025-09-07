@@ -15,45 +15,44 @@ export const getRecords = [
       if (!validation.isValid) {
         return HttpResponse.json(
           {
-            status: 401,
-            code: 'EDMT-4010101',
-            message: '유효하지 않은 토큰입니다.',
+            code: 'A-40101',
+            message: '토큰이 누락되었습니다.',
           },
-          { status: 401 },
+          { status: 200 },
         );
       }
 
       if (validation.isExpired) {
         return HttpResponse.json(
           {
-            status: 401,
-            code: 'EDMT-4010102',
-            message: '만료된 토큰입니다.',
+            code: 'A-40101',
+            message: '토큰이 누락되었습니다.',
           },
-          { status: 401 },
+          { status: 200 },
         );
       }
 
       if (validation.isNotVerified) {
         return HttpResponse.json(
           {
-            status: 403,
-            code: 'EDMT-4030101',
-            message: '권한이 부족한 사용자입니다.',
+            code: 'A-40304',
+            message: '접근 권한이 없는 사용자입니다. 교사 인증을 진행해주세요.',
           },
-          { status: 403 },
+          { status: 200 },
         );
       }
       const { recordType } = params;
 
       const records = RECORD_DATA[recordType];
 
-      return HttpResponse.json({
-        status: 200,
-        code: 'EDMT-20002',
-        message: '요청에 성공했습니다.',
-        data: records,
-      });
+      return HttpResponse.json(
+        {
+          code: 'SUCCESS',
+          message: '요청이 성공했습니다.',
+          data: records,
+        },
+        { status: 200 },
+      );
     },
   ),
 ];
