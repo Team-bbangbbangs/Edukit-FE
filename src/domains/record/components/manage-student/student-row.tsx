@@ -24,19 +24,26 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
 
   const { mutate: patchStudents } = usePatchStudents();
 
-  const getSortedRecordTypes = (recordTypes: RecordType[]): RecordType[] => {
-    const order: RecordType[] = ['SUBJECT', 'BEHAVIOR', 'CAREER', 'FREE', 'CLUB'];
-    return order.filter((type) => recordTypes.includes(type));
+  const normalizeRecordTypes = (recordTypes: RecordType[]): RecordType[] => {
+    return recordTypes.map((type) => type.toLowerCase() as RecordType);
   };
 
+  const getSortedRecordTypes = (recordTypes: RecordType[]): RecordType[] => {
+    const order: RecordType[] = ['subject', 'behavior', 'career', 'free', 'club'];
+    const normalizedTypes = normalizeRecordTypes(recordTypes);
+    return order.filter((type) => normalizedTypes.includes(type));
+  };
+
+  const normalizedStudentRecordTypes = normalizeRecordTypes(student.recordTypes);
+
   const handleDropdownOpen = () => {
-    setTempRecordTypes([...student.recordTypes]);
+    setTempRecordTypes([...normalizedStudentRecordTypes]);
     setIsDropdownOpen(true);
   };
 
   const handleDropdownClose = () => {
     const sortedFinal = getSortedRecordTypes(tempRecordTypes);
-    const sortedOriginal = getSortedRecordTypes(student.recordTypes);
+    const sortedOriginal = getSortedRecordTypes(normalizedStudentRecordTypes);
 
     const hasChanges = JSON.stringify(sortedFinal) !== JSON.stringify(sortedOriginal);
 
@@ -53,16 +60,18 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
   };
 
   const handleAddRecordType = (recordType: RecordType) => {
-    if (!tempRecordTypes.includes(recordType)) {
-      setTempRecordTypes([...tempRecordTypes, recordType]);
+    const normalizedType = recordType.toLowerCase() as RecordType;
+    if (!tempRecordTypes.includes(normalizedType)) {
+      setTempRecordTypes([...tempRecordTypes, normalizedType]);
     }
   };
 
   const handleRemoveRecordType = (recordType: RecordType) => {
-    setTempRecordTypes(tempRecordTypes.filter((rt) => rt !== recordType));
+    const normalizedType = recordType.toLowerCase() as RecordType;
+    setTempRecordTypes(tempRecordTypes.filter((rt) => rt !== normalizedType));
   };
 
-  const currentRecordTypes = isDropdownOpen ? tempRecordTypes : student.recordTypes;
+  const currentRecordTypes = isDropdownOpen ? tempRecordTypes : normalizedStudentRecordTypes;
 
   return (
     <div ref={forwardRef} className="flex items-center self-stretch border-b border-gray-2">
@@ -137,23 +146,26 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
 
           <Dropdown.Content className="mt-[6px] inline-flex w-[152px] flex-col items-start p-2">
             {RECORD_TYPE.map((option) => {
-              const isAlreadySelected = currentRecordTypes.includes(option.value);
+              const normalizedOptionValue = option.value.toLowerCase() as RecordType;
+              const isAlreadySelected = currentRecordTypes.includes(normalizedOptionValue);
 
               return (
                 <div key={option.value} className="flex cursor-pointer items-center px-3 py-2">
                   <RecordTag
-                    recordType={option.value}
+                    recordType={normalizedOptionValue}
                     showClose={isAlreadySelected}
                     onRemove={
                       isAlreadySelected
                         ? (e) => {
                             e.stopPropagation();
-                            handleRemoveRecordType(option.value);
+                            handleRemoveRecordType(normalizedOptionValue);
                           }
                         : undefined
                     }
                     onClick={
-                      !isAlreadySelected ? () => handleAddRecordType(option.value) : undefined
+                      !isAlreadySelected
+                        ? () => handleAddRecordType(normalizedOptionValue)
+                        : undefined
                     }
                   />
                 </div>

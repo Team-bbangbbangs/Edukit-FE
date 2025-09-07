@@ -5,16 +5,16 @@ import type { Student, RecordType } from '@/domains/record/types/record';
 const generateMockStudent = (): Student[] => {
   const students: Student[] = [];
   const recordTypeOptions: RecordType[][] = [
-    ['SUBJECT'],
-    ['BEHAVIOR'],
-    ['SUBJECT', 'BEHAVIOR'],
-    ['CAREER'],
-    ['FREE'],
-    ['CLUB'],
-    ['SUBJECT', 'CAREER'],
-    ['BEHAVIOR', 'FREE'],
-    ['CAREER', 'CLUB'],
-    ['SUBJECT', 'BEHAVIOR', 'CAREER'],
+    ['subject'],
+    ['behavior'],
+    ['subject', 'behavior'],
+    ['career'],
+    ['free'],
+    ['club'],
+    ['subject', 'career'],
+    ['behavior', 'free'],
+    ['career', 'club'],
+    ['subject', 'behavior', 'career'],
     [],
   ];
 

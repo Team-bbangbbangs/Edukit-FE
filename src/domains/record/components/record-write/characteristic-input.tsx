@@ -4,7 +4,7 @@ import { Textarea } from '@/shared/components/ui/textarea/textarea';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 
 interface CharacteristicInputProps {
-  selectedId: number;
+  selectedId?: number;
   onGenerationStart: () => void;
   onResponseGenerated: (data: PromptResponse) => void;
 }
@@ -20,7 +20,14 @@ export default function CharacteristicInput({
     240,
   );
 
+  const isValidSelectedId = selectedId && !isNaN(selectedId);
+
   const handleButtonClick = () => {
+    if (!isValidSelectedId) {
+      alert('학생을 먼저 선택해주세요.');
+      return;
+    }
+
     const value = characteristicInputTextRef.current?.value;
     if (!value) {
       alert('내용을 입력해주세요.');
@@ -47,8 +54,13 @@ export default function CharacteristicInput({
 
       <Textarea
         ref={characteristicInputTextRef}
-        placeholder="내용을 입력해주세요. (학생의 활동 내용이나 특성을 작성해주시면 생활기록부 지침에 맞게 작성해드립니다)"
-        className="min-h-60 resize-none border-slate-400 p-5 placeholder:text-slate-400"
+        placeholder={
+          isValidSelectedId
+            ? '내용을 입력해주세요. (학생의 활동 내용이나 특성을 작성해주시면 생활기록부 지침에 맞게 작성해드립니다)'
+            : '학생 선택 후 작성 가능합니다.'
+        }
+        disabled={!isValidSelectedId}
+        className="min-h-60 resize-none border-slate-400 p-5 placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
         style={{
           lineHeight: 'inherit',
           fontSize: 'inherit',
@@ -59,8 +71,8 @@ export default function CharacteristicInput({
       <div className="flex justify-end">
         <button
           onClick={handleButtonClick}
-          disabled={isPending}
-          className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950 disabled:bg-slate-400"
+          disabled={isPending || !isValidSelectedId}
+          className="w-auto rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950 disabled:cursor-not-allowed disabled:bg-slate-400"
         >
           {isPending ? '생성중...' : '생성'}
         </button>
