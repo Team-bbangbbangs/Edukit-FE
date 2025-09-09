@@ -18,6 +18,7 @@ import { getProfile } from '../../domains/profile/mocks/get-profile';
 import { patchAfterLoginPassword } from '../../domains/profile/mocks/patch-after-login-password';
 import { patchEmail } from '../../domains/profile/mocks/patch-email';
 import { patchProfile } from '../../domains/profile/mocks/patch-profile';
+import { aiGenerate } from '../../domains/record/mocks/ai-generate';
 import { createRecordDetail } from '../../domains/record/mocks/create-record-detail';
 import { deleteStudents } from '../../domains/record/mocks/delete-students';
 import { getRecordDetail } from '../../domains/record/mocks/get-record-detail';
@@ -26,7 +27,6 @@ import { getStudents } from '../../domains/record/mocks/get-students';
 import { getStudentsName } from '../../domains/record/mocks/get-students-name';
 import { patchRecordDetail } from '../../domains/record/mocks/patch-record-detail';
 import { patchStudents } from '../../domains/record/mocks/patch-students';
-import { postPrompt } from '../../domains/record/mocks/post-prompt';
 import { postRecordDetail } from '../../domains/record/mocks/post-record-detail';
 import { postStudents } from '../../domains/record/mocks/post-students';
 import { postUploadExcel } from '../../domains/record/mocks/post-upload-excel';
@@ -42,7 +42,6 @@ export const handlers = [
   ...signup,
   ...getVerifyEmail,
   ...getStudentsName,
-  ...postPrompt,
   ...getProfile,
   ...getCheckValidNickname,
   ...patchProfile,
@@ -64,4 +63,5 @@ export const handlers = [
   ...postStudents,
   ...postRecordDetail,
   ...getRecordDetail,
+  ...aiGenerate,
 ];
