@@ -125,7 +125,6 @@ export const useSseStream = (taskId: string | null) => {
         const eventSource = new EventSourcePolyfill(url, {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           heartbeatTimeout: 300000,
-          connectionTimeout: 60000,
           withCredentials: false,
         });
 
@@ -134,7 +133,6 @@ export const useSseStream = (taskId: string | null) => {
         eventSource.onopen = handleSseOpen;
         eventSource.onerror = handleSseError;
         eventSource.addEventListener('ai-message', handleSseMessage);
-        eventSource.onmessage = handleSseMessage;
       } catch {
         setError('연결을 시작할 수 없습니다.');
       }
