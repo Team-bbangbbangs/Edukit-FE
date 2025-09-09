@@ -61,12 +61,38 @@ export interface SummaryRecordResponse {
 export interface PromptRequest {
   recordId: number;
   prompt: string;
+  byteCount: number;
 }
 
-export interface PromptResponse {
-  description1: string;
-  description2: string;
-  description3: string;
+export interface AiGenerateRequest {
+  byteCount: number;
+  prompt: string;
+}
+
+export interface AiGenerateResponse {
+  taskId: string;
+}
+
+export type SseMessageType = 'PROGRESS' | 'RESPONSE';
+
+export interface SseMessage {
+  taskId: string;
+  type: SseMessageType;
+  data: {
+    message?: string;
+    finalContent?: string;
+    version?: number;
+  };
+}
+
+export interface StreamingResponse {
+  taskId: string;
+  progressMessages: string[];
+  versions: {
+    version: number;
+    content: string;
+  }[];
+  isComplete: boolean;
 }
 
 export interface InvalidRows {
