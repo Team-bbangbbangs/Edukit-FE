@@ -31,7 +31,8 @@
     "next.config.mjs",
     "tailwind.config.ts",
     "jest.config.ts",
-    "jest.setup.ts"
+    "jest.setup.ts",
+    "src/types/event-source-polyfill.d.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }
