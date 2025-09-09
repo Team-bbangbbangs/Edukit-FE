@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { RECORD_TYPE_TITLES } from '@/domains/record/constants/record-type';
-import type { RecordType, PromptResponse } from '@/domains/record/types/record';
+import type { RecordType } from '@/domains/record/types/record';
 import {
   Sidebar,
   SidebarProvider,
@@ -27,19 +27,22 @@ export default function StudentRecordWrite({
   recordId,
   studentName,
 }: StudentRecordWriteProps) {
-  const [aiResponses, setAiResponses] = useState<PromptResponse | null>(null);
+  const [taskId, setTaskId] = useState<string | null>(null);
   const isValidRecordId = recordId && !isNaN(recordId);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [bytesLimit, setBytesLimit] = useState(recordType === 'career' ? 2100 : 1500);
 
-  const handleAiResponseGenerated = (responseData: PromptResponse) => {
-    setAiResponses(responseData);
-    setIsGenerating(false);
+  const handleTaskIdReceived = (newTaskId: string) => {
+    setTaskId(newTaskId);
   };
 
   const handleGenerationStart = () => {
     setIsGenerating(true);
+  };
+
+  const handleGenerationComplete = () => {
+    setIsGenerating(false);
   };
 
   return (
@@ -66,14 +69,15 @@ export default function StudentRecordWrite({
             bytesLimit={bytesLimit}
             onBytesLimitChange={setBytesLimit}
             onGenerationStart={handleGenerationStart}
-            onResponseGenerated={handleAiResponseGenerated}
+            onTaskIdReceived={handleTaskIdReceived}
           />
           {isValidRecordId ? (
             <>
               <AiResponse
-                responses={aiResponses}
+                taskId={taskId}
                 isGenerating={isGenerating}
                 bytesLimit={bytesLimit}
+                onGenerationComplete={handleGenerationComplete}
               />
               <RecordSummary
                 selectedId={recordId}
