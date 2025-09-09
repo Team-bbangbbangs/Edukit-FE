@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { usePostPrompt } from '@/domains/record/apis/mutations/use-post-prompt';
-import type { PromptResponse } from '@/domains/record/types/record';
+import { useAiGenerate } from '@/domains/record/apis/mutations/use-ai-generate';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
 import Button from '@/shared/components/ui/button/button';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
@@ -11,7 +10,7 @@ interface CharacteristicInputProps {
   bytesLimit: number;
   onBytesLimitChange: (newLimit: number) => void;
   onGenerationStart: () => void;
-  onResponseGenerated: (data: PromptResponse) => void;
+  onTaskIdReceived: (taskId: string) => void;
 }
 
 export default function CharacteristicInput({
@@ -19,12 +18,12 @@ export default function CharacteristicInput({
   bytesLimit,
   onBytesLimitChange,
   onGenerationStart,
-  onResponseGenerated,
+  onTaskIdReceived,
 }: CharacteristicInputProps) {
   const [description, setDescription] = useState('');
   const [showTooltip, setShowTooltip] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const { mutate: postPrompt, isPending } = usePostPrompt();
+  const { mutate: aiGenerate, isPending } = useAiGenerate();
   const { textareaRef: characteristicInputTextRef, resizeTextarea } = useAutoResizeTextarea(
     description,
     150,
@@ -88,11 +87,17 @@ export default function CharacteristicInput({
     }
 
     onGenerationStart();
-    postPrompt(
-      { recordId: selectedId, prompt: description },
+    aiGenerate(
+      {
+        recordId: selectedId,
+        request: {
+          byteCount: calculateByte(description),
+          prompt: description,
+        },
+      },
       {
         onSuccess: (data) => {
-          onResponseGenerated(data);
+          onTaskIdReceived(data.taskId);
         },
         onError: () => {
           alert('생성에 실패했습니다. 다시 시도해주세요.');
