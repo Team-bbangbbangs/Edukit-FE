@@ -69,7 +69,7 @@ export function EditCell({ student, field, value, onSave, className }: EditableC
           className="w-full bg-transparent text-center text-body-16-m text-gray-black outline-none"
         />
       ) : (
-        <span className="text-body-16-m text-gray-black">{value}</span>
+        <span className="truncate text-body-16-m text-gray-black">{value}</span>
       )}
 
       {error ? (

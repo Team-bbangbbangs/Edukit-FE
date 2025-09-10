@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type { Ref } from 'react';
 
 import { usePatchStudents } from '@/domains/record/apis/mutations/use-patch-students';
 import { RecordTag } from '@/domains/record/components/manage-student/record-tag';
@@ -15,7 +16,7 @@ interface StudentRowProps {
   student: Student;
   isSelected: boolean;
   onToggleSelect: (studentId: number) => void;
-  forwardRef?: React.Ref<HTMLDivElement>;
+  forwardRef?: Ref<HTMLDivElement>;
 }
 
 export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: StudentRowProps) {

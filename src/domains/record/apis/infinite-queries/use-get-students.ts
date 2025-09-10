@@ -28,10 +28,6 @@ export const getStudents = async (params: GetStudentsParams = {}) => {
     searchParams.append('lastStudentId', params.lastStudentId.toString());
   }
 
-  if (params.pageSize && params.pageSize !== 20) {
-    searchParams.append('pageSize', params.pageSize.toString());
-  }
-
   const queryString = searchParams.toString();
   const endpoint = queryString ? `/api/v1/students?${queryString}` : '/api/v1/students';
 

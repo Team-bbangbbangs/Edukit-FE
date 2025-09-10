@@ -46,7 +46,7 @@ export const getStudents = [
     const classNumbers = url.searchParams.getAll('classNumbers').map(Number);
     const recordTypes = url.searchParams.getAll('recordTypes') as RecordType[];
     const lastStudentId = url.searchParams.get('lastStudentId');
-    const pageSize = parseInt(url.searchParams.get('pageSize') || '20');
+    const pageSize = 20;
 
     let filteredStudents = [...MOCK_STUDENTS];
 
