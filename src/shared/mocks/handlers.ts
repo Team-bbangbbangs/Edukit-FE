@@ -19,13 +19,11 @@ import { patchAfterLoginPassword } from '../../domains/profile/mocks/patch-after
 import { patchEmail } from '../../domains/profile/mocks/patch-email';
 import { patchProfile } from '../../domains/profile/mocks/patch-profile';
 import { aiGenerate } from '../../domains/record/mocks/ai-generate';
-import { createRecordDetail } from '../../domains/record/mocks/create-record-detail';
 import { deleteStudents } from '../../domains/record/mocks/delete-students';
 import { getRecordDetail } from '../../domains/record/mocks/get-record-detail';
 import { getRecords } from '../../domains/record/mocks/get-records';
 import { getStudents } from '../../domains/record/mocks/get-students';
 import { getStudentsName } from '../../domains/record/mocks/get-students-name';
-import { patchRecordDetail } from '../../domains/record/mocks/patch-record-detail';
 import { patchStudents } from '../../domains/record/mocks/patch-students';
 import { postRecordDetail } from '../../domains/record/mocks/post-record-detail';
 import { postStudents } from '../../domains/record/mocks/post-students';
@@ -37,8 +35,6 @@ export const handlers = [
   ...getRecords,
   ...getNoticeList,
   ...getNoticeDetail,
-  ...patchRecordDetail,
-  ...createRecordDetail,
   ...signup,
   ...getVerifyEmail,
   ...getStudentsName,
