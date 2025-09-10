@@ -125,6 +125,7 @@ export interface CreateStudentRequest {
   studentName: string;
   recordTypes: RecordType[];
 }
+
 export interface StudentsResponse {
   studentCount: number;
   grades: number[];
@@ -140,5 +141,31 @@ export interface StudentFilters {
 
 export interface GetStudentsParams extends StudentFilters {
   lastStudentId?: number;
-  pageSize?: number;
+}
+
+export interface Records {
+  recordId: number;
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+  description: string;
+}
+
+export interface RecordsResponse {
+  studentCount: number;
+  grades: number[];
+  classNumbers: number[];
+  studentRecords: Records[];
+}
+
+export interface RecordsFilters {
+  recordType: RecordType;
+  grade?: number;
+  classNumber?: number;
+  search?: string;
+}
+
+export interface GetRecordsParams extends RecordsFilters {
+  lastRecordId?: number;
 }
