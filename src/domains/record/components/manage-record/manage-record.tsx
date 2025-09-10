@@ -24,6 +24,7 @@ interface ManageRecordProps {
 
 export default function ManageRecord({ recordType }: ManageRecordProps) {
   const [filters, setFilters] = useState<RecordsFilters>({ recordType: recordType });
+  const [editingRecordId, setEditingRecordId] = useState<number | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
     useGetRecords(filters);
@@ -43,6 +44,10 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
 
   const handleFiltersChange = (newFilters: RecordsFilters) => {
     setFilters(newFilters);
+  };
+
+  const handleEditingChange = (recordId: number | null) => {
+    setEditingRecordId(recordId);
   };
 
   return (
@@ -86,6 +91,8 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
                   key={record.recordId}
                   record={record}
                   forwardRef={isLast ? lastRecordElementRef : undefined}
+                  isEditing={editingRecordId === record.recordId}
+                  onEditingChange={handleEditingChange}
                 />
               );
             })}
