@@ -6,6 +6,7 @@ interface FetchOptions extends Omit<RequestInit, 'body'> {
   body?: unknown;
   params?: Record<string, string | number | boolean>;
   skipTokenRefresh?: boolean;
+  responseType?: 'json' | 'blob';
 }
 
 // 토큰 갱신 중복 요청 방지를 위한 Promise 캐시
@@ -111,13 +112,14 @@ async function refreshAccessToken(): Promise<string | null> {
 /**
  * Response를 파싱하고 에러를 처리하는 함수
  * 1. HTTP 상태 코드 확인
- * 2. JSON 파싱 시도
+ * 2. responseType에 따라 JSON 또는 Blob 파싱
  * 3. 커스텀 에러 코드가 있으면 ApiError로 변환
  * 4. Response wrapper에서 data 추출
  */
 async function handleResponse<T>(
   response: globalThis.Response,
   skipTokenRefresh = false,
+  responseType: 'json' | 'blob' = 'json',
 ): Promise<T> {
   if (!response.ok) {
     let errorData;
@@ -127,6 +129,11 @@ async function handleResponse<T>(
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  if (responseType === 'blob') {
+    const blob = await response.blob();
+    return blob as T;
   }
 
   let responseData;
@@ -154,7 +161,7 @@ async function handleResponse<T>(
  * 3. 새 토큰으로 동일한 요청 재시도
  */
 async function request<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
-  const { body, params, skipTokenRefresh, ...fetchOptions } = options;
+  const { body, params, skipTokenRefresh, responseType = 'json', ...fetchOptions } = options;
 
   const url = buildURL(endpoint, params);
   const headers = buildHeaders(options);
@@ -176,7 +183,7 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
   try {
     const response = await fetch(url, config);
 
-    return await handleResponse<T>(response, skipTokenRefresh);
+    return await handleResponse<T>(response, skipTokenRefresh, responseType);
   } catch (error) {
     if (error instanceof TokenExpiredError && !skipTokenRefresh) {
       const newToken = await refreshAccessToken();
@@ -186,7 +193,7 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
           ...config,
           headers: { ...config.headers, Authorization: `Bearer ${newToken}` },
         });
-        return await handleResponse<T>(retryResponse, true);
+        return await handleResponse<T>(retryResponse, true, responseType);
       }
     }
     throw error;
