@@ -22,6 +22,14 @@ export const useDeleteStudents = () => {
       queryClient.invalidateQueries({
         queryKey: ['students'],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ['studentsName'],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['records'],
+      });
     },
     onError: (error) => {
       alert(error.message);

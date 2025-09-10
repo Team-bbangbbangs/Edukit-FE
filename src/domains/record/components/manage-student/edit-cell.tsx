@@ -8,7 +8,13 @@ interface EditableCellProps {
   student: Student;
   field: keyof Pick<Student, 'grade' | 'classNumber' | 'studentNumber' | 'studentName'>;
   value: string | number;
-  onSave: (updatedStudent: Student) => void;
+  onSave: (
+    updatedStudent: Student,
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: Error) => void;
+    },
+  ) => void;
   className?: string;
 }
 
@@ -21,38 +27,71 @@ export function EditCell({ student, field, value, onSave, className }: EditableC
   const handleBlur = () => {
     if (tempValue.trim() === '') {
       setError('입력값은 비워놓을 수 없습니다.');
+      setTempValue(value.toString());
       setIsEditing(true);
       return;
     }
 
-    setError('');
-    setIsEditing(false);
+    if (tempValue === value.toString()) {
+      setError('');
+      setIsEditing(false);
+      return;
+    }
 
-    if (tempValue !== value.toString()) {
-      const isNumberField = ['grade', 'classNumber', 'studentNumber'].includes(field);
-      let finalValue: string | number = tempValue;
+    const isNumberField = ['grade', 'classNumber', 'studentNumber'].includes(field);
+    let finalValue: string | number = tempValue;
 
-      if (isNumberField) {
-        const numValue = Number(tempValue);
-        if (isNaN(numValue)) {
-          setError('숫자만 입력 가능합니다.');
-          setIsEditing(true);
-          return;
-        }
-        finalValue = numValue;
+    if (isNumberField) {
+      const numValue = Number(tempValue);
+      if (isNaN(numValue)) {
+        setError('숫자만 입력 가능합니다.');
+        setTempValue(value.toString());
+        setIsEditing(true);
+        return;
       }
+      finalValue = numValue;
+    }
 
-      const updatedStudent: Student = {
-        ...student,
-        [field]: finalValue,
-      };
-      onSave(updatedStudent);
+    setError('');
+
+    const updatedStudent: Student = {
+      ...student,
+      [field]: finalValue,
+    };
+
+    onSave(updatedStudent, {
+      onSuccess: () => {
+        setIsEditing(false);
+      },
+      onError: () => {
+        setError('유효한 값을 입력해주세요.');
+        setTempValue(value.toString());
+        setIsEditing(true);
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.select();
+          }
+        }, 0);
+      },
+    });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleBlur();
+    }
+    if (e.key === 'Escape') {
+      setError('');
+      setTempValue(value.toString());
+      setIsEditing(false);
     }
   };
 
   return (
     <div
-      className={`relative flex items-center justify-center border-r border-gray-2 px-10 py-4 transition-colors ${className} ${error ? 'border-red-500' : ''} ${isEditing ? 'border-blue-400 ring-1 ring-blue-300' : 'cursor-pointer hover:bg-gray-50'} focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-300`}
+      className={`relative flex items-center justify-center px-10 py-4 transition-colors ${className} ${error ? 'border-red-500' : ''} ${isEditing ? 'border border-blue-400' : 'cursor-pointer border-r border-gray-2 hover:bg-gray-50'}`}
       onClick={() => {
         if (!isEditing) {
           setIsEditing(true);
@@ -66,14 +105,17 @@ export function EditCell({ student, field, value, onSave, className }: EditableC
           value={tempValue}
           onChange={(e) => setTempValue(e.target.value)}
           onBlur={handleBlur}
-          className="w-full bg-transparent text-center text-body-16-m text-gray-black outline-none"
+          onKeyDown={handleKeyDown}
+          className="w-full bg-transparent text-center text-body-16-m text-gray-black outline-none disabled:opacity-50"
         />
       ) : (
         <span className="truncate text-body-16-m text-gray-black">{value}</span>
       )}
 
       {error ? (
-        <span className="absolute -bottom-5 whitespace-nowrap text-xs text-red-500">{error}</span>
+        <span className="absolute -bottom-5 z-10 whitespace-nowrap text-xs text-red-500">
+          {error}
+        </span>
       ) : null}
     </div>
   );
