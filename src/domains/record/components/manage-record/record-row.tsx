@@ -1,9 +1,11 @@
+import type { Ref } from 'react';
+
 import type { Records } from '@/domains/record/types/record';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
 
 interface RecordRowProps {
   record: Records;
-  forwardRef?: React.Ref<HTMLDivElement>;
+  forwardRef?: Ref<HTMLDivElement>;
 }
 
 export default function RecordRow({ record, forwardRef }: RecordRowProps) {
