@@ -40,7 +40,9 @@ export const usePatchStudents = () => {
               ...page,
               students:
                 page.students?.map((student: Student) =>
-                  student.studentId === updatedStudent.studentId ? updatedStudent : student,
+                  student.studentId === updatedStudent.studentId
+                    ? { ...student, ...updatedStudent }
+                    : student,
                 ) || page.students,
             })),
           };
@@ -51,7 +53,9 @@ export const usePatchStudents = () => {
           return {
             ...queryData,
             students: queryData.students.map((student: Student) =>
-              student.studentId === updatedStudent.studentId ? updatedStudent : student,
+              student.studentId === updatedStudent.studentId
+                ? { ...student, ...updatedStudent }
+                : student,
             ),
           };
         }
