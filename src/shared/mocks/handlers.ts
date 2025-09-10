@@ -1,10 +1,10 @@
 import { getCheckAuthValidNickname } from '../../domains/auth/mocks/get-check-auth-valid-nickname';
 import { getVerifyEmail } from '../../domains/auth/mocks/get-verify-email';
-import { patchResetPassword } from '../../domains/auth/mocks/patch-reset-password';
+import { patchPassword } from '../../domains/auth/mocks/patch-password';
+import { postFindPassword } from '../../domains/auth/mocks/post-find-password';
 import { postLogin } from '../../domains/auth/mocks/post-login';
 import { postLogout } from '../../domains/auth/mocks/post-logout';
 import { postSendEmail } from '../../domains/auth/mocks/post-send-email';
-import { postVerifyEmail } from '../../domains/auth/mocks/post-verify-email';
 import { reissue } from '../../domains/auth/mocks/reissue';
 import { signup } from '../../domains/auth/mocks/signup';
 import { deleteAdminNotice } from '../../domains/notice/mocks/delete-admin-notice';
@@ -46,8 +46,8 @@ export const handlers = [
   ...postLogout,
   ...reissue,
   ...postSendEmail,
-  ...postVerifyEmail,
-  ...patchResetPassword,
+  ...postFindPassword,
+  ...patchPassword,
   ...postAdminNotice,
   ...patchAdminNotice,
   ...deleteAdminNotice,
