@@ -72,6 +72,23 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
     setTempRecordTypes((prev) => prev.filter((rt) => rt !== normalizedType));
   };
 
+  const handleSaveStudent = (
+    updatedStudent: Student,
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    patchStudents(updatedStudent, {
+      onSuccess: () => {
+        options?.onSuccess?.();
+      },
+      onError: (error) => {
+        options?.onError?.(error);
+      },
+    });
+  };
+
   const currentRecordTypes = isDropdownOpen ? tempRecordTypes : normalizedStudentRecordTypes;
 
   return (
@@ -91,28 +108,28 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
         student={student}
         field="grade"
         value={student.grade}
-        onSave={patchStudents}
+        onSave={handleSaveStudent}
         className="w-[100px]"
       />
       <EditCell
         student={student}
         field="classNumber"
         value={student.classNumber}
-        onSave={patchStudents}
+        onSave={handleSaveStudent}
         className="w-[100px]"
       />
       <EditCell
         student={student}
         field="studentNumber"
         value={student.studentNumber}
-        onSave={patchStudents}
+        onSave={handleSaveStudent}
         className="w-[200px]"
       />
       <EditCell
         student={student}
         field="studentName"
         value={student.studentName}
-        onSave={patchStudents}
+        onSave={handleSaveStudent}
         className="w-[140px]"
       />
 
@@ -145,7 +162,7 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
             )}
           </Dropdown.Trigger>
 
-          <Dropdown.Content className="mt-[6px] inline-flex w-[152px] flex-col items-start p-2">
+          <Dropdown.Content className="mt-[6px] inline-flex !w-[156px] flex-col items-start p-2">
             {RECORD_TYPE.map((option) => {
               const normalizedOptionValue = option.value.toLowerCase() as RecordType;
               const isAlreadySelected = currentRecordTypes.includes(normalizedOptionValue);
