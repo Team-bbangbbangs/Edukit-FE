@@ -23,6 +23,10 @@ export const usePostRecordDetail = () => {
       queryClient.invalidateQueries({
         queryKey: ['record-detail', variables.recordId],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ['records'],
+      });
     },
   });
 };
