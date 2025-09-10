@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { useGetStudents } from '@/domains/record/apis/infinite-queries/get-students';
+import { useGetStudents } from '@/domains/record/apis/infinite-queries/use-get-students';
 import type { StudentsResponse, Student, StudentFilters } from '@/domains/record/types/record';
 import { useInfiniteScroll } from '@/shared/hooks/use-infinite-scroll';
 
