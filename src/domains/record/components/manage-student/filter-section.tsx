@@ -262,9 +262,11 @@ export function FilterSection({
                     className="flex w-full cursor-pointer items-center rounded-[8px] px-3 py-2 hover:bg-gray-1"
                     onClick={() => handleGradeToggle(grade)}
                   >
-                    <span className="w-[31px] text-body-16-m text-gray-black">{grade}</span>
+                    <span className="w-[39px] truncate text-body-16-m text-gray-black">
+                      {grade}
+                    </span>
                     {selectedGrades.includes(grade) ? (
-                      <Icons.Check size={18} className="ml-2" color="text-blue-400" />
+                      <Icons.Check size={18} color="text-blue-400" />
                     ) : null}
                   </div>
                 ))}
@@ -291,7 +293,7 @@ export function FilterSection({
                   size={18}
                   color="text-blue-400"
                   hoverColor="text-blue-600"
-                  className={`hidden cursor-pointer ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
+                  className={`hidden cursor-pointer ${selectedClasses.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     removeFilter('class');
@@ -305,9 +307,11 @@ export function FilterSection({
                     className="flex w-full cursor-pointer items-center rounded-[8px] px-3 py-2 hover:bg-gray-1"
                     onClick={() => handleClassToggle(classNumber)}
                   >
-                    <span className="w-[31px] text-body-16-m text-gray-black">{classNumber}</span>
+                    <span className="w-[39px] truncate text-body-16-m text-gray-black">
+                      {classNumber}
+                    </span>
                     {selectedClasses.includes(classNumber) ? (
-                      <Icons.Check size={18} className="ml-2" color="text-blue-400" />
+                      <Icons.Check size={18} color="text-blue-400" />
                     ) : null}
                   </div>
                 ))}
@@ -334,14 +338,14 @@ export function FilterSection({
                   size={18}
                   color="text-blue-400"
                   hoverColor="text-blue-600"
-                  className={`hidden cursor-pointer ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
+                  className={`hidden cursor-pointer ${selectedRecordTypes.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     removeFilter('record');
                   }}
                 />
               </Dropdown.Trigger>
-              <Dropdown.Content className="!mt-2 inline-flex !w-[152px] flex-col items-start p-2">
+              <Dropdown.Content className="!mt-2 inline-flex !w-[156px] flex-col items-start p-2">
                 {RECORD_TYPE.map((option) => {
                   const isSelected = selectedRecordTypes.includes(option.value);
 
