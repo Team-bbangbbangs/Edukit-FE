@@ -62,7 +62,7 @@ export default function SuccessSignup() {
 
   return (
     <div className="flex flex-col items-center gap-10 py-8 text-center">
-      <h2 className="text-4xl font-bold">가입 완료</h2>
+      <h2 className="text-4xl font-bold text-green-500">가입 완료</h2>
       <p className="text-2xl text-gray-700">
         가입하신 이메일로 인증 메일을 보냈습니다.
         <br />
