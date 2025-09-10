@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, keepPreviousData } from '@tanstack/react-query';
 
 import type {
   StudentsResponse,
@@ -54,6 +54,7 @@ export const useGetStudents = (filters: StudentFilters = {}) => {
       if (students.length === 0) return undefined;
       return students[students.length - 1].studentId;
     },
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     retry: 0,
