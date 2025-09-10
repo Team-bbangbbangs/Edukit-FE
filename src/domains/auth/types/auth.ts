@@ -20,3 +20,9 @@ export interface VerifyEmailRequest {
   id: string;
   code: string;
 }
+
+export interface PatchPasswordBody {
+  memberUuid: string;
+  verificationCode: string;
+  password: string;
+}

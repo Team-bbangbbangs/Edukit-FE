@@ -11,11 +11,10 @@ import { useAuth } from '@/shared/providers/auth-provider';
 
 import ProfileImage from '../../../../../public/images/profile-image.png';
 
-const tabStyle = 'flex pt-6 mx-5 flex-col justify-between items-center whitespace-nowrap';
+const tabStyle = 'flex pt-6 mx-2 lg:mx-5 flex-col justify-between items-center whitespace-nowrap';
 
 const tabs = [
   { label: 'AI 생활기록부 작성', path: '/manage-student' },
-  { label: '커뮤니티', path: '/' },
   { label: '공지사항', path: '/notice' },
 ];
 
@@ -68,9 +67,9 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="fixed top-0 z-30 flex h-[72px] w-full justify-center border-b border-b-gray-2 bg-white">
-      <div className="flex w-[1440px] justify-between px-10">
-        <div className="flex gap-4 lg:gap-40">
+    <header className="fixed top-0 z-30 flex h-[72px] w-full border-b border-b-gray-2 bg-white">
+      <div className="flex w-full justify-between px-4 lg:px-10">
+        <div className="flex gap-2 lg:gap-40">
           <Link href="/" className="flex items-center">
             <Image src="/svgs/logo.svg" alt="logo" width={126} height={28} />
           </Link>
@@ -101,7 +100,7 @@ export default function Header() {
             href="https://walla.my/survey/tBoiYaly9xugPKLhAyRx"
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap rounded-full bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
+            className="hidden whitespace-nowrap rounded-full bg-blue-600 px-4 py-2 text-white hover:bg-blue-800 md:block"
           >
             피드백 작성하기
           </a>

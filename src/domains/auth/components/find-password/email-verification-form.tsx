@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { usePostVerifyEmail } from '@/domains/auth/apis/mutations/use-post-verify-email';
+import { usePostFindPassword } from '@/domains/auth/apis/mutations/use-post-find-password';
 import { emailSchema } from '@/domains/auth/types/auth-scheme';
 import { Input } from '@/shared/components/ui/input/input';
 
@@ -15,12 +15,12 @@ const emailVerificationSchema = z.object({
 type EmailVerificationData = z.infer<typeof emailVerificationSchema>;
 
 interface EmailVerificationFormProps {
-  onSuccess: (email: string) => void;
+  onEmailSent: () => void;
 }
 
-export function EmailVerificationForm({ onSuccess }: EmailVerificationFormProps) {
+export default function EmailVerificationForm({ onEmailSent }: EmailVerificationFormProps) {
   const [serverError, setServerError] = useState('');
-  const { mutate: postVerifyEmail, isPending } = usePostVerifyEmail();
+  const { mutate: postFindPassword, isPending } = usePostFindPassword();
 
   const {
     register,
@@ -32,9 +32,9 @@ export function EmailVerificationForm({ onSuccess }: EmailVerificationFormProps)
 
   const onSubmit = (data: EmailVerificationData) => {
     setServerError('');
-    postVerifyEmail(data.email, {
+    postFindPassword(data.email, {
       onSuccess: () => {
-        onSuccess(data.email);
+        onEmailSent();
       },
       onError: (error) => {
         setServerError(error.message);
@@ -68,9 +68,9 @@ export function EmailVerificationForm({ onSuccess }: EmailVerificationFormProps)
       <button
         type="submit"
         disabled={isPending}
-        className="mt-8 h-16 w-96 rounded-md bg-slate-800 px-4 py-2 text-2xl font-bold text-white hover:bg-slate-950 disabled:opacity-50"
+        className="mt-8 h-16 w-96 rounded-md bg-slate-800 px-4 py-2 text-title-18 text-white hover:bg-slate-950 disabled:opacity-50"
       >
-        이메일 확인
+        {isPending ? '전송 중...' : '비밀번호 재설정 이메일 보내기'}
       </button>
     </form>
   );
