@@ -161,7 +161,7 @@ export default function StudentSidebarContent({
                   isStudentActive(student.recordId) && 'bg-gray-2',
                 )}
               >
-                <span className="text-label-18 text-gray-black">
+                <span className="block truncate text-label-18 text-gray-black">
                   {`${index + 1}. ${student.studentName}`}
                 </span>
               </button>
