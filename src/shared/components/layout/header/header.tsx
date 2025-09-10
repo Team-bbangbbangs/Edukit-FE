@@ -69,7 +69,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 z-30 flex h-[72px] w-full border-b border-b-gray-2 bg-white">
       <div className="flex w-full justify-between px-4 lg:px-10">
-        <div className="flex gap-2 lg:gap-40">
+        <div className="flex gap-2 lg:gap-10">
           <Link href="/" className="flex items-center">
             <Image src="/svgs/logo.svg" alt="logo" width={126} height={28} />
           </Link>
