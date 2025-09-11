@@ -8,12 +8,14 @@ export const safeDecodeURIComponent = (str: string): string => {
 };
 
 export const parseSearchParams = (searchParams: { id?: string; name?: string }) => {
-  try {
-    const recordId = searchParams.id ? Number(searchParams.id) : undefined;
-    const studentName = searchParams.name ? decodeURIComponent(searchParams.name) : undefined;
+  const recordId = searchParams.id ? Number(searchParams.id) : undefined;
+  const studentName = searchParams.name ? safeDecodeURIComponent(searchParams.name) : undefined;
 
-    return { recordId, studentName, isValid: true };
-  } catch {
-    return { recordId: undefined, studentName: undefined, isValid: false };
-  }
+  const isIdValid = !searchParams.id || (!isNaN(recordId!) && recordId! > 0);
+
+  return {
+    recordId,
+    studentName,
+    isValid: isIdValid,
+  };
 };
