@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { useGetStudents } from '@/domains/record/apis/infinite-queries/use-get-students';
 import type { StudentsResponse, Student, StudentFilters } from '@/domains/record/types/record';
+import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
+import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
 import { useInfiniteScroll } from '@/shared/hooks/use-infinite-scroll';
 
 import { AddStudentRow } from './add-student-row';
@@ -20,8 +22,16 @@ export default function ManageStudent() {
 
   const [filters, setFilters] = useState<StudentFilters>({});
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
-    useGetStudents(filters);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+    isUnauthorized,
+    isNotPermission,
+  } = useGetStudents(filters);
 
   const lastStudentElementRef = useInfiniteScroll({
     fetchNextPage,
@@ -59,11 +69,15 @@ export default function ManageStudent() {
     setSelectedIds([]);
   };
 
+  const hasError = isUnauthorized || isNotPermission || !!error;
+  const isDisabled = hasError || isLoading;
+
   return (
     <div className="flex w-full flex-col justify-center p-[60px]">
       <ManageStudentHeader
         onAddStudent={() => setIsAddingStudent(true)}
         isAddingStudent={isAddingStudent}
+        disabled={isDisabled}
       />
 
       <FilterSection
@@ -73,6 +87,7 @@ export default function ManageStudent() {
         classNumbers={classNumbers}
         onClearSelection={() => setSelectedIds([])}
         onFiltersChange={handleFiltersChange}
+        disabled={isDisabled}
       />
 
       <div className="mb-80 flex w-[1135px] flex-col items-start">
@@ -81,6 +96,14 @@ export default function ManageStudent() {
         {isLoading ? (
           <div className="flex w-full items-center justify-center py-8">
             <div className="text-gray-black">로딩중...</div>
+          </div>
+        ) : isUnauthorized ? (
+          <div className="flex w-full items-center justify-center py-8">
+            <NotAuthorizedError />
+          </div>
+        ) : isNotPermission ? (
+          <div className="flex w-full items-center justify-center py-8">
+            <NotPermissionError />
           </div>
         ) : error ? (
           <div className="flex w-full items-center justify-center py-8">
@@ -108,6 +131,15 @@ export default function ManageStudent() {
                 />
               );
             })}
+
+            {isFetchingNextPage ? (
+              <div className="flex w-full items-center justify-center py-8">
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
+                  <span className="text-body-16-m text-gray-4">추가 데이터를 불러오는 중...</span>
+                </div>
+              </div>
+            ) : null}
           </>
         )}
       </div>
