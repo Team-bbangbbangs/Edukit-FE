@@ -44,6 +44,7 @@ interface DropdownTriggerProps extends DropdownProps {
   iconSize?: number;
   iconClassName?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 interface DropdownItemProps extends DropdownProps {
@@ -143,6 +144,7 @@ function DropdownTrigger({
   className = '',
   iconPosition = 'none',
   onClick,
+  disabled = false,
 }: DropdownTriggerProps) {
   const { open, setOpen } = useDropdownContext();
 
@@ -164,6 +166,7 @@ function DropdownTrigger({
       aria-expanded={open}
       aria-haspopup="menu"
       data-state={open ? 'open' : 'closed'}
+      disabled={disabled}
       onClick={handleClick}
     >
       {iconPosition === 'left' ? Icon : null}
