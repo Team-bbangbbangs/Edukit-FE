@@ -6,6 +6,7 @@ import type {
   RecordsFilters,
 } from '@/domains/record/types/record';
 import { api } from '@/shared/lib/api';
+import { isUnauthorizedError, isNotPermissionError } from '@/shared/lib/errors';
 
 export const getRecords = async (params: GetRecordsParams) => {
   const searchParams = new URLSearchParams();
@@ -35,7 +36,7 @@ export const getRecords = async (params: GetRecordsParams) => {
 };
 
 export const useGetRecords = (filters: RecordsFilters) => {
-  return useInfiniteQuery<
+  const query = useInfiniteQuery<
     RecordsResponse,
     Error,
     RecordsResponse,
@@ -60,4 +61,13 @@ export const useGetRecords = (filters: RecordsFilters) => {
     gcTime: 10 * 60 * 1000,
     retry: 0,
   });
+
+  const isUnauthorized = query.error ? isUnauthorizedError(query.error) : false;
+  const isNotPermission = query.error ? isNotPermissionError(query.error) : false;
+
+  return {
+    ...query,
+    isUnauthorized,
+    isNotPermission,
+  };
 };

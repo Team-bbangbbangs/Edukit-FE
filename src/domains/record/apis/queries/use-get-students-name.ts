@@ -6,6 +6,7 @@ import type {
   StudentsNamesFilters,
 } from '@/domains/record/types/record';
 import { api } from '@/shared/lib/api';
+import { isUnauthorizedError, isNotPermissionError } from '@/shared/lib/errors';
 
 export const getStudentsName = async (
   recordType: RecordType,
@@ -19,11 +20,20 @@ export const getStudentsName = async (
 };
 
 export const useGetStudentsName = (recordType: RecordType, filters: StudentsNamesFilters = {}) => {
-  return useQuery<StudentNamesResponse>({
+  const query = useQuery<StudentNamesResponse>({
     queryKey: ['studentsName', recordType, filters],
     queryFn: () => getStudentsName(recordType, filters),
     retry: 0,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
+
+  const isUnauthorized = query.error ? isUnauthorizedError(query.error) : false;
+  const isNotPermission = query.error ? isNotPermissionError(query.error) : false;
+
+  return {
+    ...query,
+    isUnauthorized,
+    isNotPermission,
+  };
 };

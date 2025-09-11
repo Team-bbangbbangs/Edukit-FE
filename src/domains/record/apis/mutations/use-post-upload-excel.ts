@@ -32,8 +32,5 @@ export const usePostUploadExcel = () => {
         queryKey: ['records'],
       });
     },
-    onError: (error) => {
-      alert(error.message);
-    },
   });
 };
