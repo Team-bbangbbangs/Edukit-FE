@@ -29,6 +29,12 @@ export default function RecordSummary({ selectedId, recordType, bytesLimit }: Re
   const { textareaRef, resizeTextarea } = useAutoResizeTextarea(description);
 
   useEffect(() => {
+    if (isError) {
+      router.push(`/write-${recordType}`);
+    }
+  }, [isError, router, recordType]);
+
+  useEffect(() => {
     if (data) {
       setDescription(data.description || '');
     }
@@ -61,9 +67,9 @@ export default function RecordSummary({ selectedId, recordType, bytesLimit }: Re
   if (isNotPermission) {
     return <NotPermissionError />;
   }
-  if (isError) {
-    router.push(`/write-${recordType}`);
-  }
+
+  if (isError) return null;
+
   if (isPending) {
     return <Loading />;
   }
