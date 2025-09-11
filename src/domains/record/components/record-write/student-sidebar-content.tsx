@@ -7,6 +7,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useGetStudentsName } from '@/domains/record/apis/queries/use-get-students-name';
 import type { RecordType, StudentsNamesFilters } from '@/domains/record/types/record';
 import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
+import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
 import { Icons } from '@/shared/components/ui/icon/icon';
 import { Input } from '@/shared/components/ui/input/input';
 import { cn } from '@/shared/lib/utils';
@@ -33,7 +35,13 @@ export default function StudentSidebarContent({
     ...(searchTerm && { studentName: searchTerm }),
   };
 
-  const { data: studentsData, isLoading, isError } = useGetStudentsName(recordType, filters);
+  const {
+    data: studentsData,
+    isLoading,
+    isError,
+    isUnauthorized,
+    isNotPermission,
+  } = useGetStudentsName(recordType, filters);
 
   const handleStudentClick = (recordId: number, studentName: string) => {
     const params = new URLSearchParams(searchParams);
@@ -141,6 +149,14 @@ export default function StudentSidebarContent({
         {isLoading ? (
           <div className="flex items-center justify-center p-4">
             <div className="text-label-18 text-gray-4">로딩 중...</div>
+          </div>
+        ) : isUnauthorized ? (
+          <div className="flex h-full items-center justify-center">
+            <NotAuthorizedError />
+          </div>
+        ) : isNotPermission ? (
+          <div className="flex h-full items-center justify-center">
+            <NotPermissionError />
           </div>
         ) : isError ? (
           <div className="flex items-center justify-center p-8 text-label-18 text-red-500">

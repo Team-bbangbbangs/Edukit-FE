@@ -99,9 +99,6 @@ export default function CharacteristicInput({
         onSuccess: (data) => {
           onTaskIdReceived(data.taskId);
         },
-        onError: () => {
-          alert('생성에 실패했습니다. 다시 시도해주세요.');
-        },
       },
     );
   };

@@ -7,9 +7,14 @@ import ExcelUploadModal from '@/shared/components/ui/modal/excel-upload-modal';
 interface ManageStudentHeaderProps {
   onAddStudent: () => void;
   isAddingStudent: boolean;
+  disabled?: boolean;
 }
 
-export function ManageStudentHeader({ onAddStudent, isAddingStudent }: ManageStudentHeaderProps) {
+export function ManageStudentHeader({
+  onAddStudent,
+  isAddingStudent,
+  disabled = false,
+}: ManageStudentHeaderProps) {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
 
   return (
@@ -23,7 +28,7 @@ export function ManageStudentHeader({ onAddStudent, isAddingStudent }: ManageStu
           shape="rect"
           className="flex items-center gap-2"
           onClick={onAddStudent}
-          disabled={isAddingStudent}
+          disabled={isAddingStudent || disabled}
         >
           <span className="text-label-16 text-blue-400">학생 추가</span>
           <Icons.Add color="text-blue-400" size={20} />
@@ -35,6 +40,7 @@ export function ManageStudentHeader({ onAddStudent, isAddingStudent }: ManageStu
           shape="rect"
           className="text-label-16 text-white"
           onClick={() => setExcelModalOpen(true)}
+          disabled={disabled}
         >
           엑셀 파일에서 명단 업로드
         </Button>

@@ -5,9 +5,13 @@ import Button from '@/shared/components/ui/button/button';
 
 interface ManageRecordHeaderProps {
   recordType: RecordType;
+  disabled?: boolean;
 }
 
-export default function ManageRecordHeader({ recordType }: ManageRecordHeaderProps) {
+export default function ManageRecordHeader({
+  recordType,
+  disabled = false,
+}: ManageRecordHeaderProps) {
   const { mutate: downloadExcel, isPending } = useDownloadExcel();
 
   const handleExcelDownload = () => {
@@ -25,7 +29,7 @@ export default function ManageRecordHeader({ recordType }: ManageRecordHeaderPro
         shape="rect"
         className="text-label-16 text-white"
         onClick={handleExcelDownload}
-        disabled={isPending}
+        disabled={isPending || disabled}
       >
         {isPending ? '다운로드 중...' : '엑셀로 내보내기'}
       </Button>

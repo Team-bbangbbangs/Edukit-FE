@@ -16,6 +16,7 @@ interface FilterSectionProps {
   classNumbers?: number[];
   onClearSelection: () => void;
   onFiltersChange: (filters: StudentFilters) => void;
+  disabled?: boolean;
 }
 
 export function FilterSection({
@@ -25,6 +26,7 @@ export function FilterSection({
   classNumbers,
   onClearSelection,
   onFiltersChange,
+  disabled = false,
 }: FilterSectionProps) {
   const hasSelection = selectedIds.length > 0;
 
@@ -169,6 +171,7 @@ export function FilterSection({
                 size="small"
                 shape="pill"
                 onClick={() => setDeleteModalOpen(true)}
+                disabled={disabled}
               >
                 <span className="text-label-16 text-blue-400">삭제</span>
               </Button>
@@ -178,6 +181,7 @@ export function FilterSection({
                 size="small"
                 shape="pill"
                 onClick={onClearSelection}
+                disabled={disabled}
               >
                 <span className="text-label-16 text-gray-4">취소</span>
               </Button>
@@ -188,7 +192,8 @@ export function FilterSection({
             <span className="text-title-20 text-gray-4">총 {totalCount}명의 학생 등록</span>
             <Dropdown>
               <Dropdown.Trigger
-                className={`flex items-center justify-center gap-2 rounded-full border ${activeFilters.size > 0 ? 'border-blue-400' : 'border-gray-2'} bg-white px-3 py-2 hover:bg-gray-1 disabled:bg-gray-1 disabled:text-gray-3`}
+                disabled={disabled}
+                className={`flex items-center justify-center gap-2 rounded-full border ${activeFilters.size > 0 ? 'border-blue-400' : 'border-gray-2'} bg-white px-3 py-2 ${disabled ? 'cursor-not-allowed bg-gray-1 text-gray-3' : 'hover:bg-gray-1'}`}
               >
                 <span
                   className={`text-label-16 ${activeFilters.size > 0 ? 'text-blue-400' : 'text-gray-4'}`}
