@@ -8,6 +8,8 @@ import SaveSummaryRecordModal from '@/domains/record/components/record-write/sav
 import type { RecordType } from '@/domains/record/types/record';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
 import Button from '@/shared/components/ui/button/button';
+import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
+import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
 import Loading from '@/shared/components/ui/loading/loading';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 
@@ -22,8 +24,15 @@ export default function RecordSummary({ selectedId, recordType, bytesLimit }: Re
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState('');
   const { mutate: postRecordDetail } = usePostRecordDetail();
-  const { data, isPending, isError } = useGetRecordDetail(selectedId);
+  const { data, isPending, isError, isUnauthorized, isNotPermission } =
+    useGetRecordDetail(selectedId);
   const { textareaRef, resizeTextarea } = useAutoResizeTextarea(description);
+
+  useEffect(() => {
+    if (isError) {
+      router.push(`/write-${recordType}`);
+    }
+  }, [isError, router, recordType]);
 
   useEffect(() => {
     if (data) {
@@ -52,9 +61,15 @@ export default function RecordSummary({ selectedId, recordType, bytesLimit }: Re
     setDescription(e.target.value);
   };
 
-  if (isError) {
-    router.push(`/write-${recordType}`);
+  if (isUnauthorized) {
+    return <NotAuthorizedError />;
   }
+  if (isNotPermission) {
+    return <NotPermissionError />;
+  }
+
+  if (isError) return null;
+
   if (isPending) {
     return <Loading />;
   }

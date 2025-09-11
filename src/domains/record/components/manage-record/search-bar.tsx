@@ -12,6 +12,7 @@ interface SearchBarProps {
   grades?: number[];
   classNumbers?: number[];
   onFiltersChange: (filters: RecordsFilters) => void;
+  disabled?: boolean;
 }
 
 export default function SearchBar({
@@ -19,6 +20,7 @@ export default function SearchBar({
   grades,
   classNumbers,
   onFiltersChange,
+  disabled = false,
 }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGrade, setSelectedGrade] = useState<number | undefined>();
@@ -118,6 +120,7 @@ export default function SearchBar({
           placeholder="이름"
           value={searchTerm}
           onChange={(e) => handleSearchChange(e.target.value)}
+          disabled={disabled}
           className="h-[48px] min-w-[200px] rounded-[10px] border border-gray-2 py-[11px] pl-4 pr-10"
         />
         <Icons.Search

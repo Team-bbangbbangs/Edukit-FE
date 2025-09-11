@@ -1,5 +1,5 @@
 import { reissue } from '@/domains/auth/apis/reissue';
-import { ApiError, TokenExpiredError } from '@/shared/lib/errors';
+import { ApiError, isUnauthorizedError } from '@/shared/lib/errors';
 import { tokenStore } from '@/shared/lib/token-store';
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
@@ -143,8 +143,13 @@ async function handleResponse<T>(
     throw new Error('Invalid JSON response');
   }
 
-  if (!skipTokenRefresh && (responseData.code === 'A-40101' || responseData.code === 'A-40102')) {
-    throw new TokenExpiredError(responseData.code, responseData.message || 'Token expired');
+  if (
+    !skipTokenRefresh &&
+    (responseData.code === 'A-40101' ||
+      responseData.code === 'A-40102' ||
+      responseData.code === 'A-40103')
+  ) {
+    throw new ApiError(responseData.code, responseData.message || 'Token expired');
   }
 
   if (responseData.code && responseData.code !== 'SUCCESS') {
@@ -185,7 +190,8 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
 
     return await handleResponse<T>(response, skipTokenRefresh, responseType);
   } catch (error) {
-    if (error instanceof TokenExpiredError && !skipTokenRefresh) {
+    // TokenExpiredError 체크 대신 isUnauthorizedError 함수 사용
+    if (isUnauthorizedError(error) && !skipTokenRefresh) {
       const newToken = await refreshAccessToken();
 
       if (newToken) {

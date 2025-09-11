@@ -6,6 +6,7 @@ import type {
   StudentFilters,
 } from '@/domains/record/types/record';
 import { api } from '@/shared/lib/api';
+import { isUnauthorizedError, isNotPermissionError } from '@/shared/lib/errors';
 
 export const getStudents = async (params: GetStudentsParams = {}) => {
   const searchParams = new URLSearchParams();
@@ -35,7 +36,7 @@ export const getStudents = async (params: GetStudentsParams = {}) => {
 };
 
 export const useGetStudents = (filters: StudentFilters = {}) => {
-  return useInfiniteQuery<
+  const query = useInfiniteQuery<
     StudentsResponse,
     Error,
     StudentsResponse,
@@ -59,4 +60,13 @@ export const useGetStudents = (filters: StudentFilters = {}) => {
     gcTime: 10 * 60 * 1000,
     retry: 0,
   });
+
+  const isUnauthorized = query.error ? isUnauthorizedError(query.error) : false;
+  const isNotPermission = query.error ? isNotPermissionError(query.error) : false;
+
+  return {
+    ...query,
+    isUnauthorized,
+    isNotPermission,
+  };
 };

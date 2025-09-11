@@ -19,5 +19,8 @@ export const useAiGenerate = () => {
         ai_inputLength: variables.request.prompt?.length || 0,
       });
     },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 };

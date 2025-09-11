@@ -9,6 +9,8 @@ import type {
   RecordsFilters,
   RecordType,
 } from '@/domains/record/types/record';
+import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
+import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
 import { useInfiniteScroll } from '@/shared/hooks/use-infinite-scroll';
 
 import ManageRecordDashboardHeader from './manage-record-dashboard-header';
@@ -26,8 +28,16 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
   const [filters, setFilters] = useState<RecordsFilters>({ recordType: recordType });
   const [editingRecordId, setEditingRecordId] = useState<number | null>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
-    useGetRecords(filters);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+    isUnauthorized,
+    isNotPermission,
+  } = useGetRecords(filters);
 
   const lastRecordElementRef = useInfiniteScroll({
     fetchNextPage,
@@ -50,9 +60,12 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
     setEditingRecordId(recordId);
   };
 
+  const hasError = isUnauthorized || isNotPermission || !!error;
+  const isDisabled = hasError || isLoading;
+
   return (
     <div className="flex w-full flex-col justify-center p-[60px]">
-      <ManageRecordHeader recordType={recordType} />
+      <ManageRecordHeader recordType={recordType} disabled={isDisabled} />
 
       <div className="mb-8 flex w-[1135px] flex-col items-start gap-6">
         <div className="flex items-center justify-between self-stretch">
@@ -62,6 +75,7 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
             grades={grades}
             classNumbers={classNumbers}
             onFiltersChange={handleFiltersChange}
+            disabled={isDisabled}
           />
         </div>
       </div>
@@ -72,6 +86,14 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
         {isLoading ? (
           <div className="flex w-full items-center justify-center py-8">
             <div className="text-gray-black">로딩중...</div>
+          </div>
+        ) : isUnauthorized ? (
+          <div className="flex w-full items-center justify-center py-8">
+            <NotAuthorizedError />
+          </div>
+        ) : isNotPermission ? (
+          <div className="flex w-full items-center justify-center py-8">
+            <NotPermissionError />
           </div>
         ) : error ? (
           <div className="flex w-full items-center justify-center py-8">
@@ -96,6 +118,15 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
                 />
               );
             })}
+
+            {isFetchingNextPage ? (
+              <div className="flex w-full items-center justify-center py-8">
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
+                  <span className="text-body-16-m text-gray-4">추가 데이터를 불러오는 중...</span>
+                </div>
+              </div>
+            ) : null}
           </>
         )}
       </div>
