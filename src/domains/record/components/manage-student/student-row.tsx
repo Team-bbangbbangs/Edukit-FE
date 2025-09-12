@@ -1,0 +1,201 @@
+'use client';
+
+import { useState } from 'react';
+import type { Ref } from 'react';
+
+import { usePatchStudents } from '@/domains/record/apis/mutations/use-patch-students';
+import { RecordTag } from '@/domains/record/components/manage-student/record-tag';
+import { RECORD_TYPE } from '@/domains/record/constants/record-type';
+import type { Student, RecordType } from '@/domains/record/types/record';
+import Dropdown from '@/shared/components/ui/dropdown/dropdown';
+import { Icons } from '@/shared/components/ui/icon/icon';
+
+import { EditCell } from './edit-cell';
+
+interface StudentRowProps {
+  student: Student;
+  isSelected: boolean;
+  onToggleSelect: (studentId: number) => void;
+  forwardRef?: Ref<HTMLDivElement>;
+}
+
+export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: StudentRowProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [tempRecordTypes, setTempRecordTypes] = useState<RecordType[]>([]);
+
+  const { mutate: patchStudents } = usePatchStudents();
+
+  const normalizeRecordTypes = (recordTypes: RecordType[]): RecordType[] => {
+    return recordTypes.map((type) => type.toLowerCase() as RecordType);
+  };
+
+  const getSortedRecordTypes = (recordTypes: RecordType[]): RecordType[] => {
+    const order: RecordType[] = ['subject', 'behavior', 'career', 'free', 'club'];
+    const normalizedTypes = normalizeRecordTypes(recordTypes);
+    return order.filter((type) => normalizedTypes.includes(type));
+  };
+
+  const normalizedStudentRecordTypes = normalizeRecordTypes(student.recordTypes);
+
+  const handleDropdownOpen = () => {
+    setTempRecordTypes([...normalizedStudentRecordTypes]);
+    setIsDropdownOpen(true);
+  };
+
+  const handleDropdownClose = () => {
+    const sortedFinal = getSortedRecordTypes(tempRecordTypes);
+    const sortedOriginal = getSortedRecordTypes(normalizedStudentRecordTypes);
+
+    const hasChanges = JSON.stringify(sortedFinal) !== JSON.stringify(sortedOriginal);
+
+    if (hasChanges) {
+      const updatedStudent: Student = {
+        ...student,
+        recordTypes: sortedFinal,
+      };
+      patchStudents(updatedStudent);
+    }
+
+    setTempRecordTypes([]);
+    setIsDropdownOpen(false);
+  };
+
+  const handleAddRecordType = (recordType: RecordType) => {
+    const normalizedType = recordType.toLowerCase() as RecordType;
+    setTempRecordTypes((prev) =>
+      prev.includes(normalizedType) ? prev : [...prev, normalizedType],
+    );
+  };
+
+  const handleRemoveRecordType = (recordType: RecordType) => {
+    const normalizedType = recordType.toLowerCase() as RecordType;
+    setTempRecordTypes((prev) => prev.filter((rt) => rt !== normalizedType));
+  };
+
+  const handleSaveStudent = (
+    updatedStudent: Student,
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    patchStudents(updatedStudent, {
+      onSuccess: () => {
+        options?.onSuccess?.();
+      },
+      onError: (error) => {
+        options?.onError?.(error);
+      },
+    });
+  };
+
+  const currentRecordTypes = isDropdownOpen ? tempRecordTypes : normalizedStudentRecordTypes;
+
+  return (
+    <div ref={forwardRef} className="flex items-center self-stretch border-b border-gray-2">
+      <div
+        className="flex w-14 cursor-pointer items-center justify-center border-r border-gray-2 py-4"
+        onClick={() => onToggleSelect(student.studentId)}
+      >
+        {isSelected ? (
+          <Icons.BoxChecked color="text-blue-400" data-testid="student-checkbox" />
+        ) : (
+          <Icons.BoxDefault
+            color="text-gray-2"
+            hoverColor="text-gray-5"
+            data-testid="student-defaultbox"
+          />
+        )}
+      </div>
+
+      <EditCell
+        student={student}
+        field="grade"
+        value={student.grade}
+        onSave={handleSaveStudent}
+        className="w-[100px]"
+      />
+      <EditCell
+        student={student}
+        field="classNumber"
+        value={student.classNumber}
+        onSave={handleSaveStudent}
+        className="w-[100px]"
+      />
+      <EditCell
+        student={student}
+        field="studentNumber"
+        value={student.studentNumber}
+        onSave={handleSaveStudent}
+        className="w-[200px]"
+      />
+      <EditCell
+        student={student}
+        field="studentName"
+        value={student.studentName}
+        onSave={handleSaveStudent}
+        className="w-[140px]"
+      />
+
+      <div className="flex h-full flex-1">
+        <Dropdown
+          className="h-full w-full"
+          onOpenChange={(open) => {
+            if (open && !isDropdownOpen) {
+              handleDropdownOpen();
+            } else if (!open && isDropdownOpen) {
+              handleDropdownClose();
+            }
+          }}
+        >
+          <Dropdown.Trigger
+            className={`flex h-full w-full cursor-pointer flex-wrap content-center items-center gap-[10px] border-none p-[10px] ${
+              isDropdownOpen ? 'bg-blue-50' : 'bg-white hover:bg-gray-50'
+            }`}
+          >
+            {currentRecordTypes.length === 0 ? (
+              <span
+                className={`text-body-16-m ${isDropdownOpen ? 'text-blue-400' : 'text-gray-5'}`}
+              >
+                항목 추가
+              </span>
+            ) : (
+              currentRecordTypes.map((recordType) => (
+                <RecordTag key={recordType} recordType={recordType} showClose={false} />
+              ))
+            )}
+          </Dropdown.Trigger>
+
+          <Dropdown.Content className="mt-[6px] inline-flex !w-[156px] flex-col items-start p-2">
+            {RECORD_TYPE.map((option) => {
+              const normalizedOptionValue = option.value.toLowerCase() as RecordType;
+              const isAlreadySelected = currentRecordTypes.includes(normalizedOptionValue);
+
+              return (
+                <div key={option.value} className="flex cursor-pointer items-center px-3 py-2">
+                  <RecordTag
+                    recordType={normalizedOptionValue}
+                    showClose={isAlreadySelected}
+                    onRemove={
+                      isAlreadySelected
+                        ? (e) => {
+                            e.stopPropagation();
+                            handleRemoveRecordType(normalizedOptionValue);
+                          }
+                        : undefined
+                    }
+                    onClick={
+                      !isAlreadySelected
+                        ? () => handleAddRecordType(normalizedOptionValue)
+                        : undefined
+                    }
+                  />
+                </div>
+              );
+            })}
+          </Dropdown.Content>
+        </Dropdown>
+      </div>
+    </div>
+  );
+}

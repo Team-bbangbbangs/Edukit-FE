@@ -1,8 +1,8 @@
-import ClubRecordTable from '@/domains/record/components/student-manage/club-record-table';
+import ManageRecord from '@/domains/record/components/manage-record/manage-record';
 import { createPageMetadata } from '@/shared/constants/metadata';
 
-export const metadata = createPageMetadata('manageStudent', { url: '/manage-club' });
+export const metadata = createPageMetadata('manageRecord', { url: '/manage-club' });
 
 export default function Page() {
-  return <ClubRecordTable />;
+  return <ManageRecord recordType="club" />;
 }

@@ -9,37 +9,37 @@ const notices: DetailNoticeResponse[] = Array.from({ length: 80 }, (_, i) => {
   const content = `공지사항 내용 ${i + 1} `.repeat(contentLength / 20);
 
   return {
-    noticeId: `${i + 1}`,
+    noticeId: i + 1,
     category: tags[i % tags.length],
     title: `공지사항 제목 ${i + 1}`,
     createdAt: new Date(Date.now() - i * 1000 * 60 * 60).toISOString(),
     content,
+    noticeFileKeys: ['1', '2', '3'],
   };
 });
 
 export const getNoticeDetail = [
-  http.get('/api/v1/notices/:noticeId', ({ params }) => {
+  http.get('/api/v2/notices/:noticeId', ({ params }) => {
     const { noticeId } = params;
-    const notice = notices.find((n) => n.noticeId === noticeId);
+    const notice = notices.find((n) => n.noticeId === Number(noticeId));
 
     if (!notice) {
       return HttpResponse.json(
         {
-          status: 404,
-          code: 'EDMT-4040301',
+          code: 'NO-40402',
           message: '해당 공지사항이 존재하지 않습니다.',
         },
-        { status: 404 },
+        { status: 200 },
       );
     }
 
-    const response = {
-      status: 200,
-      code: 'EDMT-200',
-      message: '요청이 성공했습니다.',
-      data: notice,
-    };
-
-    return HttpResponse.json(response);
+    return HttpResponse.json(
+      {
+        code: 'SUCCESS',
+        message: '요청에 성공했습니다.',
+        data: notice,
+      },
+      { status: 200 },
+    );
   }),
 ];

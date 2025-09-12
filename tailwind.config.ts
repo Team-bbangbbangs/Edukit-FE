@@ -10,6 +10,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'collapsible-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-collapsible-content-height)' },
+        },
+        'collapsible-up': {
+          from: { height: 'var(--radix-collapsible-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'collapsible-down': 'collapsible-down 0.2s ease-out',
+        'collapsible-up': 'collapsible-up 0.2s ease-out',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -44,13 +58,31 @@ const config: Config = {
           white: '#ffffff',
           1: '#f9fafb',
           2: '#dedede',
-          3: '#868686',
-          4: '#464646',
+          3: '#C2C2C2',
+          4: '#868686',
+          5: '#464646',
           black: '#121212',
         },
         blue: {
+          50: '#F0F4FE',
+          100: '#DCE5FD',
+          200: '#C2D3F8',
+          300: '#98B7F8',
           400: '#5484f2',
+          500: '#436BEE',
+          600: '#2D4CE3',
+          700: '#2539D0',
+          800: '#2430A9',
+          900: '#232E85',
+          950: '#1A1E51',
         },
+        brandSkyblue: '#D8EEFF',
+        brandPink: '#FFDEEE',
+        brandOrange: '#FDE3D2',
+        brandGreen: '#D9F4D7',
+        brandPurple: '#F0E4FC',
+        brandDim: '#121212',
+        brandRed: '#F25454',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -58,7 +90,7 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        suit: ['var(--font-suit)'],
+        suit: ['var(--font-suit)', 'sans-serif'],
       },
 
       fontSize: {

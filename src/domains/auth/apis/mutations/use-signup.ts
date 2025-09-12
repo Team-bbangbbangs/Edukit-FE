@@ -29,9 +29,5 @@ export const useSignup = () => {
         },
       });
     },
-
-    onError: (error) => {
-      alert(error.message);
-    },
   });
 };

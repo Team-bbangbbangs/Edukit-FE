@@ -1,14 +1,14 @@
 import Link from 'next/link';
 
 interface PaginationProps {
-  categoryId?: string;
+  category?: string;
   nowPage?: string;
   totalPages: number;
 }
 
 const paginationStyle = 'rounded-md min-w-8 h-8 flex items-center justify-center text-center p-1';
 
-export default function Pagination({ categoryId, nowPage = '1', totalPages }: PaginationProps) {
+export default function Pagination({ category, nowPage = '1', totalPages }: PaginationProps) {
   const currentPage = parseInt(nowPage, 10);
 
   const blockSize = 5;
@@ -23,8 +23,8 @@ export default function Pagination({ categoryId, nowPage = '1', totalPages }: Pa
   const makeQuery = (page: number) => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
-    if (categoryId) {
-      params.set('categoryId', categoryId);
+    if (category) {
+      params.set('category', category);
     }
     return `?${params.toString()}`;
   };

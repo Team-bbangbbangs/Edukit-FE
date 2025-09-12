@@ -18,8 +18,7 @@ export default function SuccessPasswordResetModal({
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
       <Modal.Overlay />
-      <Modal.Content aria-describedby={undefined} className="max-w-md rounded-xl px-8 py-6">
-        <Modal.Close />
+      <Modal.Content aria-describedby={undefined} className="max-w-xl rounded-xl p-20">
         <Modal.Title className="flex flex-col items-center justify-center gap-4 text-[20px]">
           <span className="text-gray-800">비밀번호가 성공적으로 변경되었습니다!</span>
         </Modal.Title>

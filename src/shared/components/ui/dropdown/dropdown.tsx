@@ -36,6 +36,7 @@ interface DropdownContentProps extends DropdownProps {
 interface RootDropdownProps extends DropdownProps {
   defaultOpen?: boolean;
   initialFocusIndex?: number;
+  onOpenChange?: (open: boolean) => void;
 }
 
 interface DropdownTriggerProps extends DropdownProps {
@@ -43,6 +44,7 @@ interface DropdownTriggerProps extends DropdownProps {
   iconSize?: number;
   iconClassName?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 interface DropdownItemProps extends DropdownProps {
@@ -74,9 +76,30 @@ function Dropdown({
   defaultOpen = false,
   className = '',
   initialFocusIndex = -1,
+  onOpenChange,
 }: RootDropdownProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [itemCount, setItemCount] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open]);
 
   const { focusedIndex, setFocusedIndex } = useKeyboardNavigation({
     isOpen: open,
@@ -103,8 +126,7 @@ function Dropdown({
 
   return (
     <DropdownContext.Provider value={contextValue}>
-      <div className={`relative ${className}`}>
-        <Dropdown.Overlay />
+      <div ref={wrapperRef} className={`relative ${className}`}>
         {children}
       </div>
     </DropdownContext.Provider>
@@ -112,20 +134,6 @@ function Dropdown({
 }
 
 Dropdown.displayName = 'Dropdown';
-
-/* -------------------------------------------------------------------------------------------------
- * Dropdown Overlay
- * -----------------------------------------------------------------------------------------------*/
-
-function DropdownOverlay() {
-  const { open, setOpen } = useDropdownContext();
-
-  if (!open) return null;
-
-  return <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setOpen(false)} />;
-}
-
-DropdownOverlay.displayName = 'DropdownOverlay';
 
 /* -------------------------------------------------------------------------------------------------
  * Dropdown Trigger
@@ -136,6 +144,7 @@ function DropdownTrigger({
   className = '',
   iconPosition = 'none',
   onClick,
+  disabled = false,
 }: DropdownTriggerProps) {
   const { open, setOpen } = useDropdownContext();
 
@@ -153,10 +162,11 @@ function DropdownTrigger({
   return (
     <button
       type="button"
-      className={`flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white p-2 hover:border-gray-400 ${className}`}
+      className={` ${className}`}
       aria-expanded={open}
       aria-haspopup="menu"
       data-state={open ? 'open' : 'closed'}
+      disabled={disabled}
       onClick={handleClick}
     >
       {iconPosition === 'left' ? Icon : null}
@@ -206,7 +216,7 @@ function DropdownContent({ children, className = '', itemCount }: DropdownConten
   return (
     <div
       ref={dropdownRef}
-      className={`absolute top-full z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg transition-all duration-200 ease-out ${
+      className={`absolute top-full z-50 mt-1 w-full rounded-[13px] border border-gray-2 bg-white shadow-md transition-all duration-200 ease-out ${
         renderOpen
           ? 'animate-in fade-in-0 zoom-in-95'
           : 'invisible animate-out fade-out-0 zoom-out-95'
@@ -279,7 +289,6 @@ DropdownSeparator.displayName = 'DropdownSeparator';
  * -----------------------------------------------------------------------------------------------*/
 
 Dropdown.Trigger = DropdownTrigger;
-Dropdown.Overlay = DropdownOverlay;
 Dropdown.Content = DropdownContent;
 Dropdown.Item = DropdownItem;
 Dropdown.Separator = DropdownSeparator;

@@ -126,4 +126,12 @@ export default [
       '@typescript-eslint/no-empty-function': 'off',
     },
   },
+  {
+    files: ['next.config.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+      },
+    },
+  },
 ];

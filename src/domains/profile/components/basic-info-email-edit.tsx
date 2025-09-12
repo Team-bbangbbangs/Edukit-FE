@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { emailSchema } from '@/domains/auth/components/signup/signup-scheme';
+import { emailSchema } from '@/domains/auth/types/auth-scheme';
 import { usePatchEmail } from '@/domains/profile/apis/mutations/use-patch-email';
 import { Input } from '@/shared/components/ui/input/input';
 
@@ -24,6 +24,7 @@ export default function BasicInfoEmailEdit({ currentEmail, onView }: EmailEditPr
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<EmailEditType>({
     resolver: zodResolver(emailEditSchema),
     defaultValues: {
@@ -37,6 +38,12 @@ export default function BasicInfoEmailEdit({ currentEmail, onView }: EmailEditPr
       onSuccess: () => {
         alert('이메일이 성공적으로 변경되었습니다.');
         onView();
+      },
+      onError: (error) => {
+        setError('email', {
+          type: 'server',
+          message: error.message || '이메일 변경 중 오류가 발생했습니다.',
+        });
       },
     });
   };

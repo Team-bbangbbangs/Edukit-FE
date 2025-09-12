@@ -17,15 +17,15 @@ interface PageProps {
 
 export default async function NoticePage({ searchParams }: PageProps) {
   const page = searchParams?.page;
-  const categoryId = searchParams?.categoryId;
+  const category = searchParams?.category;
 
-  if (categoryId && !['2', '3'].includes(categoryId)) {
+  if (category && !['announcement', 'event'].includes(category)) {
     redirect('/notice');
   }
 
   const data = await getNoticeList({
     page,
-    categoryId,
+    category,
   });
   const parsedPage = isNaN(Number(page)) ? 1 : Number(page);
 
@@ -33,13 +33,13 @@ export default async function NoticePage({ searchParams }: PageProps) {
     <div className="h-full w-full">
       <h2 className="text-[26px] font-bold">공지사항</h2>
 
-      <NoticeCategorys categoryId={categoryId} />
+      <NoticeCategorys category={category} />
 
       {data.notices.length > 0 ? <NoticeList notice={data.notices} /> : <ErrorNotice />}
 
       {parsedPage >= 1 && parsedPage <= data.totalPages ? (
         <Pagination
-          categoryId={categoryId}
+          category={category}
           nowPage={parsedPage.toString()}
           totalPages={data.totalPages}
         />

@@ -1,11 +1,12 @@
 import { reissue } from '@/domains/auth/apis/reissue';
-import { ApiError } from '@/shared/lib/errors';
+import { ApiError, isUnauthorizedError } from '@/shared/lib/errors';
 import { tokenStore } from '@/shared/lib/token-store';
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
   body?: unknown;
   params?: Record<string, string | number | boolean>;
   skipTokenRefresh?: boolean;
+  responseType?: 'json' | 'blob';
 }
 
 // 토큰 갱신 중복 요청 방지를 위한 Promise 캐시
@@ -111,11 +112,15 @@ async function refreshAccessToken(): Promise<string | null> {
 /**
  * Response를 파싱하고 에러를 처리하는 함수
  * 1. HTTP 상태 코드 확인
- * 2. JSON 파싱 시도
+ * 2. responseType에 따라 JSON 또는 Blob 파싱
  * 3. 커스텀 에러 코드가 있으면 ApiError로 변환
  * 4. Response wrapper에서 data 추출
  */
-async function handleResponse<T>(response: globalThis.Response): Promise<T> {
+async function handleResponse<T>(
+  response: globalThis.Response,
+  skipTokenRefresh = false,
+  responseType: 'json' | 'blob' = 'json',
+): Promise<T> {
   if (!response.ok) {
     let errorData;
     try {
@@ -123,16 +128,35 @@ async function handleResponse<T>(response: globalThis.Response): Promise<T> {
     } catch {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-
-    if (errorData.status && errorData.code) {
-      throw new ApiError(errorData.status, errorData.code, errorData.message);
-    }
-
     throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
   }
 
-  const json = await response.json();
-  return 'data' in json ? (json.data as T) : (json as T);
+  if (responseType === 'blob') {
+    const blob = await response.blob();
+    return blob as T;
+  }
+
+  let responseData;
+  try {
+    responseData = await response.json();
+  } catch {
+    throw new Error('Invalid JSON response');
+  }
+
+  if (
+    !skipTokenRefresh &&
+    (responseData.code === 'A-40101' ||
+      responseData.code === 'A-40102' ||
+      responseData.code === 'A-40103')
+  ) {
+    throw new ApiError(responseData.code, responseData.message || 'Token expired');
+  }
+
+  if (responseData.code && responseData.code !== 'SUCCESS') {
+    throw new ApiError(responseData.code, responseData.message || 'Unknown error');
+  }
+
+  return 'data' in responseData ? (responseData.data as T) : (responseData as T);
 }
 
 /**
@@ -142,7 +166,7 @@ async function handleResponse<T>(response: globalThis.Response): Promise<T> {
  * 3. 새 토큰으로 동일한 요청 재시도
  */
 async function request<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
-  const { body, params, skipTokenRefresh, ...fetchOptions } = options;
+  const { body, params, skipTokenRefresh, responseType = 'json', ...fetchOptions } = options;
 
   const url = buildURL(endpoint, params);
   const headers = buildHeaders(options);
@@ -161,22 +185,25 @@ async function request<T>(endpoint: string, options: FetchOptions = {}): Promise
     config.cache = 'no-store';
   }
 
-  const response = await fetch(url, config);
+  try {
+    const response = await fetch(url, config);
 
-  // 401 인터셉터: 토큰 만료 시 자동 갱신 후 재요청
-  if (response.status === 401 && !skipTokenRefresh) {
-    const newToken = await refreshAccessToken();
+    return await handleResponse<T>(response, skipTokenRefresh, responseType);
+  } catch (error) {
+    // TokenExpiredError 체크 대신 isUnauthorizedError 함수 사용
+    if (isUnauthorizedError(error) && !skipTokenRefresh) {
+      const newToken = await refreshAccessToken();
 
-    if (newToken) {
-      const retryResponse = await fetch(url, {
-        ...config,
-        headers: { ...config.headers, Authorization: `Bearer ${newToken}` },
-      });
-      return await handleResponse<T>(retryResponse);
+      if (newToken) {
+        const retryResponse = await fetch(url, {
+          ...config,
+          headers: { ...config.headers, Authorization: `Bearer ${newToken}` },
+        });
+        return await handleResponse<T>(retryResponse, true, responseType);
+      }
     }
+    throw error;
   }
-
-  return await handleResponse<T>(response);
 }
 
 // HTTP 메서드 함수 (get, post, patch, put, delete)

@@ -20,12 +20,6 @@ export interface CreateStudentRecords {
   studentNumber: string;
 }
 
-export interface CreateStudentRecordsRequest {
-  recordType: RecordType;
-  studentRecords: CreateStudentRecords[];
-  semester: string;
-}
-
 interface CreateStudentRecord extends CreateStudentRecords {
   description: string;
   byteCount: number;
@@ -43,7 +37,15 @@ export interface StudentNames {
 }
 
 export interface StudentNamesResponse {
-  studentDetails: StudentNames[];
+  grades: number[];
+  classNumbers: number[];
+  studentNames: StudentNames[];
+}
+
+export interface StudentsNamesFilters {
+  grade?: number;
+  classNumber?: number;
+  studentName?: string;
 }
 
 export interface SummaryRecordRequest {
@@ -54,16 +56,121 @@ export interface SummaryRecordRequest {
 
 export interface SummaryRecordResponse {
   description: string;
-  byteCount: number;
 }
 
 export interface PromptRequest {
   recordId: number;
   prompt: string;
+  byteCount: number;
 }
 
-export interface PromptResponse {
-  description1: string;
-  description2: string;
-  description3: string;
+export interface AiGenerateRequest {
+  byteCount: number;
+  prompt: string;
+}
+
+export interface AiGenerateResponse {
+  taskId: string;
+}
+
+export type SseMessageType = 'PROGRESS' | 'RESPONSE';
+
+export interface SseMessage {
+  taskId: string;
+  type: SseMessageType;
+  data: {
+    message?: string;
+    finalContent?: string;
+    version?: number;
+  };
+}
+
+export interface ProgressMessage {
+  message: string;
+  version: number;
+}
+
+export interface StreamingResponse {
+  taskId: string;
+  progressMessages: ProgressMessage[];
+  versions: {
+    version: number;
+    content: string;
+  }[];
+  isComplete: boolean;
+}
+
+export interface InvalidRows {
+  rowNumber: number;
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+}
+
+export interface ExcelUploadResponse {
+  successCount: number;
+  failureCount: number;
+  invalidRows: InvalidRows[];
+}
+
+export interface Student {
+  studentId: number;
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+  recordTypes: RecordType[];
+}
+
+export interface CreateStudentRequest {
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+  recordTypes: RecordType[];
+}
+
+export interface StudentsResponse {
+  studentCount: number;
+  grades: number[];
+  classNumbers: number[];
+  students: Student[];
+}
+
+export interface StudentFilters {
+  grades?: number[];
+  classNumbers?: number[];
+  recordTypes?: RecordType[];
+}
+
+export interface GetStudentsParams extends StudentFilters {
+  lastStudentId?: number;
+}
+
+export interface Records {
+  recordId: number;
+  grade: number;
+  classNumber: number;
+  studentNumber: number;
+  studentName: string;
+  description: string;
+}
+
+export interface RecordsResponse {
+  studentCount: number;
+  grades: number[];
+  classNumbers: number[];
+  studentRecords: Records[];
+}
+
+export interface RecordsFilters {
+  recordType: RecordType;
+  grade?: number;
+  classNumber?: number;
+  search?: string;
+}
+
+export interface GetRecordsParams extends RecordsFilters {
+  lastRecordId?: number;
 }

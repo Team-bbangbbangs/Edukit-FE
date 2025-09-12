@@ -11,8 +11,7 @@ export const postLogin = [
     if (email === 'admin@edukit.co.kr' && password === 'password1234') {
       return HttpResponse.json(
         {
-          status: 200,
-          code: 'EDMT-20002',
+          code: 'SUCCESS',
           message: '요청에 성공했습니다.',
           data: {
             accessToken: `admin-access-token.${expiresAt}`,
@@ -32,8 +31,7 @@ export const postLogin = [
     if (email === 'test@edukit.co.kr' && password === 'password1234!') {
       return HttpResponse.json(
         {
-          status: 200,
-          code: 'EDMT-20002',
+          code: 'SUCCESS',
           message: '요청에 성공했습니다.',
           data: {
             accessToken: `user-access-token.${expiresAt}`,
@@ -53,8 +51,7 @@ export const postLogin = [
     if (email === 'test@edukit.co.kr' && password === 'ab12345678') {
       return HttpResponse.json(
         {
-          status: 200,
-          code: 'EDMT-20002',
+          code: 'SUCCESS',
           message: '요청에 성공했습니다.',
           data: {
             accessToken: `email-not-verified-user-access-token.${expiresAt}`,
@@ -75,21 +72,19 @@ export const postLogin = [
     if (email === 'test@edukit.co.kr' && password !== 'password1234!') {
       return HttpResponse.json(
         {
-          status: 401,
-          code: 'EDMT-4010107',
-          message: '비밀번호가 일치하지 않습니다.',
+          code: 'A-40008',
+          message: '비밀번호가 올바르지 않습니다.',
         },
-        { status: 401 },
+        { status: 200 },
       );
     }
 
     return HttpResponse.json(
       {
-        status: 401,
-        code: 'EDMT-4010107',
+        code: 'M-40401',
         message: '존재하지 않는 회원입니다. 회원가입을 진행해주세요.',
       },
-      { status: 401 },
+      { status: 200 },
     );
   }),
 ];

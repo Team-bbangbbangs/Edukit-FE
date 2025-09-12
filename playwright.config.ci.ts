@@ -10,7 +10,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'test-results/html-report' }]],
 
   use: {
-    baseURL: 'https://edukit.co.kr',
+    baseURL: 'https://develop.d12tblgwwf00b7.amplifyapp.com/',
     headless: true,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',

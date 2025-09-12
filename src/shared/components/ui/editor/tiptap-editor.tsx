@@ -14,6 +14,9 @@ import TextStyle from '@tiptap/extension-text-style';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
+import { uploadMultipleImages } from '@/domains/notice/apis/get-presigned-url';
+import { type UploadedImageInfo } from '@/domains/notice/types/notice';
+
 export interface TipTapEditorRef {
   getContent: () => string;
   setContent: (content: string) => void;
@@ -47,25 +50,90 @@ interface TipTapEditorProps {
   placeholder?: string;
   className?: string;
   initialContent?: string;
-  onContentChange?: (content: string) => void;
+  onImageUpload?: (imageInfo: UploadedImageInfo) => void;
 }
 
 const TipTapEditor = forwardRef<TipTapEditorRef, TipTapEditorProps>(
   (
-    { placeholder = '내용을 입력해주세요.', className = '', initialContent = '', onContentChange },
+    { placeholder = '내용을 입력해주세요.', className = '', initialContent = '', onImageUpload },
     ref,
   ) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleMultipleImageUploadAndInsert = async (files: File[]): Promise<void> => {
+      if (files.length === 0) return;
+
+      try {
+        const uploadResults = await uploadMultipleImages(files);
+
+        uploadResults.forEach((result, index) => {
+          if (onImageUpload) {
+            onImageUpload({
+              tmpFileUrl: result.tmpFileUrl,
+              fileUrl: result.fileUrl,
+              fileKey: result.fileKey,
+            });
+          }
+
+          setTimeout(() => {
+            editor?.commands.setImage({ src: result.tmpFileUrl });
+
+            if (index < uploadResults.length - 1) {
+              editor?.commands.createParagraphNear();
+            }
+          }, index * 100);
+        });
+      } catch (error) {
+        alert(
+          error instanceof Error
+            ? error.message
+            : '이미지 업로드에 실패했습니다. 다시 시도해주세요.',
+        );
+      }
+    };
+
+    const convertToFileArray = (fileList: FileList | File[]): File[] => {
+      if (Array.isArray(fileList)) {
+        return fileList;
+      }
+      return Array.from(fileList);
+    };
+
+    const filterImageFiles = (files: File[]): File[] => {
+      return files.filter((file) => file.type.startsWith('image/'));
+    };
+
+    const extractImageFilesFromClipboard = async (clipboardData: DataTransfer): Promise<File[]> => {
+      const files: File[] = [];
+
+      if (clipboardData.files && clipboardData.files.length > 0) {
+        const fileArray = convertToFileArray(clipboardData.files);
+        const imageFiles = filterImageFiles(fileArray);
+        files.push(...imageFiles);
+      }
+
+      for (let i = 0; i < clipboardData.items.length; i++) {
+        const item = clipboardData.items[i];
+
+        if (item.type.startsWith('image/')) {
+          const blob = item.getAsFile();
+          if (blob) {
+            const file = new File([blob], `pasted-image-${Date.now()}.${item.type.split('/')[1]}`, {
+              type: item.type,
+            });
+            files.push(file);
+          }
+        }
+      }
+
+      return files;
+    };
 
     const editor = useEditor({
       extensions: [
         StarterKit,
         Image.configure({
-          HTMLAttributes: {
-            class:
-              'max-w-full h-auto rounded-lg cursor-pointer border-2 border-transparent hover:border-blue-300 transition-colors',
-          },
-          allowBase64: true,
+          allowBase64: false,
         }),
         Table.configure({
           resizable: true,
@@ -104,11 +172,42 @@ const TipTapEditor = forwardRef<TipTapEditorRef, TipTapEditorProps>(
           class:
             'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4',
         },
-      },
-      onUpdate: ({ editor }) => {
-        if (onContentChange) {
-          onContentChange(editor.getHTML());
-        }
+        handleDrop(view, event, slice, moved) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          if (
+            !moved &&
+            event.dataTransfer &&
+            event.dataTransfer.files &&
+            event.dataTransfer.files.length > 0
+          ) {
+            const files = convertToFileArray(event.dataTransfer.files);
+            const imageFiles = filterImageFiles(files);
+
+            if (imageFiles.length > 0) {
+              handleMultipleImageUploadAndInsert(imageFiles);
+              return true;
+            }
+          }
+
+          return false;
+        },
+        handlePaste(view, event, slice) {
+          if (!event.clipboardData) {
+            return false;
+          }
+
+          extractImageFilesFromClipboard(event.clipboardData).then((imageFiles) => {
+            if (imageFiles.length > 0) {
+              event.preventDefault();
+              event.stopPropagation();
+              handleMultipleImageUploadAndInsert(imageFiles);
+            }
+          });
+
+          return false;
+        },
       },
       immediatelyRender: false,
     });
@@ -129,20 +228,19 @@ const TipTapEditor = forwardRef<TipTapEditorRef, TipTapEditorProps>(
       fileInputRef.current?.click();
     };
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-          alert('이미지 크기는 5MB를 초과할 수 없습니다.');
-          return;
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const fileList = event.target.files;
+      if (fileList && fileList.length > 0) {
+        const files = convertToFileArray(fileList);
+        const imageFiles = filterImageFiles(files);
+
+        if (imageFiles.length > 0) {
+          await handleMultipleImageUploadAndInsert(imageFiles);
+        } else {
+          alert('이미지 파일만 업로드할 수 있습니다.');
         }
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const src = e.target?.result as string;
-          editor?.commands.setImage({ src });
-        };
-        reader.readAsDataURL(file);
       }
+
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -263,16 +361,17 @@ const TipTapEditor = forwardRef<TipTapEditorRef, TipTapEditorProps>(
           </ToolbarButton>
         </div>
 
-        <div className="min-h-[300px]">
+        <div className="relative min-h-[300px]">
           <EditorContent editor={editor} className="h-full" placeholder={placeholder} />
         </div>
 
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
           onChange={handleFileChange}
           className="hidden"
+          multiple
         />
       </div>
     );

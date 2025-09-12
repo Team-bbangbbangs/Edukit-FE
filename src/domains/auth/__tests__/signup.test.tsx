@@ -16,6 +16,9 @@ describe('signup 컴포넌트 단위 테스트', () => {
     expect(screen.getByLabelText('이메일')).toBeInTheDocument();
     expect(screen.getByLabelText('비밀번호')).toBeInTheDocument();
     expect(screen.getByLabelText('비밀번호 확인')).toBeInTheDocument();
+    expect(screen.getByLabelText('닉네임')).toBeInTheDocument();
+    expect(screen.getByText('중복 확인')).toBeInTheDocument();
+
     expect(screen.getByText('담당 교과목')).toBeInTheDocument();
     expect(screen.getByText('중학교')).toBeInTheDocument();
     expect(screen.getByText('고등학교')).toBeInTheDocument();
@@ -30,7 +33,7 @@ describe('signup 컴포넌트 단위 테스트', () => {
     await user.type(emailInput, 'invalid-email');
 
     await waitFor(() => {
-      expect(screen.getByText('이메일 형식이 유효하지 않습니다.')).toBeInTheDocument();
+      expect(screen.getByText('이메일 형식이 올바르지 않습니다.')).toBeInTheDocument();
       expect(emailInput).toHaveClass('border-red-500');
     });
   });
@@ -44,7 +47,9 @@ describe('signup 컴포넌트 단위 테스트', () => {
     await user.type(emailInput, 'test@daum.net');
 
     await waitFor(() => {
-      expect(screen.getByText('교직 이메일이 아닙니다.')).toBeInTheDocument();
+      expect(
+        screen.getByText('유효하지 않은 교사 이메일입니다. 교육청 이메일 도메인만 허용됩니다.'),
+      ).toBeInTheDocument();
       expect(emailInput).toHaveClass('border-red-500');
     });
   });
@@ -123,6 +128,96 @@ describe('signup 컴포넌트 단위 테스트', () => {
     });
   });
 
+  it('닉네임을 입력하면 중복 확인이 필요하다는 메시지가 표시된다', async () => {
+    const user = userEvent.setup();
+    render(<Signup />);
+
+    const nicknameInput = screen.getByLabelText('닉네임');
+    await user.type(nicknameInput, 'testnickname');
+
+    await waitFor(() => {
+      expect(screen.getByText('닉네임 중복 확인을 해주세요.')).toBeInTheDocument();
+      expect(nicknameInput).toHaveClass('border-orange-500');
+    });
+  });
+
+  it('닉네임이 비어있으면 중복 확인 버튼이 비활성화된다', () => {
+    render(<Signup />);
+
+    const checkButton = screen.getByText('중복 확인');
+    expect(checkButton).toBeDisabled();
+  });
+
+  it('닉네임 중복 확인에 성공하면 사용 가능하다는 메시지가 표시된다', async () => {
+    const user = userEvent.setup();
+    render(<Signup />);
+
+    const nicknameInput = screen.getByLabelText('닉네임');
+    const checkButton = screen.getByText('중복 확인');
+
+    await user.type(nicknameInput, 'testnickname');
+    await user.click(checkButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('사용하실 수 있는 닉네임입니다!')).toBeInTheDocument();
+    });
+  });
+
+  it('유효하지 않은 닉네임일 경우 에러 메시지가 표시된다', async () => {
+    const user = userEvent.setup();
+    render(<Signup />);
+
+    const nicknameInput = screen.getByLabelText('닉네임');
+    const checkButton = screen.getByText('중복 확인');
+
+    await user.type(nicknameInput, 'ㅇㅇ');
+    await user.click(checkButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('입력하신 닉네임은 유효하지 않습니다.')).toBeInTheDocument();
+      expect(nicknameInput).toHaveClass('border-red-500');
+    });
+  });
+
+  it('중복된 닉네임일 경우 에러 메시지가 표시된다', async () => {
+    const user = userEvent.setup();
+    render(<Signup />);
+
+    const nicknameInput = screen.getByLabelText('닉네임');
+    const checkButton = screen.getByText('중복 확인');
+
+    await user.type(nicknameInput, '선생님1');
+    await user.click(checkButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('입력하신 닉네임은 중복된 닉네임입니다.')).toBeInTheDocument();
+      expect(nicknameInput).toHaveClass('border-red-500');
+    });
+  });
+
+  it('닉네임을 변경하면 중복 확인 상태가 초기화된다', async () => {
+    const user = userEvent.setup();
+    render(<Signup />);
+
+    const nicknameInput = screen.getByLabelText('닉네임');
+    const checkButton = screen.getByText('중복 확인');
+
+    await user.type(nicknameInput, 'testnickname');
+    await user.click(checkButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('사용하실 수 있는 닉네임입니다!')).toBeInTheDocument();
+    });
+
+    await user.clear(nicknameInput);
+    await user.type(nicknameInput, 'newnickname');
+
+    await waitFor(() => {
+      expect(screen.getByText('닉네임 중복 확인을 해주세요.')).toBeInTheDocument();
+      expect(screen.queryByText('사용하실 수 있는 닉네임입니다!')).not.toBeInTheDocument();
+    });
+  });
+
   it('담당 교과목 입력창을 클릭하고 없는 과목을 입력하면 해당 과목이 존재하지 않는다는 메세지가 표시된다.', async () => {
     const user = userEvent.setup();
     render(<Signup />);
@@ -166,51 +261,61 @@ describe('signup 컴포넌트 단위 테스트', () => {
     expect(middleSchoolButton).toHaveAttribute('aria-checked', 'false');
   });
 
-  it('아무런 입력값을 채워넣지 않고 가입하기 버튼을 누르면 form을 채워달라는 문구가 표시된다.', async () => {
-    const user = userEvent.setup();
+  it('필수 입력값이 없거나 닉네임 중복 확인을 하지 않으면 가입하기 버튼이 비활성화된다', async () => {
     render(<Signup />);
 
-    const loginInput = screen.getByLabelText('이메일');
-    const passwordInput = screen.getByLabelText('비밀번호');
-    const passwordConfirmInput = screen.getByLabelText('비밀번호 확인');
-
-    await user.click(screen.getByRole('button', { name: '가입하기' }));
-
-    await waitFor(() => {
-      expect(screen.getByText('이메일을 입력해주세요.')).toBeInTheDocument();
-      expect(loginInput).toHaveClass('border-red-500');
-      expect(screen.getByText('비밀번호를 입력해주세요.')).toBeInTheDocument();
-      expect(passwordInput).toHaveClass('border-red-500');
-      expect(screen.getByText('비밀번호 확인을 입력해주세요.')).toBeInTheDocument();
-      expect(passwordConfirmInput).toHaveClass('border-red-500');
-      expect(screen.getByText('교과목을 입력해주세요.')).toBeInTheDocument();
-      expect(screen.getByText('학교를 선택해주세요.')).toBeInTheDocument();
-    });
+    const submitButton = screen.getByRole('button', { name: '가입하기' });
+    expect(submitButton).toBeDisabled();
+    expect(submitButton).toHaveClass('cursor-not-allowed');
   });
 
-  it('이미 가입되어 있는 이메일을 입력하면 이미 등록된 회원입니다. 라는 alert 메세지가 출력된다.', async () => {
+  it('이미 가입되어 있는 이메일로 가입 시 이메일 필드에 에러가 표시된다', async () => {
     const user = userEvent.setup();
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
-
     render(<Signup />);
 
     await user.type(screen.getByLabelText('이메일'), 'test123@edukit.co.kr');
     await user.type(screen.getByLabelText('비밀번호'), 'password123!');
     await user.type(screen.getByLabelText('비밀번호 확인'), 'password123!');
+    await user.type(screen.getByLabelText('닉네임'), 'testnickname');
+
+    await user.click(screen.getByText('중복 확인'));
+    await waitFor(() => {
+      expect(screen.getByText('사용하실 수 있는 닉네임입니다!')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByRole('button', { name: '담당 교과목 선택' }));
     const input = screen.getByPlaceholderText('과목을 입력하세요');
     await user.type(input, '국어');
     await user.click(await screen.findByText('국어'));
 
-    const highSchoolBtn = screen.getByText('고등학교');
-    await user.click(highSchoolBtn);
+    await user.click(screen.getByText('고등학교'));
+
     await user.click(screen.getByRole('button', { name: '가입하기' }));
 
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith('이미 등록된 회원입니다.');
+      expect(screen.getByText('이미 등록된 회원입니다.')).toBeInTheDocument();
+      expect(screen.getByLabelText('이메일')).toHaveClass('border-red-500');
     });
-    alertSpy.mockRestore();
+  });
+
+  it('닉네임 중복 확인을 하지 않으면 가입하기 버튼이 비활성화된다', async () => {
+    const user = userEvent.setup();
+    render(<Signup />);
+
+    await user.type(screen.getByLabelText('이메일'), 'test@edukit.co.kr');
+    await user.type(screen.getByLabelText('비밀번호'), 'password123!');
+    await user.type(screen.getByLabelText('비밀번호 확인'), 'password123!');
+    await user.type(screen.getByLabelText('닉네임'), 'testnickname');
+
+    await user.click(screen.getByRole('button', { name: '담당 교과목 선택' }));
+    const input = screen.getByPlaceholderText('과목을 입력하세요');
+    await user.type(input, '국어');
+    await user.click(await screen.findByText('국어'));
+
+    await user.click(screen.getByText('고등학교'));
+
+    const submitButton = screen.getByRole('button', { name: '가입하기' });
+    expect(submitButton).toBeDisabled();
   });
 
   it('유효한 데이터를 입력하고 회원가입을 완료하면 인증 메일 안내 화면이 나타난다', async () => {
@@ -220,14 +325,20 @@ describe('signup 컴포넌트 단위 테스트', () => {
     await user.type(screen.getByLabelText('이메일'), 'test@edukit.co.kr');
     await user.type(screen.getByLabelText('비밀번호'), 'password123!');
     await user.type(screen.getByLabelText('비밀번호 확인'), 'password123!');
+    await user.type(screen.getByLabelText('닉네임'), 'testnickname');
+
+    await user.click(screen.getByText('중복 확인'));
+    await waitFor(() => {
+      expect(screen.getByText('사용하실 수 있는 닉네임입니다!')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByRole('button', { name: '담당 교과목 선택' }));
     const input = screen.getByPlaceholderText('과목을 입력하세요');
     await user.type(input, '국어');
     await user.click(await screen.findByText('국어'));
 
-    const highSchoolBtn = screen.getByText('고등학교');
-    await user.click(highSchoolBtn);
+    await user.click(screen.getByText('고등학교'));
+
     await user.click(screen.getByRole('button', { name: '가입하기' }));
 
     await waitFor(() => {

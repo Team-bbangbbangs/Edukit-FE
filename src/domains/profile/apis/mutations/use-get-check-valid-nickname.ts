@@ -12,8 +12,5 @@ export const getCheckValidNickname = async (nickname: string) => {
 export const useGetCheckValidNickname = () => {
   return useMutation<GetCheckValidNicknameResponse, Error, string>({
     mutationFn: getCheckValidNickname,
-    onError: (error) => {
-      alert(error.message);
-    },
   });
 };

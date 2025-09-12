@@ -1,85 +1,146 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { useGetStudentsName } from '@/domains/record/apis/queries/use-get-students-name';
-import type { RecordType, PromptResponse } from '@/domains/record/types/record';
-import DefaultError from '@/shared/components/ui/error/default-error';
-import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
-import NotFoundError from '@/shared/components/ui/error/not-found-error';
-import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
-import Loading from '@/shared/components/ui/loading/loading';
+import { RECORD_TYPE_TITLES } from '@/domains/record/constants/record-type';
+import type { RecordType } from '@/domains/record/types/record';
+import {
+  Sidebar,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/shared/components/layout/sidebar/base-sidebar';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 import AiResponse from './ai-response';
 import CharacteristicInput from './characteristic-input';
+import NavigationConfirmModal from './navigation-confirm-modal';
 import RecordSummary from './record-summary';
+import StudentSidebarContent from './student-sidebar-content';
 
 interface StudentRecordWriteProps {
   recordType: RecordType;
-  recordId?: string;
+  recordId?: number;
+  studentName?: string;
 }
 
-export default function StudentRecordWrite({ recordType, recordId }: StudentRecordWriteProps) {
-  const { data, isPending, isError, isNotFound, isUnauthorized, isNotPermission } =
-    useGetStudentsName(recordType, '2025-1');
+export default function StudentRecordWrite({
+  recordType,
+  recordId,
+  studentName,
+}: StudentRecordWriteProps) {
   const router = useRouter();
-  const parsedRecordId = Number(recordId);
+  const [taskId, setTaskId] = useState<string | null>(null);
+  const isValidRecordId = recordId && !isNaN(recordId);
 
-  const [aiResponses, setAiResponses] = useState<PromptResponse | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [bytesLimit, setBytesLimit] = useState(recordType === 'career' ? 2100 : 1500);
+  const [showNavigationModal, setShowNavigationModal] = useState(false);
 
-  useEffect(() => {
-    if (!recordId && data && data.studentDetails.length > 0) {
-      router.replace(`?recordId=${data.studentDetails[0].recordId}`);
-    }
-  }, [data, recordId, router]);
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
 
-  const handleAiResponseGenerated = (responseData: PromptResponse) => {
-    setAiResponses(responseData);
-    setIsGenerating(false);
+  const handleTaskIdReceived = (newTaskId: string) => {
+    setTaskId(newTaskId);
   };
 
   const handleGenerationStart = () => {
     setIsGenerating(true);
   };
 
-  if (isPending) {
-    return <Loading />;
-  }
+  const handleGenerationComplete = () => {
+    setIsGenerating(false);
+  };
 
-  if (isNotFound) {
-    return <NotFoundError recordType={recordType} />;
-  }
+  const handleNavigationConfirm = useCallback(() => {
+    if (pendingNavigation) {
+      setTaskId(null);
+      setIsGenerating(false);
+      setShowNavigationModal(false);
+      router.push(pendingNavigation);
+      setPendingNavigation(null);
+    }
+  }, [router, pendingNavigation]);
 
-  if (isUnauthorized) {
-    return <NotAuthorizedError />;
-  }
+  const handleNavigationCancel = useCallback(() => {
+    setShowNavigationModal(false);
+    setPendingNavigation(null);
+  }, []);
 
-  if (isNotPermission) {
-    return <NotPermissionError />;
-  }
-
-  if (isError) {
-    return <DefaultError />;
-  }
-
-  if (data && data.studentDetails.length === 0) {
-    return <NotFoundError recordType={recordType} />;
-  }
+  const handleSidebarNavigation = useCallback(
+    (url: string) => {
+      if (isGenerating) {
+        setPendingNavigation(url);
+        setShowNavigationModal(true);
+      } else {
+        router.push(url);
+      }
+    },
+    [isGenerating, router],
+  );
 
   return (
-    <div className="flex flex-col gap-10">
-      <CharacteristicInput
-        students={data.studentDetails}
-        selectedId={parsedRecordId}
-        onGenerationStart={handleGenerationStart}
-        onResponseGenerated={handleAiResponseGenerated}
+    <SidebarProvider defaultOpen={false}>
+      <div className="mb-40 flex w-full flex-col gap-11 p-[60px]">
+        <div className="flex w-full justify-between">
+          <h2 className="text-heading-24 text-gray-black">{RECORD_TYPE_TITLES[recordType]}</h2>
+          <SidebarTrigger
+            className="flex shrink-0 items-center justify-between rounded-[10px] border border-gray-2 px-4 py-[11px]"
+            type="button"
+          >
+            <span
+              className={`flex-1 text-body-16-m ${studentName ? 'text-gray-black' : 'text-gray-4'}`}
+            >
+              {studentName ?? '학생 선택'}
+            </span>
+            <Icons.ChevronDown size={20} color="text-gray-4" className="ml-3" />
+          </SidebarTrigger>
+        </div>
+
+        <div className="flex w-full flex-col items-end gap-[83px]">
+          <CharacteristicInput
+            selectedId={recordId}
+            bytesLimit={bytesLimit}
+            isGenerating={isGenerating}
+            onBytesLimitChange={setBytesLimit}
+            onGenerationStart={handleGenerationStart}
+            onTaskIdReceived={handleTaskIdReceived}
+          />
+          {isValidRecordId ? (
+            <>
+              <AiResponse
+                selectedId={recordId}
+                taskId={taskId}
+                isGenerating={isGenerating}
+                bytesLimit={bytesLimit}
+                onGenerationComplete={handleGenerationComplete}
+              />
+              <RecordSummary
+                selectedId={recordId}
+                recordType={recordType}
+                bytesLimit={bytesLimit}
+              />
+            </>
+          ) : null}
+        </div>
+      </div>
+
+      <Sidebar side="right" className="bg-gray-1">
+        <SidebarTrigger className="absolute left-2 top-2 z-10 rounded-lg p-[4px] transition-colors hover:bg-gray-2">
+          <Icons.SidebarClose size={24} color="text-gray-5" />
+        </SidebarTrigger>
+        <StudentSidebarContent
+          recordType={recordType}
+          currentRecordId={recordId}
+          onNavigate={handleSidebarNavigation}
+        />
+      </Sidebar>
+
+      <NavigationConfirmModal
+        isOpen={showNavigationModal}
+        onConfirm={handleNavigationConfirm}
+        onCancel={handleNavigationCancel}
       />
-      <AiResponse recordType={recordType} responses={aiResponses} isGenerating={isGenerating} />
-      <hr className="h-[1px] border-0 bg-black" />
-      <RecordSummary selectedId={parsedRecordId} recordType={recordType} />
-    </div>
+    </SidebarProvider>
   );
 }

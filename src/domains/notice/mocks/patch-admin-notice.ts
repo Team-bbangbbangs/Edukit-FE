@@ -4,7 +4,7 @@ import type { AdminNoticeBody } from '@/domains/notice/types/notice';
 import { checkAccessToken } from '@/shared/mocks/utils/check-access-token';
 
 export const patchAdminNotice = [
-  http.patch('/api/v1/admin/notices/:noticeId', async ({ request, params }) => {
+  http.patch('/api/v2/admin/notices/:noticeId', async ({ request, params }) => {
     const authHeader = request.headers.get('authorization');
 
     const { noticeId } = params;
@@ -14,11 +14,10 @@ export const patchAdminNotice = [
     if (!validation.tokenData?.isAdmin) {
       return HttpResponse.json(
         {
-          status: 403,
-          code: 'EDMT-403',
-          message: '관리자 권한이 필요합니다.',
+          code: 'A-40304',
+          message: '접근 권한이 없는 사용자입니다. 교사 인증을 진행해주세요.',
         },
-        { status: 403 },
+        { status: 200 },
       );
     }
 
@@ -27,40 +26,44 @@ export const patchAdminNotice = [
     if (!body.title?.trim() || !body.content?.replace(/<[^>]*>/g, '').trim()) {
       return HttpResponse.json(
         {
-          status: 400,
-          code: 'EDMT-400',
-          message: '제목과 내용을 모두 입력해주세요.',
+          code: 'FAIL-400',
+          message: 'validation 오류',
+          data: {
+            category: '카테고리는 필수입니다.',
+            title: '제목은 필수입니다.',
+            content: '내용은 필수입니다.',
+          },
         },
-        { status: 400 },
+        { status: 200 },
       );
     }
 
     if (noticeId === '999') {
       return HttpResponse.json(
         {
-          status: 404,
-          code: 'EDMT-4040301',
+          code: 'NO-40402',
           message: '해당 공지사항이 존재하지 않습니다.',
         },
-        { status: 404 },
+        { status: 200 },
       );
     }
 
-    if (body.categoryId !== 2 && body.categoryId !== 3) {
+    if (body.category !== 'announcement' && body.category !== 'event') {
       return HttpResponse.json(
         {
-          status: 400,
-          code: 'EDMT-4000302',
-          message: '공지사항 작성이 허용되지 않는 카테고리입니다.',
+          code: 'NO-40001',
+          message: '유효하지 않은 공지사항 카테고리입니다.',
         },
-        { status: 400 },
+        { status: 200 },
       );
     }
 
-    return HttpResponse.json({
-      status: 200,
-      code: 'EDMT-20000',
-      message: '요청이 성공했습니다.',
-    });
+    return HttpResponse.json(
+      {
+        code: 'SUCCESS',
+        message: '요청이 성공했습니다.',
+      },
+      { status: 200 },
+    );
   }),
 ];

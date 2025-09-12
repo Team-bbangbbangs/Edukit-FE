@@ -1,106 +1,198 @@
-import type { PromptResponse, RecordType } from '@/domains/record/types/record';
+import { useEffect, useMemo, useState } from 'react';
+
+import { useSseStream } from '@/domains/record/hooks/use-sse-stream';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
-import Loading from '@/shared/components/ui/loading/loading';
+import { Icons } from '@/shared/components/ui/icon/icon';
 
 interface AiResponseProps {
-  responses: PromptResponse | null;
+  taskId: string | null;
   isGenerating: boolean;
-  recordType: RecordType;
+  bytesLimit: number;
+  selectedId?: number;
+  onGenerationComplete?: () => void;
 }
 
-export default function AiResponse({ responses, isGenerating, recordType }: AiResponseProps) {
-  const bytesLimit = recordType === 'career' ? 2100 : 1500;
+export default function AiResponse({
+  taskId,
+  isGenerating,
+  bytesLimit,
+  selectedId,
+  onGenerationComplete,
+}: AiResponseProps) {
+  const { streamingData, error, setCompletionCallback, clearData } = useSseStream(taskId);
+  const [copiedVersions, setCopiedVersions] = useState<Set<number>>(new Set());
 
-  const getContentForVersion = (version: number) => {
-    if (isGenerating) {
-      return (
-        <div className="flex flex-col gap-2" data-testid="ai-loading">
-          <Loading />
-          <p className="text-[14px] text-slate-500">20초정도 소요됩니다.</p>
-        </div>
-      );
+  useEffect(() => {
+    setCompletionCallback(onGenerationComplete || null);
+  }, [onGenerationComplete, setCompletionCallback]);
+
+  useEffect(() => {
+    if (error && onGenerationComplete) {
+      onGenerationComplete();
     }
+  }, [error, onGenerationComplete]);
 
-    if (!responses) {
-      return '학생 특성 기입란을 입력하고 생성 버튼을 눌러주세요.';
+  useEffect(() => {
+    setCopiedVersions(new Set());
+    clearData();
+  }, [selectedId, clearData]);
+
+  const isLoading = useMemo(() => {
+    if (!isGenerating) return false;
+    if (!streamingData) return true;
+
+    return !streamingData.isComplete;
+  }, [isGenerating, streamingData]);
+
+  const versionsContent = useMemo(() => {
+    return [1, 2, 3].map((version) => {
+      if (error) {
+        return {
+          content: (
+            <div className="flex flex-col gap-2">
+              <p className="text-body-18-m text-red-600">에러가 발생했습니다: {error}</p>
+            </div>
+          ),
+          textLength: 0,
+          progressMessage: '',
+        };
+      }
+
+      if (isLoading) {
+        if (streamingData) {
+          const versionContent = streamingData.versions.find((v) => v.version === version);
+          const versionProgressMessage = streamingData.progressMessages
+            .filter((pm) => pm.version === version)
+            .pop();
+
+          if (versionContent) {
+            const textLength = calculateByte(versionContent.content) || 0;
+            return {
+              content: versionContent.content,
+              textLength,
+              progressMessage: '',
+            };
+          }
+
+          const progressMessage = versionProgressMessage?.message || '생성 중...';
+
+          return {
+            content: (
+              <div className="flex flex-col" data-testid="ai-loading">
+                <span className="text-shimmer text-body-18-m">{progressMessage}</span>
+              </div>
+            ),
+            textLength: 0,
+            progressMessage,
+          };
+        } else {
+          return {
+            content: (
+              <div className="flex flex-col" data-testid="ai-loading">
+                <span className="text-shimmer text-body-18-m">초안 생성 중...</span>
+              </div>
+            ),
+            textLength: 0,
+            progressMessage: '초안 생성 중...',
+          };
+        }
+      }
+
+      if (!streamingData) {
+        return {
+          content: '학생 특성 기입란을 입력하고 생성 버튼을 눌러주세요.',
+          textLength: 0,
+          progressMessage: '',
+        };
+      }
+
+      const versionContent = streamingData.versions.find((v) => v.version === version);
+      const content = versionContent?.content || '';
+      const textLength = calculateByte(content) || 0;
+
+      return {
+        content,
+        textLength,
+        progressMessage: '',
+      };
+    });
+  }, [error, isLoading, streamingData]);
+
+  const textColor = useMemo(() => {
+    if (streamingData) {
+      return 'text-gray-black';
     }
+    return 'text-gray-4';
+  }, [streamingData]);
 
-    const descriptions = [responses.description1, responses.description2, responses.description3];
-    return descriptions[version - 1] || '';
+  const bgColor = useMemo(() => {
+    if (streamingData) {
+      return 'bg-white';
+    }
+    return 'bg-gray-1';
+  }, [streamingData]);
+
+  const handleCopy = async (content: string, version: number) => {
+    await navigator.clipboard.writeText(content);
+    setCopiedVersions((prev) => new Set(prev).add(version));
+
+    setTimeout(() => {
+      setCopiedVersions((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(version);
+        return newSet;
+      });
+    }, 3000);
   };
 
-  const getTextColor = () => {
-    if (responses && !isGenerating) {
-      return 'text-slate-700';
-    }
-    return 'text-slate-400';
+  const renderVersion = (version: number) => {
+    const versionData = versionsContent[version - 1];
+    const isLoadingState =
+      isLoading && (typeof versionData.content !== 'string' || versionData.textLength === 0);
+    const canCopy = streamingData && typeof versionData.content === 'string' && versionData.content;
+    const isCopied = copiedVersions.has(version);
+
+    return (
+      <div key={version} className="relative flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h4 className="text-title-20 text-gray-black">버전 {version}</h4>
+        </div>
+        <div
+          className={`relative min-h-[230px] rounded-[20px] border border-gray-2 px-6 pb-10 pt-6 text-body-18-m ${
+            isLoadingState ? '' : 'whitespace-pre-wrap'
+          } ${bgColor} ${textColor}`}
+          data-testid={`ai-response-version-${version}`}
+        >
+          {versionData.content}
+          {canCopy ? (
+            <button
+              onClick={() => handleCopy(versionData.content as string, version)}
+              className="absolute bottom-2 right-2 rounded-md p-1 hover:bg-gray-1"
+            >
+              {isCopied ? (
+                <Icons.Check size={18} color="text-gray-black" />
+              ) : (
+                <Icons.Copy size={18} color="text-gray-4" hoverColor="text-gray-black" />
+              )}
+            </button>
+          ) : null}
+        </div>
+
+        <div className="flex items-center justify-end self-stretch">
+          <div className="flex items-start gap-[2px]">
+            <span
+              className={`text-body-16-r ${bytesLimit < versionData.textLength ? 'text-brandRed' : 'text-gray-4'}`}
+            >
+              {versionData.textLength}
+            </span>
+            <span className="text-body-16-r text-gray-4">/</span>
+            <span className="text-body-16-r text-gray-4">{bytesLimit}</span>
+            <span className="text-body-16-r text-gray-4">Bytes</span>
+          </div>
+        </div>
+      </div>
+    );
   };
 
-  const getTextLength = (version: number) => {
-    if (!responses) return 0;
-    if (isGenerating) {
-      return 0;
-    }
-
-    const descriptions = [responses.description1, responses.description2, responses.description3];
-    return calculateByte(descriptions[version - 1]) || 0;
-  };
-
-  return (
-    <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-2">
-        <h4 className="font-bold">(버전 1)</h4>
-        <div
-          className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
-            isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
-          } ${getTextColor()}`}
-          data-testid="ai-response-version-1"
-        >
-          {getContentForVersion(1)}
-        </div>
-        <div className="flex justify-end">
-          <span className={`${bytesLimit < getTextLength(1) ? 'text-red-600' : 'text-slate-400'}`}>
-            {getTextLength(1)}
-          </span>
-          <span className="text-slate-400">/{bytesLimit} Bytes</span>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h4 className="font-bold">(버전 2)</h4>
-        <div
-          className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
-            isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
-          } ${getTextColor()}`}
-          data-testid="ai-response-version-2"
-        >
-          {getContentForVersion(2)}
-        </div>
-        <div className="flex justify-end">
-          <span className={`${bytesLimit < getTextLength(2) ? 'text-red-600' : 'text-slate-400'}`}>
-            {getTextLength(2)}
-          </span>
-          <span className="text-slate-400">/{bytesLimit} Bytes</span>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h4 className="font-bold">(버전 3)</h4>
-        <div
-          className={`min-h-40 rounded-lg border border-slate-400 p-5 ${
-            isGenerating ? 'flex items-center justify-center' : 'whitespace-pre-wrap'
-          } ${getTextColor()}`}
-          data-testid="ai-response-version-3"
-        >
-          {getContentForVersion(3)}
-        </div>
-        <div className="flex justify-end">
-          <span className={`${bytesLimit < getTextLength(3) ? 'text-red-600' : 'text-slate-400'}`}>
-            {getTextLength(3)}
-          </span>
-          <span className="text-slate-400">/{bytesLimit} Bytes</span>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="flex w-full flex-col gap-[83px]">{[1, 2, 3].map(renderVersion)}</div>;
 }

@@ -7,20 +7,21 @@ export const getVerifyEmail = [
     const code = decodeURIComponent(url.searchParams.get('code') || '');
 
     if (id === 'test@naver.com' && code === 'abc') {
-      return HttpResponse.json({
-        status: 200,
-        code: 'EDMT-20002',
-        message: '이메일 인증이 완료되었습니다.',
-      });
+      return HttpResponse.json(
+        {
+          code: 'SUCCESS',
+          message: '이메일 인증이 완료되었습니다.',
+        },
+        { status: 200 },
+      );
     }
 
     return HttpResponse.json(
       {
-        status: 400,
-        code: 'EDMT-40003',
-        message: '인증 토큰이 유효하지 않습니다.',
+        code: 'A-40102',
+        message: '유효하지 않은 토큰입니다.',
       },
-      { status: 400 },
+      { status: 200 },
     );
   }),
 ];

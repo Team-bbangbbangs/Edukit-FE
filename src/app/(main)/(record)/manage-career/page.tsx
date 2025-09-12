@@ -1,8 +1,8 @@
-import CareerRecordTable from '@/domains/record/components/student-manage/career-record-table';
+import ManageRecord from '@/domains/record/components/manage-record/manage-record';
 import { createPageMetadata } from '@/shared/constants/metadata';
 
-export const metadata = createPageMetadata('manageStudent', { url: '/manage-career' });
+export const metadata = createPageMetadata('manageRecord', { url: '/manage-career' });
 
 export default function Page() {
-  return <CareerRecordTable />;
+  return <ManageRecord recordType="career" />;
 }

@@ -2,28 +2,37 @@ import { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { usePostSummaryRecordDetail } from '@/domains/record/apis/mutations/use-post-summary-record-detail';
-import { useGetSummaryRecordDetail } from '@/domains/record/apis/queries/use-get-summary-record-detail';
+import { usePostRecordDetail } from '@/domains/record/apis/mutations/use-post-record-detail';
+import { useGetRecordDetail } from '@/domains/record/apis/queries/use-get-record-detail';
 import SaveSummaryRecordModal from '@/domains/record/components/record-write/save-summary-record-modal';
 import type { RecordType } from '@/domains/record/types/record';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
+import Button from '@/shared/components/ui/button/button';
+import NotAuthorizedError from '@/shared/components/ui/error/not-authorized-error';
+import NotPermissionError from '@/shared/components/ui/error/not-permission-error';
 import Loading from '@/shared/components/ui/loading/loading';
-import { Textarea } from '@/shared/components/ui/textarea/textarea';
 import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 
 interface RecordSummaryProps {
   selectedId: number;
   recordType: RecordType;
+  bytesLimit: number;
 }
 
-export default function RecordSummary({ selectedId, recordType }: RecordSummaryProps) {
+export default function RecordSummary({ selectedId, recordType, bytesLimit }: RecordSummaryProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [description, setDescription] = useState('');
-  const { mutate: postSummaryRecordDetail } = usePostSummaryRecordDetail();
-  const { data, isPending, isError } = useGetSummaryRecordDetail(selectedId);
+  const { mutate: postRecordDetail } = usePostRecordDetail();
+  const { data, isPending, isError, isUnauthorized, isNotPermission } =
+    useGetRecordDetail(selectedId);
   const { textareaRef, resizeTextarea } = useAutoResizeTextarea(description);
-  const bytesLimit = recordType === 'career' ? 2100 : 1500;
+
+  useEffect(() => {
+    if (isError) {
+      router.push(`/write-${recordType}`);
+    }
+  }, [isError, router, recordType]);
 
   useEffect(() => {
     if (data) {
@@ -32,13 +41,10 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
   }, [data]);
 
   const handleSave = () => {
-    const byteCount = calculateByte(description);
-
-    postSummaryRecordDetail(
+    postRecordDetail(
       {
         recordId: selectedId,
         description,
-        byteCount,
       },
       {
         onSuccess: () => {
@@ -55,50 +61,57 @@ export default function RecordSummary({ selectedId, recordType }: RecordSummaryP
     setDescription(e.target.value);
   };
 
-  if (isError) {
-    router.push(`/write-${recordType}`);
+  if (isUnauthorized) {
+    return <NotAuthorizedError />;
   }
+  if (isNotPermission) {
+    return <NotPermissionError />;
+  }
+
+  if (isError) return null;
+
   if (isPending) {
     return <Loading />;
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <h4 className="font-bold">종합</h4>
-      <Textarea
-        data-testid="summary-input"
-        ref={textareaRef}
-        value={description}
-        onChange={handleDescriptionChange}
-        onInput={resizeTextarea}
-        placeholder="완성본을 적어주세요."
-        className="border-slate-400 p-5 placeholder:text-base placeholder:text-slate-400"
-        style={{
-          lineHeight: 'inherit',
-          fontSize: 'inherit',
-          overflow: 'hidden',
-        }}
-      />
-      <div className="flex justify-end">
-        <span
-          className={`${bytesLimit < calculateByte(description) ? 'text-red-600' : 'text-slate-400'}`}
-        >
-          {calculateByte(description)}
-        </span>
-        <span className="text-slate-400">/{bytesLimit} Bytes</span>
+    <div className="flex w-full flex-col gap-4">
+      <h4 className="text-title-20 text-gray-black">최종</h4>
+      <div className="flex flex-col gap-3 rounded-[20px] border border-gray-2 p-6">
+        <textarea
+          data-testid="summary-input"
+          ref={textareaRef}
+          value={description}
+          onChange={handleDescriptionChange}
+          onInput={resizeTextarea}
+          placeholder="완성본을 적어주세요."
+          className="min-h-[150px] resize-none border-none bg-transparent p-0 text-body-18-m text-gray-black outline-none placeholder:text-body-18-m placeholder:text-gray-4"
+        />
+        <div className="flex flex-col items-end justify-center self-stretch">
+          <Button
+            color="primary"
+            variant="fill"
+            size="medium"
+            shape="pill"
+            disabled={!description.trim()}
+            onClick={handleSave}
+          >
+            저장
+          </Button>
+        </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          disabled={!description.trim()}
-          className={`rounded-md px-4 pb-1.5 pt-2 text-white ${
-            !description.trim()
-              ? 'cursor-not-allowed bg-slate-400'
-              : 'bg-slate-800 hover:bg-slate-950'
-          }`}
-          onClick={handleSave}
-        >
-          저장
-        </button>
+
+      <div className="flex items-center justify-end self-stretch">
+        <div className="flex items-start gap-[2px]">
+          <span
+            className={`text-body-16-r ${bytesLimit < calculateByte(description) ? 'text-brandRed' : 'text-gray-4'}`}
+          >
+            {calculateByte(description)}
+          </span>
+          <span className="text-body-16-r text-gray-4">/</span>
+          <span className="text-body-16-r text-gray-4">{bytesLimit}</span>
+          <span className="text-body-16-r text-gray-4">Bytes</span>
+        </div>
       </div>
 
       <SaveSummaryRecordModal open={modalOpen} onOpenChange={setModalOpen} />

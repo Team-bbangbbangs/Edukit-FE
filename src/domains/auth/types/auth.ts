@@ -11,6 +11,7 @@ export interface LoginBody {
 export interface SignupBody {
   email: string;
   password: string;
+  nickname: string;
   subject: string;
   school: string;
 }
@@ -18,4 +19,10 @@ export interface SignupBody {
 export interface VerifyEmailRequest {
   id: string;
   code: string;
+}
+
+export interface PatchPasswordBody {
+  memberUuid: string;
+  verificationCode: string;
+  password: string;
 }

@@ -10,7 +10,7 @@ import DeleteConfirmModal from '@/shared/components/ui/modal/delete-confirm-moda
 import { revalidateNotice } from '@/shared/lib/actions/revalidateNotice';
 import { useAuth } from '@/shared/providers/auth-provider';
 
-export default function EditDeleteNoticeButton({ id }: { id: string }) {
+export default function EditDeleteNoticeButton({ noticeId }: { noticeId: number }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { isAdmin } = useAuth();
@@ -18,7 +18,7 @@ export default function EditDeleteNoticeButton({ id }: { id: string }) {
   const { mutate: deleteAdminNotice } = useDeleteAdminNotice();
 
   const handleDelete = () => {
-    deleteAdminNotice(id, {
+    deleteAdminNotice(noticeId, {
       onSuccess: async () => {
         await revalidateNotice();
         setOpen(false);
@@ -33,7 +33,7 @@ export default function EditDeleteNoticeButton({ id }: { id: string }) {
   return isAdmin ? (
     <div className="flex justify-end gap-2">
       <Link
-        href={`/notice/edit-notice/${id}`}
+        href={`/notice/edit-notice/${noticeId}`}
         className="rounded-md bg-slate-800 px-4 pb-1.5 pt-2 text-white hover:bg-slate-950"
       >
         수정하기

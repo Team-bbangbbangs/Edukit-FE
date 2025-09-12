@@ -51,6 +51,13 @@ export const METADATA_CONFIG = {
 
   manageStudent: {
     title: '학생 관리 - Edukit',
+    description: '업로드한 학생 명단을 한 번에 관리하세요',
+    keywords: '학생 관리',
+    url: '/manage-student',
+  },
+
+  manageRecord: {
+    title: '생활기록부 관리 - Edukit',
     description: '작성한 생활기록부를 한 번에 관리하세요',
     keywords: '생활기록부 관리',
     url: '/manage-subject',

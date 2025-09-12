@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
+
+import { Icons } from '../icon/icon';
 
 /* -------------------------------------------------------------------------------------------------
  * ModalTypes
@@ -114,7 +115,7 @@ function ModalContent({ children, className = '' }: ModalComponentProps) {
     <div
       role="dialog"
       aria-modal="true"
-      className={`fixed left-1/2 top-1/2 z-50 flex w-full translate-x-[-50%] translate-y-[-50%] flex-col items-center gap-4 border bg-background p-12 shadow-lg duration-200 sm:rounded-lg ${
+      className={`fixed left-1/2 top-1/2 z-50 flex w-full translate-x-[-50%] translate-y-[-50%] flex-col rounded-[20px] bg-white p-14 duration-200 ${
         open
           ? 'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]'
           : 'invisible animate-out fade-out-0 zoom-out-95 slide-out-to-left-1/2 slide-out-to-top-[48%]'
@@ -143,10 +144,10 @@ function ModalClose() {
     <button
       type="button"
       onClick={handleClick}
-      className="absolute right-6 top-6 duration-200 hover:scale-125"
+      className="absolute right-8 top-8"
       aria-label="닫기"
     >
-      <X className="h-6 w-6" />
+      <Icons.Close size={28} color="text-gray-4" hoverColor="text-gray-black" />
     </button>
   );
 }
@@ -158,11 +159,7 @@ ModalClose.displayName = 'ModalClose';
  * -----------------------------------------------------------------------------------------------*/
 
 function ModalTitle({ children, className = '' }: ModalComponentProps) {
-  return (
-    <h2 className={`text-2xl font-semibold leading-none tracking-tight ${className}`}>
-      {children}
-    </h2>
-  );
+  return <h2 className={`${className}`}>{children}</h2>;
 }
 
 ModalTitle.displayName = 'ModalTitle';
@@ -172,7 +169,7 @@ ModalTitle.displayName = 'ModalTitle';
  * -----------------------------------------------------------------------------------------------*/
 
 function ModalDescription({ children, className = '' }: ModalComponentProps) {
-  return <p className={`text-lg text-muted-foreground ${className}`}>{children}</p>;
+  return <p className={`${className}`}>{children}</p>;
 }
 
 ModalDescription.displayName = 'ModalDescription';

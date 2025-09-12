@@ -5,10 +5,11 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { useLogin } from '@/domains/auth/apis/mutations/use-login';
-import { loginSchema, type LoginDataType } from '@/domains/auth/components/signup/signup-scheme';
+import { loginSchema, type LoginDataType } from '@/domains/auth/types/auth-scheme';
 import { Input } from '@/shared/components/ui/input/input';
 
 export default function Login() {
@@ -38,9 +39,8 @@ export default function Login() {
     }`;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-slate-700 px-10 py-16">
-      <h2 className="mb-4 text-[40px] font-bold">Edukit</h2>
-
+    <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-blue-400 px-10 py-16">
+      <Image src="/svgs/logo.svg" alt="Edukit" width={200} height={44} className="mb-4" />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1">
           <Input
@@ -68,7 +68,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={isPending}
-          className="ho mt-8 h-16 w-96 rounded-md bg-slate-800 px-4 py-2 text-2xl font-bold text-white disabled:opacity-50"
+          className="ho mt-8 h-16 w-96 rounded-md bg-blue-400 px-4 py-2 text-2xl font-bold text-white hover:bg-blue-600 disabled:opacity-50"
         >
           로그인
         </button>

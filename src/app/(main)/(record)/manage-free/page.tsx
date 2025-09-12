@@ -1,8 +1,8 @@
-import FreeRecordTable from '@/domains/record/components/student-manage/free-record-table';
+import ManageRecord from '@/domains/record/components/manage-record/manage-record';
 import { createPageMetadata } from '@/shared/constants/metadata';
 
-export const metadata = createPageMetadata('manageStudent', { url: '/manage-free' });
+export const metadata = createPageMetadata('manageRecord', { url: '/manage-free' });
 
 export default function Page() {
-  return <FreeRecordTable />;
+  return <ManageRecord recordType="free" />;
 }
