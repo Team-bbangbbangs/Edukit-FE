@@ -67,6 +67,7 @@ export default function StudentRecordWrite({
           <CharacteristicInput
             selectedId={recordId}
             bytesLimit={bytesLimit}
+            isGenerating={isGenerating}
             onBytesLimitChange={setBytesLimit}
             onGenerationStart={handleGenerationStart}
             onTaskIdReceived={handleTaskIdReceived}
@@ -74,6 +75,7 @@ export default function StudentRecordWrite({
           {isValidRecordId ? (
             <>
               <AiResponse
+                selectedId={recordId}
                 taskId={taskId}
                 isGenerating={isGenerating}
                 bytesLimit={bytesLimit}
