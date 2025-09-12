@@ -33,6 +33,7 @@ const config: Config = {
   // 모듈 경로 매핑
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.svg$': '<rootDir>/src/__tests__/mocks/svg.tsx',
   },
 
   // 테스트 파일 패턴
