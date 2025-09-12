@@ -76,8 +76,10 @@ export const getStudents = [
 
     const paginatedStudents = filteredStudents.slice(startIndex, startIndex + pageSize);
 
-    const availableGrades = [...new Set(MOCK_STUDENTS.map((s) => s.grade))].sort();
-    const availableClasses = [...new Set(MOCK_STUDENTS.map((s) => s.classNumber))].sort();
+    const availableGrades = [...new Set(MOCK_STUDENTS.map((s) => s.grade))].sort((a, b) => a - b);
+    const availableClasses = [...new Set(MOCK_STUDENTS.map((s) => s.classNumber))].sort(
+      (a, b) => a - b,
+    );
 
     return HttpResponse.json(
       {

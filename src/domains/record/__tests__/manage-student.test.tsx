@@ -520,9 +520,7 @@ describe('ManageStudent 컴포넌트 단위 테스트', () => {
         await user.click(subjectOption);
       }
 
-      const saveButton =
-        screen.getByRole('button', { name: '추가' }) ||
-        screen.getByRole('button', { name: '저장' });
+      const saveButton = screen.getByRole('button', { name: '추가' });
 
       await user.click(saveButton);
 
@@ -542,9 +540,7 @@ describe('ManageStudent 컴포넌트 단위 테스트', () => {
         expect(inputs).toHaveLength(4);
       });
 
-      const saveButton =
-        screen.getByRole('button', { name: '추가' }) ||
-        screen.getByRole('button', { name: '저장' });
+      const saveButton = screen.getByRole('button', { name: '추가' });
 
       await user.click(saveButton);
 
