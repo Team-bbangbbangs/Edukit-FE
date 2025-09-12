@@ -137,9 +137,9 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
         className="w-[140px]"
       />
 
-      <div className="flex flex-1">
+      <div className="flex h-full flex-1">
         <Dropdown
-          className="w-full"
+          className="h-full w-full"
           onOpenChange={(open) => {
             if (open && !isDropdownOpen) {
               handleDropdownOpen();
@@ -149,7 +149,7 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
           }}
         >
           <Dropdown.Trigger
-            className={`flex h-[58px] w-full cursor-pointer flex-wrap content-center items-center gap-[10px] border-none p-[10px] ${
+            className={`flex h-full w-full cursor-pointer flex-wrap content-center items-center gap-[10px] border-none p-[10px] ${
               isDropdownOpen ? 'bg-blue-50' : 'bg-white hover:bg-gray-50'
             }`}
           >

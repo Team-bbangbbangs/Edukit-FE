@@ -157,7 +157,7 @@ export function FilterSection({
   return (
     <>
       <div
-        className={` ${activeFilters.size > 0 ? 'mb-5' : 'mb-[29px]'} flex w-[1135px] items-center justify-between`}
+        className={` ${activeFilters.size > 0 ? 'mb-5' : 'mb-[29px]'} flex w-full items-center justify-between`}
       >
         {hasSelection ? (
           <>
@@ -233,7 +233,7 @@ export function FilterSection({
 
       {/* 활성화된 필터 표시 영역 */}
       {activeFilters.size > 0 ? (
-        <div className="mb-[25px] inline-flex w-[1135px] items-center gap-3">
+        <div className="mb-[25px] inline-flex w-full items-center gap-3">
           {activeFilters.has('grade') ? (
             <Dropdown
               defaultOpen={activeFilters.has('grade')}

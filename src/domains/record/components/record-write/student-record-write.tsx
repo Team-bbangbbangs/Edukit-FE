@@ -48,7 +48,7 @@ export default function StudentRecordWrite({
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="mb-40 flex w-full flex-col gap-11 p-[60px]">
-        <div className="flex max-w-[1135px] justify-between">
+        <div className="flex w-full justify-between">
           <h2 className="text-heading-24 text-gray-black">{RECORD_TYPE_TITLES[recordType]}</h2>
           <SidebarTrigger
             className="flex shrink-0 items-center justify-between rounded-[10px] border border-gray-2 px-4 py-[11px]"
@@ -63,7 +63,7 @@ export default function StudentRecordWrite({
           </SidebarTrigger>
         </div>
 
-        <div className="flex max-w-[1135px] flex-col items-end gap-[83px]">
+        <div className="flex w-full flex-col items-end gap-[83px]">
           <CharacteristicInput
             selectedId={recordId}
             bytesLimit={bytesLimit}

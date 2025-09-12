@@ -91,7 +91,7 @@ export function EditCell({ student, field, value, onSave, className }: EditableC
 
   return (
     <div
-      className={`relative flex items-center justify-center px-10 py-4 transition-colors ${className} ${error ? 'border-red-500' : ''} ${isEditing ? 'border border-blue-400' : 'cursor-pointer border-r border-gray-2 hover:bg-gray-50'}`}
+      className={`relative flex items-center justify-center self-stretch px-10 py-4 transition-colors ${className} ${error ? 'border-red-500' : ''} ${isEditing ? 'border border-blue-400' : 'cursor-pointer border-r border-gray-2 hover:bg-gray-50'}`}
       onClick={() => {
         if (!isEditing) {
           setIsEditing(true);
