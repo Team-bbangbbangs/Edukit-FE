@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
 
 import { RECORD_TYPE_TITLES } from '@/domains/record/constants/record-type';
 import type { RecordType } from '@/domains/record/types/record';
@@ -13,6 +15,7 @@ import { Icons } from '@/shared/components/ui/icon/icon';
 
 import AiResponse from './ai-response';
 import CharacteristicInput from './characteristic-input';
+import NavigationConfirmModal from './navigation-confirm-modal';
 import RecordSummary from './record-summary';
 import StudentSidebarContent from './student-sidebar-content';
 
@@ -27,11 +30,15 @@ export default function StudentRecordWrite({
   recordId,
   studentName,
 }: StudentRecordWriteProps) {
+  const router = useRouter();
   const [taskId, setTaskId] = useState<string | null>(null);
   const isValidRecordId = recordId && !isNaN(recordId);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [bytesLimit, setBytesLimit] = useState(recordType === 'career' ? 2100 : 1500);
+  const [showNavigationModal, setShowNavigationModal] = useState(false);
+
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
 
   const handleTaskIdReceived = (newTaskId: string) => {
     setTaskId(newTaskId);
@@ -44,6 +51,33 @@ export default function StudentRecordWrite({
   const handleGenerationComplete = () => {
     setIsGenerating(false);
   };
+
+  const handleNavigationConfirm = useCallback(() => {
+    if (pendingNavigation) {
+      setTaskId(null);
+      setIsGenerating(false);
+      setShowNavigationModal(false);
+      router.push(pendingNavigation);
+      setPendingNavigation(null);
+    }
+  }, [router, pendingNavigation]);
+
+  const handleNavigationCancel = useCallback(() => {
+    setShowNavigationModal(false);
+    setPendingNavigation(null);
+  }, []);
+
+  const handleSidebarNavigation = useCallback(
+    (url: string) => {
+      if (isGenerating) {
+        setPendingNavigation(url);
+        setShowNavigationModal(true);
+      } else {
+        router.push(url);
+      }
+    },
+    [isGenerating, router],
+  );
 
   return (
     <SidebarProvider defaultOpen={false}>
@@ -95,8 +129,18 @@ export default function StudentRecordWrite({
         <SidebarTrigger className="absolute left-2 top-2 z-10 rounded-lg p-[4px] transition-colors hover:bg-gray-2">
           <Icons.SidebarClose size={24} color="text-gray-5" />
         </SidebarTrigger>
-        <StudentSidebarContent recordType={recordType} currentRecordId={recordId} />
+        <StudentSidebarContent
+          recordType={recordType}
+          currentRecordId={recordId}
+          onNavigate={handleSidebarNavigation}
+        />
       </Sidebar>
+
+      <NavigationConfirmModal
+        isOpen={showNavigationModal}
+        onConfirm={handleNavigationConfirm}
+        onCancel={handleNavigationCancel}
+      />
     </SidebarProvider>
   );
 }

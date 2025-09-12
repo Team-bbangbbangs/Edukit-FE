@@ -99,7 +99,7 @@ export default function CharacteristicInput({
       {
         recordId: selectedId,
         request: {
-          byteCount: calculateByte(description),
+          byteCount: bytesLimit,
           prompt: description,
         },
       },

@@ -16,11 +16,13 @@ import { cn } from '@/shared/lib/utils';
 interface StudentSidebarContentProps {
   recordType: RecordType;
   currentRecordId?: number;
+  onNavigate?: (url: string) => void;
 }
 
 export default function StudentSidebarContent({
   recordType,
   currentRecordId,
+  onNavigate,
 }: StudentSidebarContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,8 +48,14 @@ export default function StudentSidebarContent({
   const handleStudentClick = (recordId: number, studentName: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('id', recordId.toString());
-    params.set('name', encodeURIComponent(studentName));
-    router.push(`?${params.toString()}`);
+    params.set('name', studentName);
+    const url = `?${params.toString()}`;
+
+    if (onNavigate) {
+      onNavigate(url);
+    } else {
+      router.push(url);
+    }
   };
 
   const handleGradeSelect = (grade: number) => {

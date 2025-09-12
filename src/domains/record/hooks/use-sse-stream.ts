@@ -13,9 +13,19 @@ export const useSseStream = (taskId: string | null) => {
   const eventSourceRef = useRef<EventSource | null>(null);
   const completionCallbackRef = useRef<(() => void) | null>(null);
   const isCompletedRef = useRef(false);
+  const currentTaskIdRef = useRef<string | null>(null);
+
+  const clearData = useCallback(() => {
+    setStreamingData(null);
+    setError(null);
+    isCompletedRef.current = false;
+  }, []);
 
   const closeConnection = useCallback(() => {
     if (eventSourceRef.current) {
+      eventSourceRef.current.removeEventListener('ai-message', handleSseMessage);
+      eventSourceRef.current.onopen = null;
+      eventSourceRef.current.onerror = null;
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
@@ -24,6 +34,10 @@ export const useSseStream = (taskId: string | null) => {
 
   const handleSseMessage = useCallback(
     (event: MessageEvent) => {
+      if (currentTaskIdRef.current !== taskId) {
+        return;
+      }
+
       try {
         const message: SseMessage = JSON.parse(event.data);
 
@@ -88,39 +102,40 @@ export const useSseStream = (taskId: string | null) => {
         setError('메시지 파싱 오류가 발생했습니다.');
       }
     },
-    [closeConnection],
+    [taskId, closeConnection],
   );
 
   const handleSseError = useCallback(() => {
-    if (isCompletedRef.current) {
+    if (isCompletedRef.current || currentTaskIdRef.current !== taskId) {
       return;
     }
 
     setError('연결 오류가 발생했습니다.');
     closeConnection();
-  }, [closeConnection]);
+  }, [taskId, closeConnection]);
 
   const handleSseOpen = useCallback(() => {
-    setIsConnected(true);
-    setError(null);
-    isCompletedRef.current = false;
-  }, []);
+    if (currentTaskIdRef.current === taskId) {
+      setIsConnected(true);
+      setError(null);
+      isCompletedRef.current = false;
+    }
+  }, [taskId]);
 
   const buildSseUrl = useCallback((taskId: string): string => {
     const isMock = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
     const endpoint = `/api/v2/student-records/stream/${taskId}`;
 
     if (isMock) return endpoint;
-
     return `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`;
   }, []);
 
   const connect = useCallback(
     (taskId: string) => {
       closeConnection();
-      setStreamingData(null);
-      setError(null);
-      isCompletedRef.current = false;
+      clearData();
+
+      currentTaskIdRef.current = taskId;
 
       try {
         const url = buildSseUrl(taskId);
@@ -141,24 +156,32 @@ export const useSseStream = (taskId: string | null) => {
         setError('연결을 시작할 수 없습니다.');
       }
     },
-    [closeConnection, buildSseUrl, handleSseMessage, handleSseOpen, handleSseError],
+    [closeConnection, clearData, buildSseUrl, handleSseMessage, handleSseOpen, handleSseError],
   );
 
   useEffect(() => {
-    if (taskId) {
+    if (taskId && taskId !== currentTaskIdRef.current) {
       connect(taskId);
-    } else {
+    } else if (!taskId && currentTaskIdRef.current) {
       closeConnection();
-      setStreamingData(null);
-      setError(null);
-      isCompletedRef.current = false;
+      clearData();
+      currentTaskIdRef.current = null;
     }
 
     return () => {
-      closeConnection();
-      isCompletedRef.current = false;
+      if (!taskId) {
+        closeConnection();
+        currentTaskIdRef.current = null;
+      }
     };
-  }, [taskId, connect, closeConnection]);
+  }, [taskId, connect, closeConnection, clearData]);
+
+  useEffect(() => {
+    return () => {
+      closeConnection();
+      currentTaskIdRef.current = null;
+    };
+  }, [closeConnection]);
 
   const setCompletionCallback = useCallback((callback: (() => void) | null) => {
     completionCallbackRef.current = callback;
@@ -171,5 +194,6 @@ export const useSseStream = (taskId: string | null) => {
     connect,
     closeConnection,
     setCompletionCallback,
+    clearData,
   };
 };
