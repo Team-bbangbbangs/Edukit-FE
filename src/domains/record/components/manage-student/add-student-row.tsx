@@ -170,7 +170,11 @@ export function AddStudentRow({ onCancel }: AddStudentProps) {
                 const isSelected = recordTypes.includes(option.value);
 
                 return (
-                  <div key={option.value} className="flex cursor-pointer items-center px-3 py-2">
+                  <div
+                    key={option.value}
+                    className="flex cursor-pointer items-center px-3 py-2"
+                    data-testid={`record-option-${option.value}`}
+                  >
                     <RecordTag
                       recordType={option.value}
                       showClose={isSelected}

@@ -13,9 +13,13 @@ export function DashboardHeader({ isAllSelected, onToggleAll }: DashboardHeaderP
         onClick={onToggleAll}
       >
         {isAllSelected ? (
-          <Icons.BoxChecked color="text-blue-400" />
+          <Icons.BoxChecked color="text-blue-400" data-testid="header-checkbox" />
         ) : (
-          <Icons.BoxDefault color="text-gray-2" hoverColor="text-gray-5" />
+          <Icons.BoxDefault
+            color="text-gray-2"
+            hoverColor="text-gray-5"
+            data-testid="header-defaultbox"
+          />
         )}
       </div>
       <div className="flex w-[100px] items-center justify-center px-9 py-4">
