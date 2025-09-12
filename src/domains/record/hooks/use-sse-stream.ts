@@ -37,8 +37,12 @@ export const useSseStream = (taskId: string | null) => {
 
           switch (message.type) {
             case 'PROGRESS':
-              if (message.data?.message) {
-                const newMessages = [...current.progressMessages, message.data.message];
+              if (message.data?.message && message.data?.version) {
+                const newMessage = {
+                  message: message.data.message,
+                  version: message.data.version,
+                };
+                const newMessages = [...current.progressMessages, newMessage];
                 return { ...current, progressMessages: newMessages };
               }
               return current;

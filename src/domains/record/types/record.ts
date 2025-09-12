@@ -85,9 +85,14 @@ export interface SseMessage {
   };
 }
 
+export interface ProgressMessage {
+  message: string;
+  version: number;
+}
+
 export interface StreamingResponse {
   taskId: string;
-  progressMessages: string[];
+  progressMessages: ProgressMessage[];
   versions: {
     version: number;
     content: string;
