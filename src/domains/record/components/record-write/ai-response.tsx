@@ -19,7 +19,7 @@ export default function AiResponse({
   selectedId,
   onGenerationComplete,
 }: AiResponseProps) {
-  const { streamingData, error, setCompletionCallback } = useSseStream(taskId);
+  const { streamingData, error, setCompletionCallback, clearData } = useSseStream(taskId);
   const [copiedVersions, setCopiedVersions] = useState<Set<number>>(new Set());
 
   useEffect(() => {
@@ -27,8 +27,15 @@ export default function AiResponse({
   }, [onGenerationComplete, setCompletionCallback]);
 
   useEffect(() => {
+    if (error && onGenerationComplete) {
+      onGenerationComplete();
+    }
+  }, [error, onGenerationComplete]);
+
+  useEffect(() => {
     setCopiedVersions(new Set());
-  }, [selectedId]);
+    clearData();
+  }, [selectedId, clearData]);
 
   const isLoading = useMemo(() => {
     if (!isGenerating) return false;
