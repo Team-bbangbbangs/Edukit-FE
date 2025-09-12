@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAiGenerate } from '@/domains/record/apis/mutations/use-ai-generate';
 import { calculateByte } from '@/domains/record/utils/calculate-byte';
@@ -8,6 +8,7 @@ import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea';
 interface CharacteristicInputProps {
   selectedId?: number;
   bytesLimit: number;
+  isGenerating?: boolean;
   onBytesLimitChange: (newLimit: number) => void;
   onGenerationStart: () => void;
   onTaskIdReceived: (taskId: string) => void;
@@ -16,6 +17,7 @@ interface CharacteristicInputProps {
 export default function CharacteristicInput({
   selectedId,
   bytesLimit,
+  isGenerating,
   onBytesLimitChange,
   onGenerationStart,
   onTaskIdReceived,
@@ -30,6 +32,12 @@ export default function CharacteristicInput({
   );
 
   const isValidSelectedId = selectedId && !isNaN(selectedId);
+
+  useEffect(() => {
+    setDescription('');
+    setShowTooltip(true);
+    setIsEditing(false);
+  }, [selectedId]);
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
@@ -126,10 +134,10 @@ export default function CharacteristicInput({
             variant="fill"
             size="medium"
             shape="pill"
-            disabled={isPending || !isValidSelectedId}
+            disabled={isPending || isGenerating || !isValidSelectedId}
             onClick={handleButtonClick}
           >
-            {isPending ? '생성중...' : '생성'}
+            {isPending || isGenerating ? '생성중...' : '생성'}
           </Button>
         </div>
       </div>

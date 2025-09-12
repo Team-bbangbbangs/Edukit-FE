@@ -19,7 +19,7 @@ export default function ManageRecordHeader({
   };
 
   return (
-    <div className="mb-14 flex w-[1135px] items-center justify-between">
+    <div className="mb-14 flex w-full items-center justify-between">
       <h2 className="text-heading-24 text-gray-black">{RECORD_TYPE_TITLES[recordType]}</h2>
 
       <Button

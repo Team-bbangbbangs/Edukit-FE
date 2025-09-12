@@ -73,7 +73,7 @@ export default function ManageStudent() {
   const isDisabled = hasError || isLoading;
 
   return (
-    <div className="flex w-full flex-col justify-center p-[60px]">
+    <div className="flex w-full min-w-[930px] flex-col justify-center p-[60px]">
       <ManageStudentHeader
         onAddStudent={() => setIsAddingStudent(true)}
         isAddingStudent={isAddingStudent}
@@ -90,7 +90,7 @@ export default function ManageStudent() {
         disabled={isDisabled}
       />
 
-      <div className="mb-80 flex w-[1135px] flex-col items-start">
+      <div className="mb-80 flex w-full flex-col items-start">
         <DashboardHeader isAllSelected={isAllSelected} onToggleAll={handleToggleAll} />
 
         {isLoading ? (

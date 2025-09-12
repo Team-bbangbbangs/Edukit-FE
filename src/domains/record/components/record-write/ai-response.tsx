@@ -8,6 +8,7 @@ interface AiResponseProps {
   taskId: string | null;
   isGenerating: boolean;
   bytesLimit: number;
+  selectedId?: number;
   onGenerationComplete?: () => void;
 }
 
@@ -15,6 +16,7 @@ export default function AiResponse({
   taskId,
   isGenerating,
   bytesLimit,
+  selectedId,
   onGenerationComplete,
 }: AiResponseProps) {
   const { streamingData, error, setCompletionCallback } = useSseStream(taskId);
@@ -23,6 +25,10 @@ export default function AiResponse({
   useEffect(() => {
     setCompletionCallback(onGenerationComplete || null);
   }, [onGenerationComplete, setCompletionCallback]);
+
+  useEffect(() => {
+    setCopiedVersions(new Set());
+  }, [selectedId]);
 
   const isLoading = useMemo(() => {
     if (!isGenerating) return false;
@@ -41,36 +47,55 @@ export default function AiResponse({
             </div>
           ),
           textLength: 0,
+          progressMessage: '',
         };
       }
 
-      if (isLoading && streamingData) {
-        const versionContent = streamingData.versions.find((v) => v.version === version);
-        const latestProgress =
-          streamingData.progressMessages[streamingData.progressMessages.length - 1];
+      if (isLoading) {
+        if (streamingData) {
+          const versionContent = streamingData.versions.find((v) => v.version === version);
+          const versionProgressMessage = streamingData.progressMessages
+            .filter((pm) => pm.version === version)
+            .pop();
 
-        if (versionContent) {
-          const textLength = calculateByte(versionContent.content) || 0;
+          if (versionContent) {
+            const textLength = calculateByte(versionContent.content) || 0;
+            return {
+              content: versionContent.content,
+              textLength,
+              progressMessage: '',
+            };
+          }
+
+          const progressMessage = versionProgressMessage?.message || '생성 중...';
+
           return {
-            content: versionContent.content,
-            textLength,
+            content: (
+              <div className="flex flex-col" data-testid="ai-loading">
+                <span className="text-shimmer text-body-18-m">{progressMessage}</span>
+              </div>
+            ),
+            textLength: 0,
+            progressMessage,
+          };
+        } else {
+          return {
+            content: (
+              <div className="flex flex-col" data-testid="ai-loading">
+                <span className="text-shimmer text-body-18-m">초안 생성 중...</span>
+              </div>
+            ),
+            textLength: 0,
+            progressMessage: '초안 생성 중...',
           };
         }
-
-        return {
-          content: (
-            <div className="flex flex-col" data-testid="ai-loading">
-              <span className="text-shimmer text-body-18-m">{latestProgress || '생성 중...'}</span>
-            </div>
-          ),
-          textLength: 0,
-        };
       }
 
       if (!streamingData) {
         return {
           content: '학생 특성 기입란을 입력하고 생성 버튼을 눌러주세요.',
           textLength: 0,
+          progressMessage: '',
         };
       }
 
@@ -81,6 +106,7 @@ export default function AiResponse({
       return {
         content,
         textLength,
+        progressMessage: '',
       };
     });
   }, [error, isLoading, streamingData]);

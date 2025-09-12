@@ -64,10 +64,10 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
   const isDisabled = hasError || isLoading;
 
   return (
-    <div className="flex w-full flex-col justify-center p-[60px]">
+    <div className="flex w-full min-w-[870px] flex-col justify-center p-[60px]">
       <ManageRecordHeader recordType={recordType} disabled={isDisabled} />
 
-      <div className="mb-8 flex w-[1135px] flex-col items-start gap-6">
+      <div className="mb-8 flex w-full flex-col items-start gap-6">
         <div className="flex items-center justify-between self-stretch">
           <h3 className="text-heading-24 text-gray-black">총 {totalCount}명의 학생 등록</h3>
           <SearchBar
@@ -80,7 +80,7 @@ export default function ManageRecord({ recordType }: ManageRecordProps) {
         </div>
       </div>
 
-      <div className="mb-80 flex w-[1135px] flex-col items-start">
+      <div className="mb-80 flex w-full flex-col items-start">
         <ManageRecordDashboardHeader recordType={recordType} />
 
         {isLoading ? (

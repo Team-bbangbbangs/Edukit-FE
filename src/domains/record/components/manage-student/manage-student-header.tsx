@@ -18,7 +18,7 @@ export function ManageStudentHeader({
   const [excelModalOpen, setExcelModalOpen] = useState(false);
 
   return (
-    <div className="mb-14 flex w-[1135px] items-center justify-between">
+    <div className="mb-14 flex w-full items-center justify-between">
       <h2 className="text-heading-24">학생 관리</h2>
       <div className="flex items-center gap-[10px]">
         <Button
