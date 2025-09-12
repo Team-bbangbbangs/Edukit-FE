@@ -48,7 +48,7 @@ export default function StudentSidebarContent({
   const handleStudentClick = (recordId: number, studentName: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('id', recordId.toString());
-    params.set('name', encodeURIComponent(studentName));
+    params.set('name', studentName);
     const url = `?${params.toString()}`;
 
     if (onNavigate) {
