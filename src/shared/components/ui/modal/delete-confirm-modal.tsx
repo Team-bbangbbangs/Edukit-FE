@@ -39,6 +39,7 @@ export default function DeleteConfirmModal({
             shape="rect"
             className="flex flex-1 items-center justify-center"
             onClick={handleCancel}
+            data-testid="modal-cancel-button"
           >
             <span className="text-label-18 text-gray-4">취소</span>
           </Button>

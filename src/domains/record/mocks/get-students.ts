@@ -76,12 +76,19 @@ export const getStudents = [
 
     const paginatedStudents = filteredStudents.slice(startIndex, startIndex + pageSize);
 
+    const availableGrades = [...new Set(MOCK_STUDENTS.map((s) => s.grade))].sort((a, b) => a - b);
+    const availableClasses = [...new Set(MOCK_STUDENTS.map((s) => s.classNumber))].sort(
+      (a, b) => a - b,
+    );
+
     return HttpResponse.json(
       {
         code: 'SUCCESS',
         message: '요청이 성공했습니다.',
         data: {
           studentCount: filteredStudents.length,
+          grades: availableGrades,
+          classNumbers: availableClasses,
           students: paginatedStudents,
         },
       },

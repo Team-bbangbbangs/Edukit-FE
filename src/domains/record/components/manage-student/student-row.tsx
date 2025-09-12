@@ -98,9 +98,13 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
         onClick={() => onToggleSelect(student.studentId)}
       >
         {isSelected ? (
-          <Icons.BoxChecked color="text-blue-400" />
+          <Icons.BoxChecked color="text-blue-400" data-testid="student-checkbox" />
         ) : (
-          <Icons.BoxDefault color="text-gray-2" hoverColor="text-gray-5" />
+          <Icons.BoxDefault
+            color="text-gray-2"
+            hoverColor="text-gray-5"
+            data-testid="student-defaultbox"
+          />
         )}
       </div>
 

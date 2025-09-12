@@ -253,6 +253,7 @@ export function FilterSection({
                   size={18}
                   color="text-blue-400"
                   hoverColor="text-blue-600"
+                  data-testid="remove-filter"
                   className={`hidden cursor-pointer ${selectedGrades.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -264,6 +265,7 @@ export function FilterSection({
                 {grades?.map((grade) => (
                   <div
                     key={grade}
+                    role="option"
                     className="flex w-full cursor-pointer items-center rounded-[8px] px-3 py-2 hover:bg-gray-1"
                     onClick={() => handleGradeToggle(grade)}
                   >
@@ -298,6 +300,7 @@ export function FilterSection({
                   size={18}
                   color="text-blue-400"
                   hoverColor="text-blue-600"
+                  data-testid="remove-filter"
                   className={`hidden cursor-pointer ${selectedClasses.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -310,6 +313,7 @@ export function FilterSection({
                   <div
                     key={classNumber}
                     className="flex w-full cursor-pointer items-center rounded-[8px] px-3 py-2 hover:bg-gray-1"
+                    role="option"
                     onClick={() => handleClassToggle(classNumber)}
                   >
                     <span className="w-[39px] truncate text-body-16-m text-gray-black">
@@ -331,7 +335,7 @@ export function FilterSection({
             >
               <Dropdown.Trigger className="group flex items-center justify-center gap-2 rounded-full bg-blue-50 px-3 py-1.5">
                 <span className="text-label-16 text-blue-400">
-                  생활기록부 관리 항목: {getFilterDisplayText('record')}
+                  {`생활기록부 관리 항목: ${getFilterDisplayText('record')}`}
                 </span>
                 <Icons.ChevronUp
                   size={18}
@@ -343,6 +347,7 @@ export function FilterSection({
                   size={18}
                   color="text-blue-400"
                   hoverColor="text-blue-600"
+                  data-testid="remove-filter"
                   className={`hidden cursor-pointer ${selectedRecordTypes.length > 0 ? 'group-data-[state=closed]:block' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -355,7 +360,12 @@ export function FilterSection({
                   const isSelected = selectedRecordTypes.includes(option.value);
 
                   return (
-                    <div key={option.value} className="flex cursor-pointer items-center px-3 py-2">
+                    <div
+                      key={option.value}
+                      className="flex cursor-pointer items-center px-3 py-2"
+                      role="option"
+                      data-testid={`record-option-${option.value}`}
+                    >
                       <RecordTag
                         recordType={option.value}
                         showClose={isSelected}

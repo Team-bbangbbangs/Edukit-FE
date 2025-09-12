@@ -1,9 +1,23 @@
+import React from 'react';
+
 import '@testing-library/jest-dom';
+
 import { setupMSW } from '@/__tests__/utils/msw-setup';
 
 // 테스트 환경에서 MSW 활성화
 process.env.NEXT_PUBLIC_API_MOCKING = 'enabled';
 setupMSW();
+
+// IntersectionObserver Mock
+global.IntersectionObserver = jest.fn((_callback) => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+  takeRecords: jest.fn(),
+  root: null,
+  rootMargin: '',
+  thresholds: [],
+}));
 
 // Next.js useRouter Mock
 const mockPush = jest.fn();
@@ -42,6 +56,48 @@ jest.mock('@/shared/providers/auth-provider', () => ({
 (global as any).mockRefresh = mockRefresh;
 (global as any).mockSetAuthData = mockSetAuthData;
 (global as any).mockUseAuth = mockUseAuth;
+
+// SVG 파일 모킹
+jest.mock('@/shared/components/ui/icon/icon', () => {
+  const MockIcon = React.forwardRef<SVGSVGElement, any>((props: any, ref: any) => {
+    const { hoverColor, color, ...validProps } = props;
+    return React.createElement('svg', { ref, ...validProps });
+  });
+  MockIcon.displayName = 'MockIcon';
+
+  return {
+    Icons: {
+      Add: MockIcon,
+      Close: MockIcon,
+      Check: MockIcon,
+      BoxDefault: MockIcon,
+      BoxChecked: MockIcon,
+      Upload: MockIcon,
+      Download: MockIcon,
+      ChevronUp: MockIcon,
+      ChevronDown: MockIcon,
+      Filter: MockIcon,
+      Logo: MockIcon,
+      Search: MockIcon,
+      SidebarClose: MockIcon,
+      Copy: MockIcon,
+    },
+    Add: MockIcon,
+    Close: MockIcon,
+    Check: MockIcon,
+    BoxDefault: MockIcon,
+    BoxChecked: MockIcon,
+    Upload: MockIcon,
+    Download: MockIcon,
+    ChevronUp: MockIcon,
+    ChevronDown: MockIcon,
+    Filter: MockIcon,
+    Logo: MockIcon,
+    Search: MockIcon,
+    SidebarClose: MockIcon,
+    Copy: MockIcon,
+  };
+});
 
 // 전역으로 mock을 초기화 할 수 있는 함수
 (global as any).clearAllTestMocks = () => {
