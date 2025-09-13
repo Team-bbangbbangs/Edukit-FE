@@ -25,6 +25,7 @@ export default function CharacteristicInput({
   const [description, setDescription] = useState('');
   const [showTooltip, setShowTooltip] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(String(bytesLimit));
   const { mutate: aiGenerate, isPending } = useAiGenerate();
   const { textareaRef: characteristicInputTextRef, resizeTextarea } = useAutoResizeTextarea(
     description,
@@ -47,28 +48,20 @@ export default function CharacteristicInput({
     if (isValidSelectedId) {
       setIsEditing(true);
       setShowTooltip(false);
+      setInputValue(String(bytesLimit));
     }
   };
 
   const handleBytesLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
+    setInputValue(e.target.value);
+  };
 
-    if (inputValue === '') {
-      onBytesLimitChange(bytesLimit);
-      return;
-    }
-
-    if (!/^\d+$/.test(inputValue)) {
-      return;
-    }
-
+  const validateAndUpdateBytesLimit = () => {
     const newValue = Number(inputValue);
 
-    if (isNaN(newValue)) {
-      return;
-    }
-
-    if (newValue < 0) {
+    if (isNaN(newValue) || newValue < 1) {
+      onBytesLimitChange(bytesLimit);
+      setInputValue(String(bytesLimit));
       return;
     }
 
@@ -76,6 +69,7 @@ export default function CharacteristicInput({
   };
 
   const handleBytesLimitBlur = () => {
+    validateAndUpdateBytesLimit();
     setIsEditing(false);
   };
 
@@ -151,21 +145,23 @@ export default function CharacteristicInput({
           <span className="text-body-16-r text-gray-4">/</span>
           {isEditing ? (
             <input
-              value={bytesLimit}
+              value={inputValue}
               onChange={handleBytesLimitChange}
               onBlur={handleBytesLimitBlur}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  handleBytesLimitBlur();
+                  validateAndUpdateBytesLimit();
+                  setIsEditing(false);
                 }
                 if (e.key === 'Escape') {
+                  setInputValue(String(bytesLimit));
                   setIsEditing(false);
                 }
               }}
               autoFocus
               className="m-0 appearance-none border-none bg-transparent p-0 text-center text-body-16-r text-gray-4 outline-none"
               style={{
-                width: `${String(bytesLimit).length * 0.6}em`,
+                width: `${String(inputValue).length * 0.6}em`,
               }}
             />
           ) : (
