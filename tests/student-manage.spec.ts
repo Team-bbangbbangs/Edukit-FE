@@ -1,226 +1,294 @@
 import { test, expect } from '@playwright/test';
 
-import {
-  performLogout,
-  expectAlertMessage,
-  loginAsUser,
-  loginAsUnverified,
-} from './utils/test-helpers';
+import { loginAsUser, loginAsUnverified } from './utils/test-helpers';
 
 test.describe('학생 관리 페이지 E2E 테스트', () => {
-  test('1. 로그인이 안되어 있는 상태에서 사이드바의 나의 학생 관리 하위 항목인 세부능력 및 특기사항을 클릭해서 들어가면 로그인이 필요합니다 라는 텍스트가 나오고, 학생 추가/엑셀로 내보내기 버튼이 보이지 않고, 로그인 버튼을 누르면 로그인 페이지로 이동한다.', async ({
-    page,
-  }) => {
-    await page.goto('/');
-    await page.click('a[href="/manage-subject"]');
+  test.describe('접근 권한 테스트', () => {
+    test('로그인 안한 상태에서 학생 관리 페이지에 접근하면 로그인이 필요하다는 UI컴포넌트가 나오고 업로드 버튼, 필터 버튼이 disabled 상태로 나온다', async ({
+      page,
+    }) => {
+      await page.goto('/manage-student');
+      await page.waitForTimeout(3000);
 
-    await page.waitForTimeout(3000);
+      // 로그인이 필요합니다 메시지 확인
+      await expect(page.locator('text=로그인이 필요합니다')).toBeVisible();
 
-    await expect(page.locator('text=로그인이 필요합니다')).toBeVisible();
+      // 엑셀 파일에서 명단 업로드 버튼 disabled 상태 확인
+      const uploadButton = page.locator('button:has-text("엑셀 파일에서 명단 업로드")');
+      await expect(uploadButton).toBeDisabled();
 
-    await expect(page.locator('button:has-text("학생 추가")')).not.toBeVisible();
-    await expect(page.locator('td:has-text("+ 추가하기")')).not.toBeVisible();
-    await expect(page.locator('button:has-text("엑셀로 내보내기")')).not.toBeVisible();
+      // 필터 버튼 disabled 상태 확인
+      const filterButton = page.locator('button:has-text("필터")');
+      await expect(filterButton).toBeDisabled();
+    });
 
-    await page.click('a[href="/login"]:has-text("로그인")');
-    await expect(page).toHaveURL('/login');
-  });
+    test('이메일 미인증 사용자로 학생 관리 페이지에 접근하면 이메일 인증 후 서비스 이용이 가능하다는 메세지가 나오고 업로드, 필터 버튼이 disabled 상태로 나온다', async ({
+      page,
+    }) => {
+      await loginAsUnverified(page);
+      await page.goto('/manage-student');
+      await page.waitForTimeout(3000);
 
-  test('2. 이메일 인증하지 않은 유저가 로그인 하고 사이드바의 나의 학생 관리 하위 항목인 행동 특성 및 종합의견을 클릭해서 들어가면 이메일을 인증해주세요 라는 텍스트가 나오고, 학생 추가/엑셀로 내보내기 버튼이 보이지 않고, 로그아웃을 하고 다시 들어가면 로그인이 필요합니다 라는 텍스트가 나온다.', async ({
-    page,
-  }) => {
-    await loginAsUnverified(page);
-    await page.click('a[href="/manage-behavior"]');
+      // 이메일 인증 후 서비스 이용이 가능합니다 메시지 확인
+      await expect(page.locator('text=이메일 인증 후 서비스 이용이 가능합니다.')).toBeVisible();
 
-    await page.waitForTimeout(3000);
+      // 엑셀 파일에서 명단 업로드 버튼 disabled 상태 확인
+      const uploadButton = page.locator('button:has-text("엑셀 파일에서 명단 업로드")');
+      await expect(uploadButton).toBeDisabled();
 
-    await expect(page.locator('text=이메일 인증 후 서비스 이용이 가능합니다.')).toBeVisible();
+      // 필터 버튼 disabled 상태 확인
+      const filterButton = page.locator('button:has-text("필터")');
+      await expect(filterButton).toBeDisabled();
+    });
 
-    await expect(page.locator('button:has-text("학생 추가")')).not.toBeVisible();
-    await expect(page.locator('td:has-text("+ 추가하기")')).not.toBeVisible();
-    await expect(page.locator('button:has-text("엑셀로 내보내기")')).not.toBeVisible();
+    test('인증된 사용자가 학생 관리 페이지에 접근 시 학생 관리 대시보드가 나온다', async ({
+      page,
+    }) => {
+      await loginAsUser(page);
+      await page.goto('/manage-student');
+      await page.waitForTimeout(3000);
 
-    await performLogout(page);
-    await page.goto('/manage-behavior');
+      // 학생 관리 대시보드 확인
+      await expect(page.locator('h2:has-text("학생 관리")')).toBeVisible();
 
-    await page.waitForTimeout(3000);
+      // 엑셀 파일에서 명단 업로드 버튼 enabled 상태 확인
+      const uploadButton = page.locator('button:has-text("엑셀 파일에서 명단 업로드")');
+      await expect(uploadButton).toBeEnabled();
 
-    await expect(page.locator('text=로그인이 필요합니다')).toBeVisible();
-  });
-
-  test('3. 로그인 하고 사이드바의 나의 학생 관리 하위 항목인 창체 - 자율을 클릭해서 들어가면 엑셀로 내보내기 버튼이 disabled 상태이고, 학생 데이터가 0개이며 추가하기 버튼만 나온다.', async ({
-    page,
-  }) => {
-    await loginAsUser(page);
-    await page.click('a[href="/manage-free"]');
-
-    await page.waitForTimeout(3000);
-
-    await expect(page.locator('button:has-text("엑셀로 내보내기")')).toBeDisabled();
-    await expect(page.locator('table tbody tr')).toHaveCount(1);
-    await expect(page.locator('td:has-text("+ 추가하기")')).toBeVisible();
-  });
-
-  test('4. 로그인하고 manage-free 링크로 들어와서 학생 등록하고 생활기록부 관리하기 버튼을 클릭해서 템플릿을 다운로드 하고, 파일 업로드를 클릭해서 해당 템플릿 excel 파일을 올리면 이름 목록이 잘 나오고, 생성하기 버튼을 누르면 추가된 데이터가 잘 보인다.', async ({
-    page,
-  }) => {
-    await loginAsUser(page);
-
-    await page.click('a[href="/manage-free"]');
-
-    await page.waitForTimeout(3000);
-
-    await page.click('button:has-text("학생 추가")');
-
-    const downloadPromise = page.waitForEvent('download');
-    await page.click('button:has-text("템플릿 다운로드")');
-    const download = await downloadPromise;
-    const downloadPath = await download.path();
-
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(downloadPath);
-
-    await expect(page.locator('text=홍길동')).toBeVisible();
-    await expect(page.locator('text=김철수')).toBeVisible();
-    await expect(page.locator('text=이영희')).toBeVisible();
-    await expect(page.locator('text=업로드된 학생 목록 (3명)')).toBeVisible();
-
-    await page.click('button:has-text("3명 생성하기")');
-
-    await page.waitForTimeout(3000);
-
-    // 추가한 데이터 정리
-    await expect(page.locator('text=홍길동')).toBeVisible();
-    await expect(page.locator('text=김철수')).toBeVisible();
-    await expect(page.locator('text=이영희')).toBeVisible();
-
-    await page.locator('table tbody tr').first().click();
-    await page.click('button:has-text("삭제하기")');
-    await expect(page.locator('text=정말 삭제하시겠습니까?')).toBeVisible();
-    await page.click('button[data-testid="modal-remove-button"]');
-
-    await page.locator('table tbody tr').first().click();
-    await page.click('button:has-text("삭제하기")');
-    await expect(page.locator('text=정말 삭제하시겠습니까?')).toBeVisible();
-    await page.click('button[data-testid="modal-remove-button"]');
-
-    await page.locator('table tbody tr').first().click();
-    await page.click('button:has-text("삭제하기")');
-    await expect(page.locator('text=정말 삭제하시겠습니까?')).toBeVisible();
-    await page.click('button[data-testid="modal-remove-button"]');
-  });
-
-  test('5. 엑셀 업로드 시 잘못된 파일 형식을 업로드하면, 엑셀 파일을 처리하는 중 오류가 발생했습니다. 라는 alert 창이 나온다.', async ({
-    page,
-  }) => {
-    await loginAsUser(page);
-
-    await page.click('a[href="/manage-free"]');
-
-    await page.waitForTimeout(3000);
-
-    await page.click('button:has-text("학생 추가")');
-
-    await expectAlertMessage(page, '엑셀 파일을 처리하는 중 오류가 발생했습니다.');
-
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles({
-      name: 'test.txt',
-      mimeType: 'text/plain',
-      buffer: Buffer.from('invalid file content'),
+      // 필터 버튼 enabled 상태 확인
+      const filterButton = page.locator('button:has-text("필터")');
+      await expect(filterButton).toBeEnabled();
     });
   });
 
-  test('6. 추가하기 버튼을 눌러서 학번, 이름, 내용을 채워넣고 추가하고, 수정하고, 삭제하는 로직이 정상적으로 수행되고 UI가 상황에 맞게 바뀐다', async ({
-    page,
-  }) => {
-    await loginAsUser(page);
+  test.describe('학생 데이터 관리', () => {
+    test.beforeEach(async ({ page }) => {
+      await loginAsUser(page);
+      await page.goto('/manage-student');
+      await page.waitForTimeout(3000);
+    });
 
-    await page.click('a[href="/manage-career"]');
+    test('학생 추가 버튼을 클릭해서 적절한 입력값을 채우고 추가 버튼을 누르면 해당 데이터가 잘 보인다', async ({
+      page,
+    }) => {
+      // 학생 추가 버튼 클릭
+      await page.click('button:has-text("학생 추가")');
 
-    await page.click('td:has-text("+ 추가하기")');
+      // 대시보드 맨 위에 새로운 행이 나오는지 확인 (AddStudentRow 컴포넌트)
+      const inputFields = page.locator('input[placeholder="입력"]');
+      await expect(inputFields).toHaveCount(4);
 
-    await page.fill('input[data-testid="student-number-input"]', '2024001');
-    await page.fill('input[data-testid="student-name-input"]', '테스트학생');
-    await page.fill(
-      'textarea[data-testid="description-textarea"]',
-      '성실하고 적극적인 학생입니다.',
-    );
+      // 학년, 반, 번호, 이름 입력 (학년/반/번호 순으로 정렬되므로 1로 세팅)
+      await inputFields.nth(0).fill('1'); // 학년
+      await inputFields.nth(1).fill('1'); // 반
+      await inputFields.nth(2).fill('1'); // 번호
+      await inputFields.nth(3).fill('테스트학생'); // 이름
 
-    await page.click('button:has-text("추가하기")');
+      // 항목 추가 버튼 클릭하여 드롭다운 열기
+      await page.click('button:has-text("항목 추가")');
 
-    await page.waitForTimeout(3000);
+      // 세특 버튼 클릭
+      await page.click('[data-testid="record-option-subject"]');
 
-    await expect(page.locator('text=테스트학생')).toBeVisible();
+      // 추가 버튼 클릭
+      await page.click('[data-testid="add-student-button"]');
 
-    await page.locator('table tbody tr').first().click();
+      // 입력한 데이터가 나오는지 확인
+      await expect(page.locator('text=테스트학생')).toBeVisible();
+    });
 
-    const nameInput = page.locator('input[data-testid="student-name-input"]');
-    await nameInput.clear();
-    await nameInput.fill('수정된이름');
+    test('학생 수정 기능이 잘 동작한다', async ({ page }) => {
+      // StudentRow 컴포넌트의 첫 번째 학생 행을 찾기
+      // div 기반 구조에서 학생 행을 선택
+      const studentRows = page.locator('[data-testid="student-row"]');
+      const firstStudentRow = studentRows.first();
 
-    await page.click('button:has-text("수정하기")');
+      // 이름 셀을 찾아서 수정 (StudentRow 컴포넌트 내의 이름 필드)
+      const nameField = firstStudentRow
+        .locator('text="이름"')
+        .locator('..')
+        .locator('input, span[contenteditable], div[contenteditable]')
+        .first();
 
-    await page.waitForTimeout(3000);
+      // 이름 필드 더블클릭하여 편집 모드 진입
+      await nameField.dblclick();
 
-    await expect(page.locator('text=수정된이름')).toBeVisible();
+      // 입력 필드가 나타나면 값 변경
+      await page.waitForTimeout(500); // 편집 모드 전환 대기
 
-    await page.locator('table tbody tr').first().click();
+      // 편집 가능한 입력 필드를 찾아서 수정
+      const editableInput = firstStudentRow.locator('input[type="text"]').first();
+      if (await editableInput.isVisible()) {
+        await editableInput.clear();
+        await editableInput.fill('이승섭');
+        await editableInput.press('Enter');
+      } else {
+        // contenteditable인 경우
+        const editableDiv = firstStudentRow.locator('[contenteditable="true"]').first();
+        await editableDiv.clear();
+        await editableDiv.fill('이승섭');
+        await editableDiv.press('Enter');
+      }
 
-    await page.click('button:has-text("삭제하기")');
-    await expect(page.locator('text=정말 삭제하시겠습니까?')).toBeVisible();
-    await page.click('button[data-testid="modal-remove-button"]');
+      // 변경된 데이터가 나오는지 확인
+      await expect(page.locator('text=이승섭')).toBeVisible();
+    });
 
-    await page.waitForTimeout(3000);
+    test('학생 삭제 기능이 잘 동작한다', async ({ page }) => {
+      // 초기 학생 수 확인 및 저장
+      const initialCountElement = page.locator('text=/총 \\d+명의 학생 등록/');
+      await expect(initialCountElement).toBeVisible();
 
-    await expect(page.locator('button:has-text("엑셀로 내보내기")')).toBeDisabled();
-    await expect(page.locator('table tbody tr')).toHaveCount(1);
-  });
+      const initialCountText = await initialCountElement.textContent();
+      const initialCountMatch = initialCountText?.match(/총 (\d+)명의 학생 등록/);
+      const initialCount = initialCountMatch ? parseInt(initialCountMatch[1]) : 0;
 
-  test('7. 로그인하고, 세부 능력 및 특기사항에서 table 맨 위의 row를 클릭해서 취소하기 버튼을 누르면 아무 일도 일어나지 않는다.', async ({
-    page,
-  }) => {
-    await loginAsUser(page);
+      // 첫 번째 학생 행의 체크박스 클릭 (StudentRow 컴포넌트 내)
+      const firstStudentCheckbox = page.locator('[data-testid="student-defaultbox"]').first();
+      await firstStudentCheckbox.click();
 
-    await page.click('a[href="/manage-subject"]');
+      // "총 1명의 학생 선택" 글씨 확인
+      await expect(page.locator('text=총 1명의 학생 선택')).toBeVisible();
 
-    await page.waitForTimeout(3000);
+      // 삭제 버튼 클릭
+      await page.click('button:has-text("삭제")');
 
-    await page.locator('table tbody tr').first().click();
+      // "정말 삭제하시겠습니까?" 모달 확인
+      await expect(page.locator('text=정말 삭제하시겠습니까?')).toBeVisible();
 
-    const inputField = page.locator('input[data-testid="student-name-input"]');
-    await expect(inputField).toBeVisible();
+      // 모달의 삭제 버튼 클릭
+      await page.click('button:has-text("삭제"):last-of-type');
 
-    await page.click('button:has-text("취소하기")');
+      // 삭제 후 학생 수가 1 줄어들었는지 확인
+      await page.waitForTimeout(1000);
 
-    await expect(inputField).not.toBeVisible();
-  });
+      // 삭제 후 학생 수 확인
+      const finalCountElement = page.locator('text=/총 \\d+명의 학생 등록/');
+      await expect(finalCountElement).toBeVisible();
 
-  test('8. 엑셀로 내보내기 버튼을 누르면 현재 있는 data가 엑셀로 추출되어서 다운로드 받아진다.', async ({
-    page,
-  }) => {
-    await loginAsUser(page);
+      const finalCountText = await finalCountElement.textContent();
+      const finalCountMatch = finalCountText?.match(/총 (\d+)명의 학생 등록/);
+      const finalCount = finalCountMatch ? parseInt(finalCountMatch[1]) : 0;
 
-    await page.click('a[href="/manage-subject"]');
+      // 학생 수가 1 줄어들었는지 확인
+      expect(finalCount).toBe(initialCount - 1);
+    });
 
-    await page.waitForTimeout(3000);
+    test('무한 스크롤 기능을 검증한다', async ({ page }) => {
+      // 초기 총 학생 수 확인 및 저장 (FilterSection에서)
+      const initialTotalElement = page.locator('text=/총 \\d+명의 학생 등록/');
+      await expect(initialTotalElement).toBeVisible();
 
-    const exportButton = page.locator('button:has-text("엑셀로 내보내기")');
-    await expect(exportButton).toBeEnabled();
+      const initialTotalText = await initialTotalElement.textContent();
+      const initialTotalMatch = initialTotalText?.match(/총 (\d+)명의 학생 등록/);
+      const totalStudentCount = initialTotalMatch ? parseInt(initialTotalMatch[1]) : 0;
 
-    const downloadPromise = page.waitForEvent('download');
-    await exportButton.click();
-    const download = await downloadPromise;
+      // 초기 로드된 학생 행 수 확인
+      let currentRowCount = await page.locator('[data-testid="student-row"]').count();
+      console.log(`초기 로드된 학생 수: ${currentRowCount}`);
 
-    expect(download).toBeTruthy();
+      // 무한 스크롤을 위해 마지막 학생 요소까지 스크롤
+      const maxAttempts = 10;
+      let attempts = 0;
 
-    const downloadPath = await download.path();
-    expect(downloadPath).toBeTruthy();
+      while (currentRowCount < totalStudentCount && attempts < maxAttempts) {
+        // 현재 마지막 학생 요소로 스크롤
+        const lastStudent = page.locator('[data-testid="student-row"]').last();
 
-    const fileName = download.suggestedFilename();
-    if (fileName && fileName !== 'download') {
-      expect(fileName).toContain('.xlsx');
-      expect(fileName).toContain('세부능력 및 특기사항');
-    }
+        // 마지막 요소가 뷰포트에 보이도록 스크롤
+        await lastStudent.scrollIntoViewIfNeeded();
+
+        // 조금 더 아래로 스크롤하여 무한 스크롤 트리거
+        await page.evaluate(() => {
+          window.scrollBy(0, 500);
+        });
+
+        // 네트워크 요청 완료 대기
+        await page.waitForTimeout(2000);
+
+        const newRowCount = await page.locator('[data-testid="student-row"]').count();
+        console.log(`스크롤 후 학생 수: ${newRowCount}`);
+
+        if (newRowCount === currentRowCount) {
+          // 더 이상 로드되지 않으면 강제로 더 아래로 스크롤
+          await page.evaluate(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+          });
+          await page.waitForTimeout(2000);
+
+          const finalCheck = await page.locator('[data-testid="student-row"]').count();
+          if (finalCheck === newRowCount) {
+            attempts++;
+          } else {
+            currentRowCount = finalCheck;
+            attempts = 0; // 새 데이터가 로드되면 시도 횟수 리셋
+          }
+        } else {
+          currentRowCount = newRowCount;
+          attempts = 0; // 새 데이터가 로드되면 시도 횟수 리셋
+        }
+      }
+
+      console.log(`최종 로드된 학생 수: ${currentRowCount}, 총 학생 수: ${totalStudentCount}`);
+
+      // 맨 위로 올라가기
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(1000);
+
+      // DashboardHeader의 전체 선택 체크박스 클릭
+      const headerCheckbox = page.locator('[data-testid="header-defaultbox"]');
+      await headerCheckbox.click();
+
+      // 전체 선택되었는지 확인 - 처음 확인한 총 학생 수와 동일한지 검증
+      const selectedElement = page.locator(`text=총 ${totalStudentCount}명의 학생 선택`);
+      await expect(selectedElement).toBeVisible();
+
+      // 추가 검증: 선택된 학생 수가 총 학생 수와 정확히 일치하는지 확인
+      const selectedText = await page.locator('text=/총 \\d+명의 학생 선택/').textContent();
+      const selectedMatch = selectedText?.match(/총 (\d+)명의 학생 선택/);
+      const selectedCount = selectedMatch ? parseInt(selectedMatch[1]) : 0;
+
+      expect(selectedCount).toBe(totalStudentCount);
+
+      // 실제로 화면에 로드된 학생 행 수도 검증
+      const finalRowCount = await page.locator('[data-testid="student-row"]').count();
+      expect(finalRowCount).toBe(totalStudentCount);
+    });
+
+    test('필터 기능을 검증한다', async ({ page }) => {
+      // 필터 버튼 클릭 후 학년 1 선택
+      await page.click('button:has-text("필터")');
+      await page.click('button:has-text("학년")');
+      await page.locator('div[role="option"]:has-text("1")').first().click();
+
+      // 필터 버튼 클릭 후 반 9 선택
+      await page.click('button:has-text("필터")');
+      await page.click('button:has-text("반")');
+      await page.locator('div[role="option"]:has-text("9")').first().click();
+
+      // 필터 버튼 클릭 후 생기부 관리 항목에서 행발 선택
+      await page.click('button:has-text("필터")');
+      await page.click('button:has-text("생기부 관리 항목")');
+      await page.locator('div[role="option"]:has-text("행발")').first().click();
+      await page.click('text=/총 \\d+명의 학생 등록/');
+
+      // 학년 1, 반 9, 번호 4, 이름 권선우, 생활기록부 관리 항목 세특, 행발 데이터 확인
+      await expect(page.locator('text=권선우')).toBeVisible();
+
+      // 필터의 모든 x 버튼 클릭하여 필터 해제
+      const filterXButtons = page.locator('button[aria-label="필터 제거"]');
+      const filterCount = await filterXButtons.count();
+
+      for (let i = 0; i < filterCount; i++) {
+        await filterXButtons.first().click();
+        await page.waitForTimeout(500);
+      }
+
+      // 다시 모든 학생이 나오는지 확인 (행 수가 늘어났는지 확인)
+      await page.waitForTimeout(1000);
+      const allRows = page.locator('[data-testid="student-row"]');
+      const finalRowCount = await allRows.count();
+      expect(finalRowCount).toBeGreaterThan(1);
+    });
   });
 });
