@@ -74,12 +74,12 @@ export default function AiResponse({
             };
           }
 
-          const progressMessage = versionProgressMessage?.message || '생성 중...';
+          const progressMessage = versionProgressMessage?.message || '초안 생성 중...';
 
           return {
             content: (
               <div className="flex flex-col" data-testid="ai-loading">
-                <span className="text-shimmer text-body-18-m">{progressMessage}</span>
+                <span className="animate-text-shimmer text-body-18-m">{progressMessage}</span>
               </div>
             ),
             textLength: 0,
@@ -89,7 +89,7 @@ export default function AiResponse({
           return {
             content: (
               <div className="flex flex-col" data-testid="ai-loading">
-                <span className="text-shimmer text-body-18-m">초안 생성 중...</span>
+                <span className="animate-text-shimmer text-body-18-m">초안 생성 중...</span>
               </div>
             ),
             textLength: 0,
