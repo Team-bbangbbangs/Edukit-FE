@@ -1,5 +1,5 @@
 import { reset } from '@amplitude/analytics-browser';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useRouter } from 'next/navigation';
 
@@ -18,11 +18,13 @@ export const logout = async () => {
 export const useLogout = () => {
   const { setAuthData } = useAuth();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleLogoutCleanup = () => {
     setAuthData(null, null);
     reset();
     clearAmplitudeAccessToken();
+    queryClient.clear();
     router.push('/');
   };
 
