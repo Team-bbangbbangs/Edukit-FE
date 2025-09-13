@@ -92,7 +92,11 @@ export function StudentRow({ student, isSelected, onToggleSelect, forwardRef }: 
   const currentRecordTypes = isDropdownOpen ? tempRecordTypes : normalizedStudentRecordTypes;
 
   return (
-    <div ref={forwardRef} className="flex items-center self-stretch border-b border-gray-2">
+    <div
+      ref={forwardRef}
+      className="flex items-center self-stretch border-b border-gray-2"
+      data-testid="student-row"
+    >
       <div
         className="flex w-14 cursor-pointer items-center justify-center border-r border-gray-2 py-4"
         onClick={() => onToggleSelect(student.studentId)}

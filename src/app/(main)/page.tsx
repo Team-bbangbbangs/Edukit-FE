@@ -141,7 +141,7 @@ export default function Page() {
 
               <Link href="/write-subject">
                 <div className="w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700">
-                  학생 관리 시작하기
+                  생활기록부 작성 시작하기
                 </div>
               </Link>
             </div>
