@@ -101,6 +101,7 @@ export function EditCell({ student, field, value, onSave, className }: EditableC
     >
       {isEditing ? (
         <input
+          type="text"
           ref={inputRef}
           value={tempValue}
           onChange={(e) => setTempValue(e.target.value)}
