@@ -123,7 +123,7 @@ const Sidebar = React.forwardRef<
       />
       <div
         className={cn(
-          'fixed z-10 flex h-svh w-[--sidebar-width] transition-[left,right,transform] duration-200 ease-linear',
+          'fixed z-30 flex h-svh w-[--sidebar-width] transition-[left,right,transform] duration-200 ease-linear',
           side === 'left'
             ? cn('left-0', open ? 'translate-x-0' : '-translate-x-full')
             : cn('right-0', open ? 'translate-x-0' : 'translate-x-full'),
