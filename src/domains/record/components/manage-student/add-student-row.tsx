@@ -213,6 +213,7 @@ export function AddStudentRow({ onCancel }: AddStudentProps) {
             shape="pill"
             onClick={handleSave}
             disabled={isPostPending}
+            data-testid="add-student-button"
           >
             <span className="text-label-14 text-white">
               {isPostPending ? '추가 중...' : '추가'}

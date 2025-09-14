@@ -216,7 +216,7 @@ function DropdownContent({ children, className = '', itemCount }: DropdownConten
   return (
     <div
       ref={dropdownRef}
-      className={`absolute top-full z-50 mt-1 w-full rounded-[13px] border border-gray-2 bg-white shadow-md transition-all duration-200 ease-out ${
+      className={`absolute top-full z-20 mt-1 w-full rounded-[13px] border border-gray-2 bg-white shadow-md transition-all duration-200 ease-out ${
         renderOpen
           ? 'animate-in fade-in-0 zoom-in-95'
           : 'invisible animate-out fade-out-0 zoom-out-95'

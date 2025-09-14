@@ -76,7 +76,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
     // 금칙어 닉네임 입력
     await nicknameInput.fill('ㅇㅇ');
     await expect(page.locator('button:has-text("중복 확인")')).toBeEnabled();
-    await expectAlertMessage(page, '금칙어가 들어갔습니다. 다른 닉네임을 사용해주세요.');
+    await expectAlertMessage(page, '입력하신 닉네임은 유효하지 않습니다.');
     await page.click('button:has-text("중복 확인")');
 
     await page.waitForTimeout(3000);
@@ -84,7 +84,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
     // 중복된 닉네임 입력
     await nicknameInput.clear();
     await nicknameInput.fill('선생님1');
-    await expectAlertMessage(page, '현재 사용 중인 닉네임입니다.');
+    await expectAlertMessage(page, '입력하신 닉네임은 중복된 닉네임입니다.');
     await page.click('button:has-text("중복 확인")');
 
     await page.waitForTimeout(3000);
@@ -148,13 +148,12 @@ test.describe('프로필 관리 E2E 테스트', () => {
     let newSubject = '';
     if (currentSubject === '국어') {
       // 국어이면 수학으로 변경
-      const mathOption = page.getByRole('button', { name: '수학', exact: true });
-      await mathOption.click();
+      // Dropdown.Item을 직접 클릭 (드롭다운이 열린 상태에서)
+      await page.click('text=수학');
       newSubject = '수학';
     } else {
       // 국어가 아니면 국어로 변경
-      const koreanOption = page.getByRole('button', { name: '국어', exact: true });
-      await koreanOption.click();
+      await page.click('text=국어');
       newSubject = '국어';
     }
     await page.waitForTimeout(1000);
@@ -233,7 +232,7 @@ test.describe('프로필 관리 E2E 테스트', () => {
 
     // 새 비밀번호 확인에 다른 값 입력
     await page.fill('input[placeholder="새 비밀번호"]', 'newPassword123!');
-    await page.fill('input[placeholder="새 비밀번호 확인"]', 'differentPassword');
+    await page.fill('input[placeholder="새 비밀번호 확인"]', 'differentPassword12');
     await page.click('button:has-text("저장")');
     await expect(
       page.locator('text=새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.'),
